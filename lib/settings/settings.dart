@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/provider.dart';
-import 'package:openauth/theme/default.dart';
+import 'package:openauth/theme/core.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -21,7 +21,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
             AppBar(title: Text(Translations.of(context)!.navigation_settings)),
         body: Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
           return SettingsList(
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             sections: [
               SettingsSection(tiles: [
                 SettingsTile(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum UserTheme { light, dark }
+enum UserTheme { light, dark, amoled, dracula, nord }
 
 extension UserThemeExtension on UserTheme {
   String get value {
@@ -10,6 +10,12 @@ extension UserThemeExtension on UserTheme {
         return 'light';
       case UserTheme.dark:
         return 'dark';
+      case UserTheme.amoled:
+        return 'amoled';
+      case UserTheme.dracula:
+        return 'dracula';
+      case UserTheme.nord:
+        return 'nord';
     }
   }
 
@@ -20,6 +26,12 @@ extension UserThemeExtension on UserTheme {
         return UserTheme.light;
       case 'dark':
         return UserTheme.dark;
+      case 'amoled':
+        return UserTheme.amoled;
+      case 'dracula':
+        return UserTheme.dracula;
+      case 'nord':
+        return UserTheme.nord;
       default:
         throw Error();
     }

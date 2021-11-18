@@ -4,8 +4,11 @@ import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/locales/locales.dart';
 import 'package:openauth/settings/notifier.dart';
+import 'package:openauth/settings/provider.dart';
 import 'package:openauth/settings/settings.dart';
+import 'package:openauth/theme/core.dart';
 import 'package:openauth/theme/default.dart';
+import 'package:openauth/theme/dracula.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -30,7 +33,7 @@ class OpenAuth extends StatelessWidget {
               Translations.delegate
             ],
             onGenerateTitle: (context) => Translations.of(context)!.app_name,
-            theme: getDefault(notifier.preferences.theme),
+            theme: getTheme(notifier.preferences.theme),
             home: const MainPage(),
           );
         }));
