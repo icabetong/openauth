@@ -13,6 +13,8 @@ ThemeData getAmoled() {
       colorScheme: base.colorScheme.copyWith(
           primary: primary,
           onPrimary: onPrimary,
+          secondary: primary,
+          onSecondary: onPrimary,
           surface: background,
           onSurface: Colors.white));
 }
