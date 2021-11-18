@@ -3,5 +3,10 @@
     "navigation_settings": "Settings",
     "navigation_about": "About",
     "button_add": "Add",
-    "settings_theme": "Theme"
+    "settings_theme": "Theme",
+    "settings_theme_light": "Light",
+    "settings_theme_dark": "Dark",
+    "settings_theme_amoled": "Amoled",
+    "settings_theme_dracula": "Dracula",
+    "settings_theme_nord": "Nord"
 }

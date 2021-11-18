@@ -3,9 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/locales/locales.dart';
+import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:openauth/theme/default.dart';
-import 'package:openauth/theme/provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -18,8 +18,9 @@ class OpenAuth extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => ThemeProvider(),
-        child: Consumer<ThemeProvider>(builder: (context, notifier, child) {
+        create: (_) => PreferenceNotifier(),
+        child:
+            Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
           return MaterialApp(
             supportedLocales: AppLocales.all,
             localizationsDelegates: const [
@@ -29,7 +30,7 @@ class OpenAuth extends StatelessWidget {
               Translations.delegate
             ],
             onGenerateTitle: (context) => Translations.of(context)!.app_name,
-            theme: getDefault(notifier.userTheme),
+            theme: getDefault(notifier.preferences.theme),
             home: const MainPage(),
           );
         }));
