@@ -37,10 +37,18 @@ ThemeData getTheme(UserTheme userTheme) {
 }
 
 ThemeData getBase({Brightness brightness = Brightness.light}) {
-  final base = ThemeData(brightness: brightness, fontFamily: 'Outfit');
+  const font = 'Outfit';
+  final base = ThemeData(brightness: brightness, fontFamily: font);
 
   return base.copyWith(
-    appBarTheme: base.appBarTheme.copyWith(elevation: 2),
+    appBarTheme: base.appBarTheme.copyWith(
+        elevation: 2,
+        titleTextStyle: TextStyle(
+            fontFamily: font,
+            color: base.colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
+            fontSize: 20),
+        iconTheme: IconThemeData(color: base.colorScheme.onSurface)),
     bottomAppBarTheme: base.bottomAppBarTheme.copyWith(elevation: 12),
   );
 }

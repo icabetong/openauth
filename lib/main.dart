@@ -49,6 +49,57 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Future<Action> _invoke() async {
+    return await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(Translations.of(context)!.title_add_account,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 18)),
+                const SizedBox(height: 32),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context, Action.scan);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                const Icon(Icons.scanner_outlined),
+                                Text(Translations.of(context)!.button_scan)
+                              ],
+                            ),
+                          )),
+                      OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context, Action.input);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              children: [
+                                const Icon(Icons.edit_outlined),
+                                Text(Translations.of(context)!.button_input)
+                              ],
+                            ),
+                          ))
+                    ]),
+                const SizedBox(height: 16)
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +131,11 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add_rounded),
-          onPressed: () async {},
+          onPressed: () async {
+            final Action result = await _invoke();
+            debugPrint(result.toString());
+          },
+          icon: const Icon(Icons.add),
           label: Text(Translations.of(context)!.button_add)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -111,4 +165,5 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
+enum Action { input, scan }
 enum Route { settings, about }

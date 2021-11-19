@@ -3,22 +3,23 @@ import 'package:openauth/theme/core.dart';
 
 ThemeData getDefault({Brightness brightness = Brightness.light}) {
   ThemeData base = getBase(brightness: brightness);
-  const primary = Color(0xffffffff);
-  const onPrimary = Color(0xff000000);
-  final secondary = Colors.teal.shade500;
-  const onSecondary = Colors.white;
+  final primary = Colors.teal.shade500;
+  const onPrimary = Colors.white;
   final scaffold = brightness == Brightness.light
       ? base.colorScheme.surface
       : base.scaffoldBackgroundColor;
 
   return base.copyWith(
-    appBarTheme: base.appBarTheme,
+    appBarTheme: base.appBarTheme.copyWith(
+        backgroundColor: base.colorScheme.surface,
+        titleTextStyle: base.appBarTheme.titleTextStyle
+            ?.copyWith(color: base.colorScheme.onSurface)),
     scaffoldBackgroundColor: scaffold,
     colorScheme: base.colorScheme.copyWith(
       primary: primary,
       onPrimary: onPrimary,
-      secondary: secondary,
-      onSecondary: onSecondary,
+      secondary: primary,
+      onSecondary: onPrimary,
     ),
   );
 }

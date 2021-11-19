@@ -20,5 +20,7 @@ ThemeData getAmoled() {
           onSurface: Colors.white),
       bottomAppBarColor: surface,
       popupMenuTheme: base.popupMenuTheme
-          .copyWith(color: Color.lerp(surface, Colors.white, 0.05)));
+          .copyWith(color: Color.lerp(surface, Colors.white, 0.05)),
+      bottomSheetTheme:
+          base.bottomSheetTheme.copyWith(backgroundColor: surface));
 }

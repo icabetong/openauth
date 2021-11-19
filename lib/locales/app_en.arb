@@ -1,8 +1,11 @@
 {
     "app_name": "OpenAuth",
+    "title_add_account": "How do you want to add your account?",
     "navigation_settings": "Settings",
     "navigation_about": "About",
     "button_add": "Add",
+    "button_scan": "Scan",
+    "button_input": "Input",
     "empty_accounts": "There's nothing here",
     "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_theme": "Theme",
