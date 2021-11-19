@@ -68,14 +68,13 @@ class _ThemeSelectionRouteState extends State<ThemeSelectionRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(Translations.of(context)!.settings_theme)),
-      body: ListView.separated(
+      body: ListView.builder(
           itemBuilder: (context, index) => ListTile(
               title: Text(getThemeName(context, themes[index])),
               leading: getLeadingIcon(themes[index]),
               onTap: () {
                 Navigator.pop(context, themes[index]);
               }),
-          separatorBuilder: (context, index) => const Divider(),
           itemCount: themes.length),
     );
   }

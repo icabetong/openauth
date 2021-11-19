@@ -55,7 +55,8 @@ class _MainPageState extends State<MainPage> {
         slivers: [
           SliverAppBar(
             title: Text(Translations.of(context)!.app_name),
-            pinned: true,
+            snap: true,
+            floating: true,
           ),
           SliverList(
               delegate: SliverChildBuilderDelegate(

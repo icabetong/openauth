@@ -6,7 +6,8 @@ ThemeData getAmoled() {
 
   final primary = Colors.teal[500];
   const onPrimary = Color(0xffffffff);
-  const background = Color(0xff000000);
+  const background = Color(0xff080808);
+  const surface = Color(0xff1c1c1c);
 
   return base.copyWith(
       scaffoldBackgroundColor: background,
@@ -15,6 +16,9 @@ ThemeData getAmoled() {
           onPrimary: onPrimary,
           secondary: primary,
           onSecondary: onPrimary,
-          surface: background,
-          onSurface: Colors.white));
+          surface: surface,
+          onSurface: Colors.white),
+      bottomAppBarColor: surface,
+      popupMenuTheme: base.popupMenuTheme
+          .copyWith(color: Color.lerp(surface, Colors.white, 0.05)));
 }
