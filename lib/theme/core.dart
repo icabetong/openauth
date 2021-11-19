@@ -37,7 +37,7 @@ ThemeData getTheme(UserTheme userTheme) {
 }
 
 ThemeData getBase({Brightness brightness = Brightness.light}) {
-  final base = ThemeData(brightness: brightness);
+  final base = ThemeData(brightness: brightness, fontFamily: 'Outfit');
 
   return base.copyWith(
     appBarTheme: base.appBarTheme.copyWith(elevation: 2),

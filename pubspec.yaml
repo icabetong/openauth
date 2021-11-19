@@ -52,6 +52,13 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: 'Outfit'
+      fonts:
+        - asset: 'fonts/Outfit-Bold.ttf'
+        - asset: 'fonts/Outfit-SemiBold.ttf'
+        - asset: 'fonts/Outfit-Medium.ttf'
+        - asset: 'fonts/Outfit-Regular.ttf'
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

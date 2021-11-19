@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
@@ -7,8 +8,6 @@ import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/provider.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:openauth/theme/core.dart';
-import 'package:openauth/theme/default.dart';
-import 'package:openauth/theme/dracula.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -24,6 +23,9 @@ class OpenAuth extends StatelessWidget {
         create: (_) => PreferenceNotifier(),
         child:
             Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
+          SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+              systemNavigationBarColor: Colors.transparent));
+          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
           return MaterialApp(
             supportedLocales: AppLocales.all,
             localizationsDelegates: const [
