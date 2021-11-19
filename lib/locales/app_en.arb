@@ -3,6 +3,8 @@
     "navigation_settings": "Settings",
     "navigation_about": "About",
     "button_add": "Add",
+    "empty_accounts": "There's nothing here",
+    "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_theme": "Theme",
     "settings_theme_light": "Light",
     "settings_theme_dark": "Dark",

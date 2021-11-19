@@ -5,7 +5,6 @@ import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/locales/locales.dart';
 import 'package:openauth/settings/notifier.dart';
-import 'package:openauth/settings/provider.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:openauth/theme/core.dart';
 import 'package:provider/provider.dart';
@@ -60,9 +59,24 @@ class _MainPageState extends State<MainPage> {
             snap: true,
             floating: true,
           ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate(
-                  (context, index) => ListTile(title: Text(index.toString()))))
+          SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(Translations.of(context)!.empty_accounts,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 8),
+                    Text(Translations.of(context)!.empty_accounts_subtitle,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14, color: Colors.grey.shade500))
+                  ],
+                ),
+              ))
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
