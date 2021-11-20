@@ -29,10 +29,10 @@ class Entry {
     this.issuer,
     this.name, {
     this.entryId = "",
-    this.type = OTPType.TOTP,
     this.length = defaultLength,
     this.period = defaultPeriod,
     this.counter = 0,
+    this.type = OTPType.totp,
     this.algorithm = "SHA21",
     this.isGoogle = false,
   });
@@ -51,5 +51,10 @@ class Entry {
   static const defaultLength = 6;
 }
 
-// ignore: constant_identifier_names
-enum OTPType { TOTP, HOTP }
+@HiveType(typeId: 1)
+enum OTPType {
+  @HiveField(0)
+  totp,
+  @HiveField(1)
+  hotp
+}

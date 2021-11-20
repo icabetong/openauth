@@ -13,11 +13,13 @@ class EntryNotifier extends ChangeNotifier {
 
   Future put(Entry entry) async {
     await repository.put(entry);
+    _entries = repository.fetch();
     notifyListeners();
   }
 
   Future remove(Entry entry) async {
-    await repository.put(entry);
+    await repository.remove(entry);
+    _entries = repository.fetch();
     notifyListeners();
   }
 }

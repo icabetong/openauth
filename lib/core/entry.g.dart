@@ -21,10 +21,10 @@ class EntryAdapter extends TypeAdapter<Entry> {
       fields[2] as String,
       fields[3] as String,
       entryId: fields[0] as String,
-      type: fields[7] as OTPType,
       length: fields[4] as int,
       period: fields[5] as int,
       counter: fields[6] as int,
+      type: fields[7] as OTPType,
       algorithm: fields[8] as String,
       isGoogle: fields[9] as bool,
     );
@@ -63,6 +63,45 @@ class EntryAdapter extends TypeAdapter<Entry> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is EntryAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class OTPTypeAdapter extends TypeAdapter<OTPType> {
+  @override
+  final int typeId = 1;
+
+  @override
+  OTPType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return OTPType.totp;
+      case 1:
+        return OTPType.hotp;
+      default:
+        return OTPType.totp;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, OTPType obj) {
+    switch (obj) {
+      case OTPType.totp:
+        writer.writeByte(0);
+        break;
+      case OTPType.hotp:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OTPTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

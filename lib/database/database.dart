@@ -11,6 +11,7 @@ class HiveDatabase {
   static Future init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(EntryAdapter());
+    Hive.registerAdapter(OTPTypeAdapter());
 
     const FlutterSecureStorage storage = FlutterSecureStorage();
     bool containsKey = await storage.containsKey(key: _encryptionKey);

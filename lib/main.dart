@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
+import 'package:openauth/core/entry.dart';
 import 'package:openauth/core/input_route.dart';
 import 'package:openauth/database/database.dart';
 import 'package:openauth/database/notifier.dart';
@@ -142,8 +143,9 @@ class _MainPageState extends State<MainPage> {
                   : SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
                       final entry = notifier.entries[index];
-                      return ListTile(title: Text(entry.name));
-                    }))
+                      return EntryListTile(
+                          entry: entry, onRemove: notifier.remove);
+                    }, childCount: notifier.entries.length))
             ],
           ),
           floatingActionButton: FloatingActionButton.extended(
@@ -199,6 +201,30 @@ class _MainPageState extends State<MainPage> {
         );
       }),
     );
+  }
+}
+
+class EntryListTile extends StatelessWidget {
+  const EntryListTile({Key? key, required this.entry, required this.onRemove})
+      : super(key: key);
+  final Entry entry;
+  final Function(Entry) onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        title: Text(entry.name),
+        subtitle: Text(entry.issuer),
+        trailing: PopupMenuButton<String>(
+            icon: const Icon(Icons.more_horiz_outlined),
+            onSelected: (value) {
+              onRemove(entry);
+            },
+            itemBuilder: (context) => <PopupMenuEntry<String>>[
+                  PopupMenuItem(
+                      child: Text(Translations.of(context)!.button_remove),
+                      value: "delete")
+                ]));
   }
 }
 

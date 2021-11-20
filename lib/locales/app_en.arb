@@ -8,6 +8,7 @@
     "field_secret": "Secret",
     "button_add": "Add",
     "button_save": "Save",
+    "button_remove": "Remove",
     "button_scan": "Scan",
     "button_input": "Input",
     "empty_accounts": "There's nothing here",
