@@ -37,6 +37,7 @@ dependencies:
   provider: ^6.0.1
   animations: ^2.0.2
   qr_code_scanner: ^0.6.1
+  otp: ^3.0.1
 
 dev_dependencies:
   flutter_test:

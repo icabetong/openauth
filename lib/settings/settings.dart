@@ -14,33 +14,58 @@ class SettingsRoute extends StatefulWidget {
 }
 
 class _SettingsRouteState extends State<SettingsRoute> {
+  bool isOn = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar:
             AppBar(title: Text(Translations.of(context)!.navigation_settings)),
         body: Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
-          return SettingsList(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            sections: [
-              SettingsSection(tiles: [
-                SettingsTile(
-                  leading: const Icon(Icons.palette_outlined),
-                  title: Translations.of(context)!.settings_theme,
-                  subtitle: getThemeName(context, notifier.preferences.theme),
-                  onPressed: (context) async {
-                    final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ThemeSelectionRoute(
-                                theme: notifier.preferences.theme)));
-                    if (result != null) {
-                      notifier.changeTheme(result);
-                    }
-                  },
-                )
-              ])
-            ],
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: SettingsList(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              sections: [
+                SettingsSection(
+                    title: Translations.of(context)!.settings_group_display,
+                    tiles: [
+                      SettingsTile(
+                        leading: const Icon(Icons.palette_outlined),
+                        title: Translations.of(context)!.settings_theme,
+                        subtitle:
+                            getThemeName(context, notifier.preferences.theme),
+                        onPressed: (context) async {
+                          final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ThemeSelectionRoute(
+                                      theme: notifier.preferences.theme)));
+                          if (result != null) {
+                            notifier.changeTheme(result);
+                          }
+                        },
+                      ),
+                    ]),
+                SettingsSection(
+                    title: Translations.of(context)!.settings_group_security,
+                    tiles: [
+                      SettingsTile.switchTile(
+                          leading: const Icon(Icons.visibility_off_outlined),
+                          switchActiveColor:
+                              Theme.of(context).colorScheme.primary,
+                          title:
+                              Translations.of(context)!.settings_hide_secrets,
+                          subtitle: Translations.of(context)!
+                              .settings_hide_secrets_subtitle,
+                          subtitleMaxLines: 2,
+                          onToggle: (status) {
+                            setState(() => isOn = status);
+                          },
+                          switchValue: isOn),
+                    ])
+              ],
+            ),
           );
         }));
   }
