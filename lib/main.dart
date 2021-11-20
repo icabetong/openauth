@@ -3,13 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
+import 'package:openauth/core/input_route.dart';
+import 'package:openauth/database/database.dart';
+import 'package:openauth/database/notifier.dart';
 import 'package:openauth/locales/locales.dart';
+import 'package:openauth/scan/scan_route.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:openauth/theme/core.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await HiveDatabase.init();
   runApp(const OpenAuth());
 }
 
@@ -49,7 +54,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  Future<Action> _invoke() async {
+  Future<Action?> _invoke() async {
     return await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -102,65 +107,97 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: Text(Translations.of(context)!.app_name),
-            snap: true,
-            floating: true,
+    return ChangeNotifierProvider(
+      create: (_) => EntryNotifier(),
+      child: Consumer<EntryNotifier>(builder: (context, notifier, child) {
+        return Scaffold(
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: Text(Translations.of(context)!.app_name),
+                snap: true,
+                floating: true,
+              ),
+              notifier.entries.isEmpty
+                  ? SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(Translations.of(context)!.empty_accounts,
+                                style: const TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w600)),
+                            const SizedBox(height: 8),
+                            Text(
+                                Translations.of(context)!
+                                    .empty_accounts_subtitle,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey.shade500))
+                          ],
+                        ),
+                      ))
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                      final entry = notifier.entries[index];
+                      return ListTile(title: Text(entry.name));
+                    }))
+            ],
           ),
-          SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(Translations.of(context)!.empty_accounts,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 8),
-                    Text(Translations.of(context)!.empty_accounts_subtitle,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 14, color: Colors.grey.shade500))
-                  ],
-                ),
-              ))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final Action result = await _invoke();
-            debugPrint(result.toString());
-          },
-          icon: const Icon(Icons.add),
-          label: Text(Translations.of(context)!.button_add)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBar(
-          child: Row(children: [
-        const Spacer(),
-        PopupMenuButton<Route>(
-            onSelected: (route) =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  switch (route) {
-                    case Route.settings:
-                      return const SettingsRoute();
-                    case Route.about:
-                      return const AboutRoute();
+          floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                final Action? result = await _invoke();
+                if (result != null) {
+                  switch (result) {
+                    case Action.input:
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ChangeNotifierProvider<EntryNotifier>.value(
+                            value: notifier, child: const InputRoute());
+                      }));
+                      break;
+                    case Action.scan:
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ChangeNotifierProvider<EntryNotifier>.value(
+                            value: notifier, child: const ScanRoute());
+                      }));
+                      break;
                   }
-                })),
-            itemBuilder: (context) => <PopupMenuEntry<Route>>[
-                  PopupMenuItem(
-                      child:
-                          Text(Translations.of(context)!.navigation_settings),
-                      value: Route.settings),
-                  PopupMenuItem(
-                      child: Text(Translations.of(context)!.navigation_about),
-                      value: Route.about)
-                ])
-      ])),
+                }
+              },
+              icon: const Icon(Icons.add),
+              label: Text(Translations.of(context)!.button_add)),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: BottomAppBar(
+              child: Row(children: [
+            const Spacer(),
+            PopupMenuButton<Route>(
+                onSelected: (route) => Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      switch (route) {
+                        case Route.settings:
+                          return const SettingsRoute();
+                        case Route.about:
+                          return const AboutRoute();
+                      }
+                    })),
+                itemBuilder: (context) => <PopupMenuEntry<Route>>[
+                      PopupMenuItem(
+                          child: Text(
+                              Translations.of(context)!.navigation_settings),
+                          value: Route.settings),
+                      PopupMenuItem(
+                          child:
+                              Text(Translations.of(context)!.navigation_about),
+                          value: Route.about)
+                    ])
+          ])),
+        );
+      }),
     );
   }
 }

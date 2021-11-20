@@ -1,13 +1,27 @@
+import 'package:hive/hive.dart';
+part 'entry.g.dart';
+
+@HiveType(typeId: 0)
 class Entry {
+  @HiveField(0)
   final String entryId;
+  @HiveField(1)
   final String secret;
+  @HiveField(2)
   final String issuer;
+  @HiveField(3)
   final String name;
+  @HiveField(4)
   final int length;
+  @HiveField(5)
   final int period;
+  @HiveField(6)
   final int counter;
+  @HiveField(7)
   final OTPType type;
+  @HiveField(8)
   final String algorithm;
+  @HiveField(9)
   final bool isGoogle;
 
   Entry(
