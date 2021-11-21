@@ -14,6 +14,8 @@ class SettingsRoute extends StatefulWidget {
 }
 
 class _SettingsRouteState extends State<SettingsRoute> {
+  Color get _themeColor => Theme.of(context).colorScheme.primary;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +29,14 @@ class _SettingsRouteState extends State<SettingsRoute> {
               sections: [
                 SettingsSection(
                     title: Translations.of(context)!.settings_group_display,
+                    titleTextStyle: _headerTextStyle,
                     tiles: [
                       SettingsTile(
                         leading: const Icon(Icons.palette_outlined),
                         title: Translations.of(context)!.settings_theme,
                         subtitle:
                             getThemeName(context, notifier.preferences.theme),
+                        titleTextStyle: _titleTextStyle,
                         onPressed: (context) async {
                           final result = await Navigator.push(
                               context,
@@ -47,27 +51,43 @@ class _SettingsRouteState extends State<SettingsRoute> {
                     ]),
                 SettingsSection(
                     title: Translations.of(context)!.settings_group_security,
+                    titleTextStyle: _headerTextStyle,
                     tiles: [
                       SettingsTile.switchTile(
                           leading: const Icon(Icons.visibility_off_outlined),
-                          switchActiveColor:
-                              Theme.of(context).colorScheme.primary,
+                          switchActiveColor: _themeColor,
                           title:
                               Translations.of(context)!.settings_hide_secrets,
                           subtitle: Translations.of(context)!
                               .settings_hide_secrets_subtitle,
-                          subtitleMaxLines: 2,
+                          subtitleMaxLines: 3,
+                          titleTextStyle: _titleTextStyle,
                           onToggle: (status) {
                             setState(
                                 () => notifier.changeSecretsHidden(status));
                           },
                           switchValue: notifier.preferences.isSecretsHidden),
+                      SettingsTile.switchTile(
+                          leading:
+                              const Icon(Icons.admin_panel_settings_outlined),
+                          switchActiveColor: _themeColor,
+                          title: Translations.of(context)!
+                              .settings_access_protection,
+                          subtitle: Translations.of(context)!
+                              .settings_access_protection_subtitle,
+                          subtitleMaxLines: 3,
+                          onToggle: (status) {},
+                          switchValue: true)
                     ])
               ],
             ),
           );
         }));
   }
+
+  TextStyle get _titleTextStyle => const TextStyle(fontWeight: FontWeight.w500);
+  TextStyle get _headerTextStyle =>
+      TextStyle(color: _themeColor, fontWeight: FontWeight.w500);
 }
 
 class ThemeSelectionRoute extends StatefulWidget {

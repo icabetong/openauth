@@ -217,7 +217,6 @@ class EntryListTile extends StatefulWidget {
 }
 
 class _EntryListTileState extends State<EntryListTile> {
-  final timems = DateTime.now().millisecondsSinceEpoch;
   CountDown? countdown;
   String? code;
   int time = 0;
@@ -225,26 +224,42 @@ class _EntryListTileState extends State<EntryListTile> {
   @override
   void initState() {
     super.initState();
-    _countdown();
+    _start();
+  }
+
+  void _start() {
+    final seconds = DateTime.now().second;
+    if (seconds == 0) {
+      countdown = CountDown(const Duration(seconds: 30));
+      _countdown();
+    } else if (seconds > 1 && seconds <= 30) {
+      countdown = CountDown(Duration(seconds: seconds));
+      _countdown();
+    } else if (seconds >= 31 && seconds <= 60) {
+      countdown = CountDown(Duration(seconds: 30 - (seconds - 30)));
+      _countdown();
+    }
   }
 
   void _countdown() {
-    countdown = CountDown(const Duration(seconds: 30));
     final sub = countdown?.stream?.listen(null);
     sub?.onDone(() {
-      _countdown();
+      _start();
     });
 
     sub?.onData((data) {
-      if (time == data.inSeconds) return;
-
       setState(() {
         time = data.inSeconds;
-        if (time == 0) {
-          code = OTP.generateTOTPCodeString(widget.entry.secret, timems);
+        if (time == 0 || code == null) {
+          _generate();
         }
       });
     });
+  }
+
+  void _generate() {
+    code = OTP.generateTOTPCodeString(
+        widget.entry.secret, DateTime.now().millisecondsSinceEpoch);
   }
 
   @override

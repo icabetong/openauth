@@ -1,14 +1,8 @@
 {
     "app_name": "OpenAuth",
-    "title_setup_database": "Setup OpenAuth",
-    "title_setup_database_subtitle": "Create a super memorable password that will be used to encrypt your data",
-    "title_decrypt_database": "Unlock Data",
-    "title_decrypt_database_subtitle": "Enter your passkey to decrypt the database",
     "title_add_account": "How do you want to add your account?",
     "navigation_settings": "Settings",
     "navigation_about": "About",
-    "field_passkey": "Passkey",
-    "field_passkey_confirm": "Confirm Passkey",
     "field_issuer": "Issuer",
     "field_name": "Name",
     "field_secret": "Secret",
@@ -28,14 +22,11 @@
     "button_remove": "Remove",
     "button_scan": "Scan",
     "button_input": "Input",
-    "button_unlock": "Unlock",
     "button_continue": "Continue",
     "button_show_advanced": "Show Advanced Options",
     "button_hide_advanced": "Hide Advanced Options",
     "error_generic": "An error occured",
     "error_code_not_found": "Error Code Not Found",
-    "error_incorrect_passkey": "Passkey provided for decryption is incorrect",
-    "error_passkey_doesnt_match": "Provided passkeys doesn't match",
     "empty_accounts": "There's nothing here",
     "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_group_display": "Display",
@@ -47,5 +38,7 @@
     "settings_theme_dracula": "Dracula",
     "settings_theme_nord": "Nord",
     "settings_hide_secrets": "Hide Secrets",
-    "settings_hide_secrets_subtitle": "When viewing or editing account data, treat secrets as passwords."
+    "settings_hide_secrets_subtitle": "Hide secrets with obscuring characters",
+    "settings_access_protection": "Access Protection",
+    "settings_access_protection_subtitle": "Require a PIN to access the app."
 }
