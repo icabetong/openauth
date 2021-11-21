@@ -25,4 +25,10 @@ class PreferenceNotifier extends ChangeNotifier {
     _handler.setSecretsHidden(isSecretsHidden);
     notifyListeners();
   }
+
+  changeFirstLaunch(bool isFirstLaunch) {
+    _preferences.isFirstLaunch = isFirstLaunch;
+    _handler.setFirstLaunch(isFirstLaunch);
+    notifyListeners();
+  }
 }

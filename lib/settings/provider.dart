@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserTheme { light, dark, amoled, dracula, nord }
@@ -40,8 +39,12 @@ extension UserThemeExtension on UserTheme {
 class Preferences {
   UserTheme theme;
   bool isSecretsHidden;
+  bool isFirstLaunch;
 
-  Preferences({this.theme = UserTheme.light, this.isSecretsHidden = true});
+  Preferences(
+      {this.theme = UserTheme.light,
+      this.isSecretsHidden = true,
+      this.isFirstLaunch = true});
 }
 
 class UserPreferenceHandler {
@@ -49,6 +52,7 @@ class UserPreferenceHandler {
 
   static const themeKey = "theme";
   static const secretsHiddenKey = "secretsHiddenKey";
+  static const firstLaunchKey = "firstLaunch";
 
   void _initPreferences() async {
     if (_preferences != null) {
@@ -59,6 +63,11 @@ class UserPreferenceHandler {
   Future<Preferences> getPreferences() async {
     UserTheme _theme = await getTheme();
     return Preferences(theme: _theme);
+  }
+
+  Future setFirstLaunch(bool isFirstLaunch) async {
+    _initPreferences();
+    return await _preferences?.setBool(firstLaunchKey, isFirstLaunch);
   }
 
   Future<bool> getSecretsHidden() async {

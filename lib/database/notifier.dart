@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:openauth/core/entry.dart';
+import 'package:openauth/entry/entry.dart';
 import 'package:openauth/database/repository.dart';
 
 class EntryNotifier extends ChangeNotifier {
