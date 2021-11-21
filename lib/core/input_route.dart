@@ -27,7 +27,10 @@ class _InputRouteState extends State<InputRoute> {
     final name = _nameController.text;
     final issuer = _issuerController.text;
     final secret = _secretController.text;
-    final entry = Entry(secret, issuer, name);
+    final period = int.parse(_periodController.text);
+    final length = int.parse(_lengthController.text);
+    final entry = Entry(secret, issuer, name,
+        period: period, length: length, type: _type, algorithm: _algorithm);
 
     save(entry);
     Navigator.pop(context);
@@ -183,7 +186,8 @@ class _InputRouteState extends State<InputRoute> {
                           ],
                         )
                       ]),
-                    ))
+                    )),
+                const SizedBox(height: 16),
               ]),
             ),
           ));

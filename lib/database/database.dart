@@ -12,6 +12,7 @@ class HiveDatabase {
     await Hive.initFlutter();
     Hive.registerAdapter(EntryAdapter());
     Hive.registerAdapter(OTPTypeAdapter());
+    Hive.registerAdapter(AlgorithmAdapter());
 
     const FlutterSecureStorage storage = FlutterSecureStorage();
     bool containsKey = await storage.containsKey(key: _encryptionKey);

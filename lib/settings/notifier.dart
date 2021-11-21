@@ -19,4 +19,10 @@ class PreferenceNotifier extends ChangeNotifier {
     _handler.setTheme(theme);
     notifyListeners();
   }
+
+  changeSecretsHidden(bool isSecretsHidden) {
+    _preferences.isSecretsHidden = isSecretsHidden;
+    _handler.setSecretsHidden(isSecretsHidden);
+    notifyListeners();
+  }
 }

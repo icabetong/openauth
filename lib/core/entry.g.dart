@@ -25,7 +25,7 @@ class EntryAdapter extends TypeAdapter<Entry> {
       period: fields[5] as int,
       counter: fields[6] as int,
       type: fields[7] as OTPType,
-      algorithm: fields[8] as String,
+      algorithm: fields[8] as Algorithm,
       isGoogle: fields[9] as bool,
     );
   }

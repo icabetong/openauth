@@ -14,8 +14,6 @@ class SettingsRoute extends StatefulWidget {
 }
 
 class _SettingsRouteState extends State<SettingsRoute> {
-  bool isOn = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +58,10 @@ class _SettingsRouteState extends State<SettingsRoute> {
                               .settings_hide_secrets_subtitle,
                           subtitleMaxLines: 2,
                           onToggle: (status) {
-                            setState(() => isOn = status);
+                            setState(
+                                () => notifier.changeSecretsHidden(status));
                           },
-                          switchValue: isOn),
+                          switchValue: notifier.preferences.isSecretsHidden),
                     ])
               ],
             ),

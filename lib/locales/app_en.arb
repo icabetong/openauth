@@ -24,6 +24,7 @@
     "button_input": "Input",
     "button_show_advanced": "Show Advanced Options",
     "button_hide_advanced": "Hide Advanced Options",
+    "error_code_not_found": "Error Code Not Found",
     "empty_accounts": "There's nothing here",
     "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_group_display": "Display",
@@ -35,5 +36,5 @@
     "settings_theme_dracula": "Dracula",
     "settings_theme_nord": "Nord",
     "settings_hide_secrets": "Hide Secrets",
-    "settings_hide_secrets_subtitle": "When viewing account data, treat secrets as passwords."
+    "settings_hide_secrets_subtitle": "When viewing or editing account data, treat secrets as passwords."
 }

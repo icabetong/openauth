@@ -11,7 +11,9 @@ import 'package:openauth/locales/locales.dart';
 import 'package:openauth/scan/scan_route.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/settings.dart';
+import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/theme/core.dart';
+import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -204,21 +206,62 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class EntryListTile extends StatelessWidget {
+class EntryListTile extends StatefulWidget {
   const EntryListTile({Key? key, required this.entry, required this.onRemove})
       : super(key: key);
   final Entry entry;
   final Function(Entry) onRemove;
 
   @override
+  State<EntryListTile> createState() => _EntryListTileState();
+}
+
+class _EntryListTileState extends State<EntryListTile> {
+  CountDown? countdown;
+  String? code;
+  int time = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _countdown();
+  }
+
+  void _countdown() {
+    countdown = CountDown(const Duration(seconds: 30));
+    final sub = countdown?.stream?.listen(null);
+    sub?.onDone(() {
+      _countdown();
+    });
+
+    sub?.onData((data) {
+      if (time == data.inSeconds) return;
+
+      setState(() {
+        time = data.inSeconds;
+        if (time == 0) {
+          code = OTP.generateTOTPCodeString(
+              widget.entry.secret, DateTime.now().millisecondsSinceEpoch,
+              length: widget.entry.length,
+              interval: widget.entry.period,
+              algorithm: widget.entry.algorithm,
+              isGoogle: widget.entry.isGoogle);
+        }
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double progress = time / 30;
     return ListTile(
-        title: Text(entry.name),
-        subtitle: Text(entry.issuer),
+        leading: CircularProgressIndicator(value: progress),
+        title: Text(code ?? Translations.of(context)!.error_code_not_found),
+        subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
         trailing: PopupMenuButton<String>(
             icon: const Icon(Icons.more_horiz_outlined),
             onSelected: (value) {
-              onRemove(entry);
+              widget.onRemove(widget.entry);
             },
             itemBuilder: (context) => <PopupMenuEntry<String>>[
                   PopupMenuItem(

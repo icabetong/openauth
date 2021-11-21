@@ -20,7 +20,6 @@ extension UserThemeExtension on UserTheme {
   }
 
   static UserTheme parse(String theme) {
-    debugPrint(theme);
     switch (theme) {
       case 'light':
         return UserTheme.light;
@@ -40,14 +39,16 @@ extension UserThemeExtension on UserTheme {
 
 class Preferences {
   UserTheme theme;
+  bool isSecretsHidden;
 
-  Preferences({this.theme = UserTheme.light});
+  Preferences({this.theme = UserTheme.light, this.isSecretsHidden = true});
 }
 
 class UserPreferenceHandler {
   SharedPreferences? _preferences;
 
   static const themeKey = "theme";
+  static const secretsHiddenKey = "secretsHiddenKey";
 
   void _initPreferences() async {
     if (_preferences != null) {
@@ -58,6 +59,19 @@ class UserPreferenceHandler {
   Future<Preferences> getPreferences() async {
     UserTheme _theme = await getTheme();
     return Preferences(theme: _theme);
+  }
+
+  Future<bool> getSecretsHidden() async {
+    _initPreferences();
+    bool _isSecretsHidden =
+        _preferences?.getBool(UserPreferenceHandler.secretsHiddenKey) ?? true;
+    return _isSecretsHidden;
+  }
+
+  Future setSecretsHidden(bool secretsHidden) async {
+    _initPreferences();
+    return await _preferences?.setBool(
+        UserPreferenceHandler.secretsHiddenKey, secretsHidden);
   }
 
   Future<UserTheme> getTheme() async {
