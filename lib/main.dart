@@ -217,6 +217,7 @@ class EntryListTile extends StatefulWidget {
 }
 
 class _EntryListTileState extends State<EntryListTile> {
+  final timems = DateTime.now().millisecondsSinceEpoch;
   CountDown? countdown;
   String? code;
   int time = 0;
@@ -240,12 +241,7 @@ class _EntryListTileState extends State<EntryListTile> {
       setState(() {
         time = data.inSeconds;
         if (time == 0) {
-          code = OTP.generateTOTPCodeString(
-              widget.entry.secret, DateTime.now().millisecondsSinceEpoch,
-              length: widget.entry.length,
-              interval: widget.entry.period,
-              algorithm: widget.entry.algorithm,
-              isGoogle: widget.entry.isGoogle);
+          code = OTP.generateTOTPCodeString(widget.entry.secret, timems);
         }
       });
     });

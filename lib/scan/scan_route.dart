@@ -12,7 +12,7 @@ class ScanRoute extends StatefulWidget {
 }
 
 class _ScanRouteState extends State<ScanRoute> {
-  final GlobalKey _qrKey = GlobalKey();
+  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
 
@@ -35,10 +35,8 @@ class _ScanRouteState extends State<ScanRoute> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    debugPrint("LLL");
     this.controller = controller;
     controller.scannedDataStream.listen((data) {
-      debugPrint("LISTENER");
       setState(() => debugPrint(data.code));
     });
   }
