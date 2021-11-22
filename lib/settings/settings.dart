@@ -1,5 +1,7 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/auth/protection_page.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/settings/provider.dart';
 import 'package:openauth/theme/core.dart';
@@ -73,11 +75,35 @@ class _SettingsRouteState extends State<SettingsRoute> {
                           switchActiveColor: _themeColor,
                           title: Translations.of(context)!
                               .settings_access_protection,
+                          titleTextStyle: _titleTextStyle,
                           subtitle: Translations.of(context)!
                               .settings_access_protection_subtitle,
                           subtitleMaxLines: 3,
-                          onToggle: (status) {},
-                          switchValue: true)
+                          onToggle: (status) async {
+                            bool isAppProtected = status;
+                            if (status) {
+                              final result = Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          const ProtectionPage(),
+                                      transitionsBuilder: (context, animation,
+                                              secondaryAnimation, child) =>
+                                          SharedAxisTransition(
+                                              child: child,
+                                              animation: animation,
+                                              secondaryAnimation:
+                                                  secondaryAnimation,
+                                              transitionType:
+                                                  SharedAxisTransitionType
+                                                      .horizontal)));
+                              isAppProtected = await result;
+                            }
+                            setState(() =>
+                                notifier.changeProtection(isAppProtected));
+                          },
+                          switchValue: notifier.preferences.isAppProtected)
                     ])
               ],
             ),

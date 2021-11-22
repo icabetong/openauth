@@ -40,19 +40,22 @@ class Preferences {
   UserTheme theme;
   bool isSecretsHidden;
   bool isFirstLaunch;
+  bool isAppProtected;
 
   Preferences(
       {this.theme = UserTheme.light,
       this.isSecretsHidden = true,
-      this.isFirstLaunch = true});
+      this.isFirstLaunch = true,
+      this.isAppProtected = false});
 }
 
 class UserPreferenceHandler {
   SharedPreferences? _preferences;
 
   static const themeKey = "theme";
-  static const secretsHiddenKey = "secretsHiddenKey";
+  static const secretsHiddenKey = "secretsHidden";
   static const firstLaunchKey = "firstLaunch";
+  static const appProtectedKey = "isAppProtected";
 
   void _initPreferences() async {
     if (_preferences != null) {
@@ -92,5 +95,10 @@ class UserPreferenceHandler {
   Future setTheme(UserTheme theme) async {
     _initPreferences();
     return await _preferences?.setString(themeKey, theme.value.toString());
+  }
+
+  Future setAppProtected(bool isProtected) async {
+    _initPreferences();
+    return await _preferences?.setBool(appProtectedKey, isProtected);
   }
 }

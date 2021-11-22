@@ -1,8 +1,12 @@
 {
     "app_name": "OpenAuth",
+    "title_setup_app_protection": "Setup App Protection",
+    "title_setup_app_protection_subtitle": "You can setup a password to restrict access to this app and its contents.",
     "title_add_account": "How do you want to add your account?",
     "navigation_settings": "Settings",
     "navigation_about": "About",
+    "field_password": "Password",
+    "field_confirm_password": "Confirm Password",
     "field_issuer": "Issuer",
     "field_name": "Name",
     "field_secret": "Secret",

@@ -61,16 +61,19 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: 'Outfit'
+    - family: 'Rubik'
       fonts:
-        - asset: 'fonts/Outfit-Bold.ttf'
+        - asset: 'fonts/Rubik-Bold.ttf'
           weight: 700
-        - asset: 'fonts/Outfit-SemiBold.ttf'
+        - asset: 'fonts/Rubik-SemiBold.ttf'
           weight: 600
-        - asset: 'fonts/Outfit-Medium.ttf'
+        - asset: 'fonts/Rubik-Medium.ttf'
           weight: 500
-        - asset: 'fonts/Outfit-Regular.ttf'
+        - asset: 'fonts/Rubik-Regular.ttf'
           weight: 400
+        - asset: 'fonts/Rubik-Light.ttf'
+          weight: 300
+          
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

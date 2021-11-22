@@ -259,7 +259,11 @@ class _EntryListTileState extends State<EntryListTile> {
 
   void _generate() {
     code = OTP.generateTOTPCodeString(
-        widget.entry.secret, DateTime.now().millisecondsSinceEpoch);
+        widget.entry.secret, DateTime.now().millisecondsSinceEpoch,
+        length: widget.entry.length,
+        interval: widget.entry.period,
+        algorithm: widget.entry.algorithm,
+        isGoogle: true);
   }
 
   @override

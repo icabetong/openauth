@@ -12,6 +12,7 @@ class PreferenceNotifier extends ChangeNotifier {
 
   void load() async {
     _preferences = await _handler.getPreferences();
+    notifyListeners();
   }
 
   changeTheme(UserTheme theme) {
@@ -29,6 +30,12 @@ class PreferenceNotifier extends ChangeNotifier {
   changeFirstLaunch(bool isFirstLaunch) {
     _preferences.isFirstLaunch = isFirstLaunch;
     _handler.setFirstLaunch(isFirstLaunch);
+    notifyListeners();
+  }
+
+  changeProtection(bool isProtected) {
+    _preferences.isAppProtected = isProtected;
+    _handler.setAppProtected(isProtected);
     notifyListeners();
   }
 }

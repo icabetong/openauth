@@ -37,7 +37,7 @@ ThemeData getTheme(UserTheme userTheme) {
 }
 
 ThemeData getBase({Brightness brightness = Brightness.light}) {
-  const font = 'Outfit';
+  const font = 'Rubik';
   final base = ThemeData(brightness: brightness, fontFamily: font);
 
   return base.copyWith(
