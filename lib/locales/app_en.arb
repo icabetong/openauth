@@ -15,9 +15,9 @@
     "field_period": "Period",
     "field_counter": "Counter",
     "field_algorithm": "Algorithm",
-    "field_is_google": "Google Account",
-    "otp_type_totp": "TOTP",
-    "otp_type_hotp": "HOTP",
+    "field_is_google": "Compatibility Mode for Google Accounts",
+    "otp_type_totp": "Time-based Authentication",
+    "otp_type_hotp": "Counter-based Authentication",
     "algorithm_type_sha1": "SHA1",
     "algorithm_type_sha256": "SHA256",
     "algorithm_type_sha512": "SHA512",
@@ -31,6 +31,9 @@
     "button_hide_advanced": "Hide Advanced Options",
     "error_generic": "An error occured",
     "error_code_not_found": "Error Code Not Found",
+    "error_name_cant_be_empty": "Name cannot be empty",
+    "error_issuer_cant_be_empty": "Issuer cannot be empty",
+    "error_secret_cant_be_empty": "Secrets cannot be empty",
     "empty_accounts": "There's nothing here",
     "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_group_display": "Display",
@@ -44,5 +47,7 @@
     "settings_hide_secrets": "Hide Secrets",
     "settings_hide_secrets_subtitle": "Hide secrets with obscuring characters",
     "settings_access_protection": "Access Protection",
-    "settings_access_protection_subtitle": "Require a PIN to access the app."
+    "settings_access_protection_subtitle": "Require a PIN to access the app.",
+    "concat_seconds": "Seconds",
+    "concat_digits": "Digits"
 }

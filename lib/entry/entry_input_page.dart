@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/database/notifier.dart';
+import 'package:openauth/shared/custom/dropdown_field.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class InputRoute extends StatefulWidget {
 }
 
 class _InputRouteState extends State<InputRoute> {
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _issuerController = TextEditingController();
   final _secretController = TextEditingController();
@@ -24,16 +26,18 @@ class _InputRouteState extends State<InputRoute> {
   bool _advancedOpen = false;
 
   void _save(Function(Entry) save) {
-    final name = _nameController.text;
-    final issuer = _issuerController.text;
-    final secret = _secretController.text;
-    final period = int.parse(_periodController.text);
-    final length = int.parse(_lengthController.text);
-    final entry = Entry(secret, issuer, name,
-        period: period, length: length, type: _type, algorithm: _algorithm);
+    if (_formKey.currentState!.validate()) {
+      final name = _nameController.text;
+      final issuer = _issuerController.text;
+      final secret = _secretController.text;
+      final period = int.parse(_periodController.text);
+      final length = int.parse(_lengthController.text);
+      final entry = Entry(secret, issuer, name,
+          period: period, length: length, type: _type, algorithm: _algorithm);
 
-    save(entry);
-    Navigator.pop(context);
+      save(entry);
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -58,137 +62,143 @@ class _InputRouteState extends State<InputRoute> {
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(children: [
-                Row(
-                  children: [
-                    const Icon(Icons.fingerprint_outlined, color: Colors.grey),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: DropdownButton<OTPType>(
-                        hint: Text(Translations.of(context)!.field_type),
-                        isExpanded: true,
-                        onChanged: (type) {
-                          setState(() {
-                            if (type != null) {
-                              _type = type;
-                            }
-                          });
-                        },
-                        value: _type,
-                        items: [
-                          DropdownMenuItem(
-                              value: OTPType.totp,
-                              child: Text(
-                                  Translations.of(context)!.otp_type_totp)),
-                          DropdownMenuItem(
-                              value: OTPType.hotp,
-                              child:
-                                  Text(Translations.of(context)!.otp_type_hotp))
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      icon: const Icon(Icons.edit_outlined),
-                      labelText: Translations.of(context)!.field_name),
-                  controller: _nameController,
-                ),
-                const SizedBox(height: 16),
-                TextField(
+              child: Form(
+                key: _formKey,
+                child: Column(children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.fingerprint_outlined,
+                          color: Colors.grey),
+                      const SizedBox(width: 16),
+                      Expanded(
+                          child: DropdownInputField<OTPType>(
+                              items: OTPType.values,
+                              labels: [
+                                Translations.of(context)!.otp_type_totp,
+                                Translations.of(context)!.otp_type_hotp
+                              ],
+                              onChange: (type) {
+                                setState(() => _type = type);
+                              })),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        icon: const Icon(Icons.edit_outlined),
+                        labelText: Translations.of(context)!.field_name),
+                    controller: _nameController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return Translations.of(context)!
+                            .error_name_cant_be_empty;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         icon: const Icon(Icons.badge_outlined),
                         labelText: Translations.of(context)!.field_issuer),
-                    controller: _issuerController),
-                const SizedBox(height: 16),
-                TextField(
+                    controller: _issuerController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return Translations.of(context)!
+                            .error_issuer_cant_be_empty;
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
                     decoration: InputDecoration(
                         border: const OutlineInputBorder(),
                         icon: const Icon(Icons.vpn_key_outlined),
                         labelText: Translations.of(context)!.field_secret),
-                    controller: _secretController),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    setState(() => _advancedOpen = !_advancedOpen);
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(_advancedOpen
-                            ? Translations.of(context)!.button_hide_advanced
-                            : Translations.of(context)!.button_show_advanced),
-                      ),
-                      Icon(_advancedOpen
-                          ? Icons.arrow_upward_outlined
-                          : Icons.arrow_downward_outlined)
-                    ],
+                    controller: _secretController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return Translations.of(context)!
+                            .error_secret_cant_be_empty;
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                AnimatedOpacity(
-                    opacity: _advancedOpen ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 500),
-                    child: Visibility(
-                      visible: _advancedOpen,
-                      child: Column(children: [
-                        TextField(
-                            controller: _periodController,
-                            decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                icon: const Icon(Icons.lock_clock_outlined),
-                                labelText:
-                                    Translations.of(context)!.field_period)),
-                        const SizedBox(height: 16),
-                        TextField(
-                            controller: _lengthController,
-                            decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                icon: const Icon(Icons.password_outlined),
-                                labelText:
-                                    Translations.of(context)!.field_length)),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            const Icon(Icons.code, color: Colors.grey),
-                            const SizedBox(width: 16),
-                            Expanded(
-                                child: DropdownButton<Algorithm>(
-                              value: _algorithm,
-                              isExpanded: true,
-                              hint: Text(
-                                  Translations.of(context)!.field_algorithm),
-                              items: [
-                                DropdownMenuItem(
-                                    value: Algorithm.SHA1,
-                                    child: Text(Translations.of(context)!
-                                        .algorithm_type_sha1)),
-                                DropdownMenuItem(
-                                    value: Algorithm.SHA256,
-                                    child: Text(Translations.of(context)!
-                                        .algorithm_type_sha256)),
-                                DropdownMenuItem(
-                                    value: Algorithm.SHA512,
-                                    child: Text(Translations.of(context)!
-                                        .algorithm_type_sha512))
-                              ],
-                              onChanged: (algorithm) {
-                                setState(() {
-                                  if (algorithm != null) {
-                                    _algorithm = algorithm;
-                                  }
-                                });
-                              },
-                            ))
-                          ],
-                        )
-                      ]),
-                    )),
-                const SizedBox(height: 16),
-              ]),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      setState(() => _advancedOpen = !_advancedOpen);
+                    },
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(_advancedOpen
+                              ? Translations.of(context)!.button_hide_advanced
+                              : Translations.of(context)!.button_show_advanced),
+                        ),
+                        Icon(_advancedOpen
+                            ? Icons.arrow_upward_outlined
+                            : Icons.arrow_downward_outlined)
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  AnimatedOpacity(
+                      opacity: _advancedOpen ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 500),
+                      child: Visibility(
+                        visible: _advancedOpen,
+                        child: Column(children: [
+                          TextField(
+                              controller: _periodController,
+                              decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  icon: const Icon(Icons.lock_clock_outlined),
+                                  labelText:
+                                      Translations.of(context)!.field_period,
+                                  suffixText: Translations.of(context)!
+                                      .concat_seconds)),
+                          const SizedBox(height: 16),
+                          TextField(
+                              controller: _lengthController,
+                              decoration: InputDecoration(
+                                  border: const OutlineInputBorder(),
+                                  icon: const Icon(Icons.password_outlined),
+                                  labelText:
+                                      Translations.of(context)!.field_length,
+                                  suffixText:
+                                      Translations.of(context)!.concat_digits)),
+                          const SizedBox(height: 16),
+                          Row(
+                            children: [
+                              const Icon(Icons.code, color: Colors.grey),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: DropdownInputField<Algorithm>(
+                                  items: Algorithm.values,
+                                  labels: [
+                                    Translations.of(context)!
+                                        .algorithm_type_sha1,
+                                    Translations.of(context)!
+                                        .algorithm_type_sha256,
+                                    Translations.of(context)!
+                                        .algorithm_type_sha512
+                                  ],
+                                  onChange: (algorithm) {
+                                    setState(() => _algorithm = algorithm);
+                                  },
+                                ),
+                              )
+                            ],
+                          )
+                        ]),
+                      )),
+                  const SizedBox(height: 16),
+                ]),
+              ),
             ),
           ));
     });

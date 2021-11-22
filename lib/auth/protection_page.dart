@@ -13,6 +13,9 @@ class _ProtectionPageState extends State<ProtectionPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,16 +52,40 @@ class _ProtectionPageState extends State<ProtectionPage> {
                         ),
                         const SizedBox(height: 32),
                         TextFormField(
+                          obscureText: !_isPasswordVisible,
+                          enableSuggestions: false,
+                          autocorrect: false,
                           controller: _passwordController,
                           decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() =>
+                                      _isPasswordVisible = !_isPasswordVisible);
+                                },
+                                icon: Icon(_isPasswordVisible
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined),
+                              ),
                               border: const OutlineInputBorder(),
                               labelText:
                                   Translations.of(context)!.field_password),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
+                          obscureText: !_isConfirmPasswordVisible,
+                          enableSuggestions: false,
+                          autocorrect: false,
                           controller: _confirmPasswordController,
                           decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() => _isConfirmPasswordVisible =
+                                      !_isConfirmPasswordVisible);
+                                },
+                                icon: Icon(_isConfirmPasswordVisible
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined),
+                              ),
                               border: const OutlineInputBorder(),
                               labelText: Translations.of(context)!
                                   .field_confirm_password),
