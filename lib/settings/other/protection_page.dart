@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/settings/provider.dart';
 
 class ProtectionPage extends StatefulWidget {
   const ProtectionPage({Key? key}) : super(key: key);
@@ -9,12 +10,19 @@ class ProtectionPage extends StatefulWidget {
 }
 
 class _ProtectionPageState extends State<ProtectionPage> {
-  final _formKey = GlobalKey();
+  final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+
+  void _onSavePassphrase() async {
+    if (_formKey.currentState!.validate()) {
+      await PassphraseHandler.setPassphrase(_passwordController.text);
+      Navigator.pop(context, true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +30,13 @@ class _ProtectionPageState extends State<ProtectionPage> {
       onWillPop: _onWillPop,
       child: SafeArea(
         child: Scaffold(
-          extendBodyBehindAppBar: true,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           ),
           body: SingleChildScrollView(
             child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                padding: const EdgeInsets.all(16),
                 child: Form(
                   key: _formKey,
                   child: Center(
@@ -69,6 +75,18 @@ class _ProtectionPageState extends State<ProtectionPage> {
                               border: const OutlineInputBorder(),
                               labelText:
                                   Translations.of(context)!.field_password),
+                          validator: (value) {
+                            if (value != null && value.trim().isEmpty) {
+                              return Translations.of(context)!
+                                  .error_passphrase_empty;
+                            } else if (value !=
+                                _confirmPasswordController.text) {
+                              return Translations.of(context)!
+                                  .error_passphrase_not_matched;
+                            }
+
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
@@ -89,10 +107,21 @@ class _ProtectionPageState extends State<ProtectionPage> {
                               border: const OutlineInputBorder(),
                               labelText: Translations.of(context)!
                                   .field_confirm_password),
+                          validator: (value) {
+                            if (value != null && value.trim().isEmpty) {
+                              return Translations.of(context)!
+                                  .error_confirm_passphrase_empty;
+                            } else if (value != _passwordController.text) {
+                              return Translations.of(context)!
+                                  .error_passphrase_not_matched;
+                            }
+
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: _onSavePassphrase,
                             child:
                                 Text(Translations.of(context)!.button_continue))
                       ],

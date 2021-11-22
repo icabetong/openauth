@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserTheme { light, dark, amoled, dracula, nord }
@@ -100,5 +103,20 @@ class UserPreferenceHandler {
   Future setAppProtected(bool isProtected) async {
     _initPreferences();
     return await _preferences?.setBool(appProtectedKey, isProtected);
+  }
+}
+
+class PassphraseHandler {
+  static const _accessControl = "access";
+
+  static Future setPassphrase(String password) async {
+    const storage = FlutterSecureStorage();
+    await storage.write(
+        key: _accessControl, value: base64Encode(password.codeUnits));
+  }
+
+  static Future<String?> getPassphrase() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: _accessControl);
   }
 }
