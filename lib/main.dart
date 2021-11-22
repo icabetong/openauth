@@ -28,8 +28,7 @@ class OpenAuth extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (_) => PreferenceNotifier(),
-        child:
-            Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
+        child: Consumer<PreferenceNotifier>(builder: (context, notifier, _) {
           SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
               systemNavigationBarColor: Colors.transparent));
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

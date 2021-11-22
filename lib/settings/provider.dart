@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,7 @@ extension UserThemeExtension on UserTheme {
   }
 
   static UserTheme parse(String theme) {
+    debugPrint(theme);
     switch (theme) {
       case 'light':
         return UserTheme.light;
@@ -46,63 +48,80 @@ class Preferences {
   bool isAppProtected;
 
   Preferences(
-      {this.theme = UserTheme.light,
-      this.isSecretsHidden = true,
-      this.isFirstLaunch = true,
-      this.isAppProtected = false});
+      {required this.theme,
+      required this.isSecretsHidden,
+      required this.isFirstLaunch,
+      required this.isAppProtected});
+
+  static Preferences getDefault() {
+    return Preferences(
+        theme: UserTheme.light,
+        isSecretsHidden: true,
+        isFirstLaunch: false,
+        isAppProtected: false);
+  }
+
+  static const defaultSecretsHidden = false;
+  static const defaultFirstLaunch = true;
+  static const defaultAppProtected = false;
 }
 
-class UserPreferenceHandler {
-  SharedPreferences? _preferences;
+class PreferenceHandler {
+  static const _theme = "theme";
+  static const _isSecretsHidden = "isSecretsHidden";
+  static const _isFirstLaunch = "isFirstLaunch";
+  static const _isAppProtected = "isAppProtected";
 
-  static const themeKey = "theme";
-  static const secretsHiddenKey = "secretsHidden";
-  static const firstLaunchKey = "firstLaunch";
-  static const appProtectedKey = "isAppProtected";
-
-  void _initPreferences() async {
-    if (_preferences != null) {
-      _preferences = await SharedPreferences.getInstance();
-    }
+  static Future<UserTheme> getTheme() async {
+    final preferences = await SharedPreferences.getInstance();
+    String? theme = preferences.getString(_theme);
+    return theme != null ? UserThemeExtension.parse(theme) : UserTheme.light;
   }
 
-  Future<Preferences> getPreferences() async {
-    UserTheme _theme = await getTheme();
-    return Preferences(theme: _theme);
+  static Future<bool> setTheme(UserTheme theme) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(_theme, theme.value.toString());
   }
 
-  Future setFirstLaunch(bool isFirstLaunch) async {
-    _initPreferences();
-    return await _preferences?.setBool(firstLaunchKey, isFirstLaunch);
+  static Future<bool> getSecretsHidden() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(_isSecretsHidden) ??
+        Preferences.defaultSecretsHidden;
   }
 
-  Future<bool> getSecretsHidden() async {
-    _initPreferences();
-    bool _isSecretsHidden =
-        _preferences?.getBool(UserPreferenceHandler.secretsHiddenKey) ?? true;
-    return _isSecretsHidden;
+  static Future<bool> setSecretsHidden(bool isSecretsHidden) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_isSecretsHidden, isSecretsHidden);
   }
 
-  Future setSecretsHidden(bool secretsHidden) async {
-    _initPreferences();
-    return await _preferences?.setBool(
-        UserPreferenceHandler.secretsHiddenKey, secretsHidden);
+  static Future<bool> getFirstLaunch() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(_isFirstLaunch) ??
+        Preferences.defaultFirstLaunch;
   }
 
-  Future<UserTheme> getTheme() async {
-    _initPreferences();
-    String? _theme = _preferences?.getString(UserPreferenceHandler.themeKey);
-    return _theme != null ? UserThemeExtension.parse(_theme) : UserTheme.light;
+  static Future<bool> setFirstLaunch(bool isFirstLaunch) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_isFirstLaunch, isFirstLaunch);
   }
 
-  Future setTheme(UserTheme theme) async {
-    _initPreferences();
-    return await _preferences?.setString(themeKey, theme.value.toString());
+  static Future<bool> getAppProtected() async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(_isFirstLaunch) ??
+        Preferences.defaultAppProtected;
   }
 
-  Future setAppProtected(bool isProtected) async {
-    _initPreferences();
-    return await _preferences?.setBool(appProtectedKey, isProtected);
+  static Future<bool> setAppProtected(bool isAppProtected) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_isAppProtected, isAppProtected);
+  }
+
+  static Future<Preferences> getPreferences() async {
+    return Preferences(
+        theme: await getTheme(),
+        isSecretsHidden: await getSecretsHidden(),
+        isFirstLaunch: await getFirstLaunch(),
+        isAppProtected: await getAppProtected());
   }
 }
 

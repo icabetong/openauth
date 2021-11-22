@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:openauth/settings/provider.dart';
 
 class PreferenceNotifier extends ChangeNotifier {
-  final UserPreferenceHandler _handler = UserPreferenceHandler();
-  Preferences _preferences = Preferences();
+  Preferences _preferences = Preferences.getDefault();
   Preferences get preferences => _preferences;
 
   PreferenceNotifier() {
@@ -11,31 +10,31 @@ class PreferenceNotifier extends ChangeNotifier {
   }
 
   void load() async {
-    _preferences = await _handler.getPreferences();
+    _preferences = await PreferenceHandler.getPreferences();
     notifyListeners();
   }
 
-  changeTheme(UserTheme theme) {
+  changeTheme(UserTheme theme) async {
     _preferences.theme = theme;
-    _handler.setTheme(theme);
+    await PreferenceHandler.setTheme(theme);
     notifyListeners();
   }
 
-  changeSecretsHidden(bool isSecretsHidden) {
+  changeSecretsHidden(bool isSecretsHidden) async {
     _preferences.isSecretsHidden = isSecretsHidden;
-    _handler.setSecretsHidden(isSecretsHidden);
+    await PreferenceHandler.setSecretsHidden(isSecretsHidden);
     notifyListeners();
   }
 
-  changeFirstLaunch(bool isFirstLaunch) {
+  changeFirstLaunch(bool isFirstLaunch) async {
     _preferences.isFirstLaunch = isFirstLaunch;
-    _handler.setFirstLaunch(isFirstLaunch);
+    await PreferenceHandler.setFirstLaunch(isFirstLaunch);
     notifyListeners();
   }
 
-  changeProtection(bool isProtected) {
+  changeProtection(bool isProtected) async {
     _preferences.isAppProtected = isProtected;
-    _handler.setAppProtected(isProtected);
+    await PreferenceHandler.setAppProtected(isProtected);
     notifyListeners();
   }
 }
