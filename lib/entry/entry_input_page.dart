@@ -4,6 +4,7 @@ import 'package:openauth/entry/entry.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/shared/custom/dropdown_field.dart';
+import 'package:openauth/shared/custom/switch.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,7 @@ class _InputRouteState extends State<InputRoute> {
   OTPType _type = OTPType.totp;
   bool _advancedOpen = false;
   bool _isSecretObscured = false;
+  bool _isGoogle = true;
 
   void _save(Function(Entry) save) {
     if (_formKey.currentState!.validate()) {
@@ -35,7 +37,11 @@ class _InputRouteState extends State<InputRoute> {
       final period = int.parse(_periodController.text);
       final length = int.parse(_lengthController.text);
       final entry = Entry(secret, issuer, name,
-          period: period, length: length, type: _type, algorithm: _algorithm);
+          period: period,
+          length: length,
+          type: _type,
+          algorithm: _algorithm,
+          isGoogle: _isGoogle);
 
       save(entry);
       Navigator.pop(context);
@@ -220,6 +226,23 @@ class _InputRouteState extends State<InputRoute> {
                                     },
                                   ),
                                 )
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                const Icon(Icons.account_circle_outlined),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: SwitchField(
+                                    labelText: Translations.of(context)!
+                                        .field_is_google,
+                                    checked: _isGoogle,
+                                    onChange: (s) {
+                                      setState(() => _isGoogle = s);
+                                    },
+                                  ),
+                                ),
                               ],
                             )
                           ]),

@@ -70,6 +70,9 @@ class _EntryPageState extends State<EntryPage> {
         });
   }
 
+  void _onTap(code) async {}
+  void _onLongPress(entry) async {}
+
   @override
   Widget build(BuildContext context) {
     return Consumer<EntryNotifier>(builder: (context, notifier, child) {
@@ -85,6 +88,8 @@ class _EntryPageState extends State<EntryPage> {
                 ? const EmptyEntry()
                 : EntryList(
                     entries: notifier.entries,
+                    onTap: _onTap,
+                    onLongPress: _onLongPress,
                   )
           ],
         ),

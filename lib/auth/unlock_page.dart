@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/auth/unlock_notifier.dart';
-import 'package:openauth/main.dart';
 import 'package:openauth/settings/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +16,7 @@ class UnlockPage extends StatefulWidget {
 class _UnlockPageState extends State<UnlockPage> {
   final _passphraseController = TextEditingController();
   String? _error;
+  bool _isPasswordShown = false;
 
   void _onAuthenticate(context) async {
     final input = _passphraseController.text;
@@ -59,12 +59,22 @@ class _UnlockPageState extends State<UnlockPage> {
                       textAlign: TextAlign.center),
                   const SizedBox(height: 32),
                   TextFormField(
+                    obscureText: !_isPasswordShown,
+                    enableSuggestions: false,
+                    autocorrect: false,
                     controller: _passphraseController,
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: Translations.of(context)!.field_password,
-                      errorText: _error,
-                    ),
+                        border: const OutlineInputBorder(),
+                        labelText: Translations.of(context)!.field_password,
+                        errorText: _error,
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(
+                                  () => _isPasswordShown = !_isPasswordShown);
+                            },
+                            icon: Icon(_isPasswordShown
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined))),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(

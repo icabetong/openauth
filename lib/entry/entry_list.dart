@@ -3,14 +3,21 @@ import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
-import 'package:otp/otp.dart';
+import 'package:openauth/shared/token.dart';
 import 'package:provider/provider.dart';
 
 enum EntryListAction { edit, remove }
 
 class EntryList extends StatelessWidget {
-  const EntryList({Key? key, required this.entries}) : super(key: key);
+  const EntryList(
+      {Key? key,
+      required this.entries,
+      required this.onTap,
+      required this.onLongPress})
+      : super(key: key);
   final List<Entry> entries;
+  final Function(String) onTap;
+  final Function(Entry) onLongPress;
 
   void _onRemove(BuildContext context, Entry entry) async {
     final result =
@@ -23,21 +30,31 @@ class EntryList extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, index) {
         return EntryListTile(
-            key: Key(entries[index].entryId),
-            entry: entries[index],
-            onRemove: (entry) {
-              _onRemove(context, entry);
-            });
+          key: Key(entries[index].entryId),
+          entry: entries[index],
+          onRemove: (entry) {
+            _onRemove(context, entry);
+          },
+          onTap: onTap,
+          onLongPress: onLongPress,
+        );
       }, childCount: entries.length),
     );
   }
 }
 
 class EntryListTile extends StatefulWidget {
-  const EntryListTile({Key? key, required this.entry, required this.onRemove})
+  const EntryListTile(
+      {Key? key,
+      required this.entry,
+      required this.onRemove,
+      required this.onTap,
+      required this.onLongPress})
       : super(key: key);
   final Entry entry;
   final Function(Entry) onRemove;
+  final Function(String) onTap;
+  final Function(Entry) onLongPress;
 
   @override
   State<EntryListTile> createState() => _EntryListTileState();
@@ -87,12 +104,7 @@ class _EntryListTileState extends State<EntryListTile> {
   }
 
   void _generate() {
-    code = OTP.generateTOTPCodeString(
-        widget.entry.secret, DateTime.now().millisecondsSinceEpoch,
-        length: widget.entry.length,
-        interval: widget.entry.period,
-        algorithm: widget.entry.algorithm,
-        isGoogle: true);
+    code = TokenGenerator.compute(widget.entry);
   }
 
   @override
@@ -101,28 +113,15 @@ class _EntryListTileState extends State<EntryListTile> {
     return ListTile(
       key: widget.key,
       leading: CircularProgressIndicator(value: progress),
-      title: Text(code ?? Translations.of(context)!.error_code_not_found),
+      title: Text(code ?? Translations.of(context)!.error_code_not_found,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
-      trailing: PopupMenuButton<EntryListAction>(
-        icon: const Icon(Icons.more_horiz_outlined),
-        onSelected: (value) {
-          switch (value) {
-            case EntryListAction.edit:
-              // TODO: Handle this case.
-              break;
-            case EntryListAction.remove:
-              widget.onRemove(widget.entry);
-              break;
-          }
-        },
-        itemBuilder: (context) {
-          return <PopupMenuEntry<EntryListAction>>[
-            PopupMenuItem(
-                child: Text(Translations.of(context)!.button_remove),
-                value: EntryListAction.remove)
-          ];
-        },
-      ),
+      onTap: () {
+        if (code != null) widget.onTap(code!);
+      },
+      onLongPress: () {
+        widget.onLongPress(widget.entry);
+      },
     );
   }
 }

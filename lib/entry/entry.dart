@@ -36,7 +36,7 @@ class Entry {
     this.counter = 0,
     this.type = OTPType.totp,
     this.algorithm = Algorithm.SHA1,
-    this.isGoogle = false,
+    this.isGoogle = true,
   }) {
     entryId = randomId();
   }
