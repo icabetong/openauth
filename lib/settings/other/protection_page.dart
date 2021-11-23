@@ -32,7 +32,7 @@ class _ProtectionPageState extends State<ProtectionPage> {
         child: Scaffold(
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Colors.transparent,
           ),
           body: SingleChildScrollView(
             child: Padding(

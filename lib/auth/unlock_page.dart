@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/auth/unlock_notifier.dart';
 import 'package:openauth/main.dart';
 import 'package:openauth/settings/provider.dart';
+import 'package:provider/provider.dart';
 
 class UnlockPage extends StatefulWidget {
   const UnlockPage({Key? key}) : super(key: key);
@@ -31,11 +33,7 @@ class _UnlockPageState extends State<UnlockPage> {
           () => _error = Translations.of(context)!.error_passphrase_invalid);
       return;
     }
-
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const MainPage()),
-        ModalRoute.withName('/'));
+    Provider.of<UnlockNotifier>(context, listen: false).change(true);
   }
 
   @override
@@ -43,6 +41,7 @@ class _UnlockPageState extends State<UnlockPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: SafeArea(
