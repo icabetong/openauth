@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
+import 'package:openauth/auth/unlock_notifier.dart';
+import 'package:openauth/auth/unlock_page.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/entry/entry_input_page.dart';
 import 'package:openauth/database/database.dart';
@@ -10,6 +12,8 @@ import 'package:openauth/database/notifier.dart';
 import 'package:openauth/locales/locales.dart';
 import 'package:openauth/scan/scan_route.dart';
 import 'package:openauth/settings/notifier.dart';
+import 'package:openauth/settings/other/protection_page.dart';
+import 'package:openauth/settings/provider.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/theme/core.dart';
@@ -26,25 +30,34 @@ class OpenAuth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => PreferenceNotifier(),
-        child: Consumer<PreferenceNotifier>(builder: (context, notifier, _) {
-          SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-              systemNavigationBarColor: Colors.transparent));
-          SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-          return MaterialApp(
-            supportedLocales: AppLocales.all,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              Translations.delegate
-            ],
-            onGenerateTitle: (context) => Translations.of(context)!.app_name,
-            theme: getTheme(notifier.preferences.theme),
-            home: const MainPage(),
-          );
-        }));
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent));
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => PreferenceNotifier()),
+          ChangeNotifierProvider(create: (_) => UnlockNotifier())
+        ],
+        child: Consumer<PreferenceNotifier>(
+          builder: (context, notifier, _) {
+            return MaterialApp(
+              supportedLocales: AppLocales.all,
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                Translations.delegate
+              ],
+              routes: {
+                '/': (context) => const MainPage(),
+                '/auth': (context) => const UnlockPage()
+              },
+              onGenerateTitle: (context) => Translations.of(context)!.app_name,
+              theme: getTheme(notifier.preferences.theme),
+            );
+          },
+        ));
   }
 }
 

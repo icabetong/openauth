@@ -1,5 +1,7 @@
 {
     "app_name": "OpenAuth",
+    "title_unlock_app": "Unlock OpenAuth",
+    "title_unlock_app_subtitle": "Enter your passphrase to unlock the app",
     "title_setup_app_protection": "Setup App Protection",
     "title_setup_app_protection_subtitle": "You can setup a password to restrict access to this app and its contents.",
     "title_add_account": "How do you want to add your account?",
@@ -27,6 +29,7 @@
     "button_scan": "Scan",
     "button_input": "Input",
     "button_continue": "Continue",
+    "button_unlock": "Unlock",
     "button_show_advanced": "Show Advanced Options",
     "button_hide_advanced": "Hide Advanced Options",
     "error_generic": "An error occured",
@@ -37,6 +40,7 @@
     "error_passphrase_empty": "Passphrase cannot be empty",
     "error_confirm_passphrase_empty": "Confirm Passphrase cannot be empty",
     "error_passphrase_not_matched": "Passphrase do not match",
+    "error_passphrase_invalid": "Wrong passphrase",
     "empty_accounts": "There's nothing here",
     "empty_accounts_subtitle": "Generated OTPs for your accounts are shown here. Tap the button below to add an account.",
     "settings_group_display": "Display",

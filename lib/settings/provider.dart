@@ -107,7 +107,7 @@ class PreferenceHandler {
 
   static Future<bool> getAppProtected() async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.getBool(_isFirstLaunch) ??
+    return preferences.getBool(_isAppProtected) ??
         Preferences.defaultAppProtected;
   }
 
