@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/database/notifier.dart';
@@ -9,7 +10,28 @@ import 'package:openauth/settings/settings.dart';
 import 'package:provider/provider.dart';
 
 enum Action { input, scan }
+enum Option { edit, remove }
 enum Route { settings, about }
+
+extension OptionExtensions on Option {
+  Widget get icon {
+    switch (this) {
+      case Option.edit:
+        return const Icon(Icons.edit_outlined);
+      case Option.remove:
+        return const Icon(Icons.delete_outline);
+    }
+  }
+
+  String getLocalization(context) {
+    switch (this) {
+      case Option.edit:
+        return Translations.of(context)!.button_edit;
+      case Option.remove:
+        return Translations.of(context)!.button_remove;
+    }
+  }
+}
 
 class EntryPage extends StatefulWidget {
   const EntryPage({Key? key}) : super(key: key);
@@ -70,8 +92,32 @@ class _EntryPageState extends State<EntryPage> {
         });
   }
 
-  void _onTap(code) async {}
-  void _onLongPress(entry) async {}
+  Future<Option?> _invokeOptions(context) async {
+    return await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ListView(
+            shrinkWrap: true,
+            children: Option.values.map((option) {
+              return ListTile(
+                  leading: option.icon,
+                  title: Text(option.getLocalization(context)));
+            }).toList(),
+          );
+        });
+  }
+
+  void _onTap(code) {
+    Clipboard.setData(ClipboardData(text: code)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              Translations.of(context)!.feedback_code_copied_to_clipboard)));
+    });
+  }
+
+  void _onLongPress(entry) async {
+    final result = await _invokeOptions(context);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -33,6 +33,7 @@
     "button_unlock": "Unlock",
     "button_show_advanced": "Show Advanced Options",
     "button_hide_advanced": "Hide Advanced Options",
+    "feedback_code_copied_to_clipboard": "Code Copied to Clipboard",
     "error_generic": "An error occured",
     "error_code_not_found": "Error Code Not Found",
     "error_name_cant_be_empty": "Name cannot be empty",

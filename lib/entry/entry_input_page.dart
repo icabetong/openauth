@@ -9,7 +9,9 @@ import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
 class InputRoute extends StatefulWidget {
-  const InputRoute({Key? key}) : super(key: key);
+  const InputRoute({Key? key, this.entry}) : super(key: key);
+
+  final Entry? entry;
 
   @override
   _InputRouteState createState() => _InputRouteState();
@@ -17,11 +19,25 @@ class InputRoute extends StatefulWidget {
 
 class _InputRouteState extends State<InputRoute> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _issuerController = TextEditingController();
-  final _secretController = TextEditingController();
-  final _periodController = TextEditingController(text: "30");
-  final _lengthController = TextEditingController(text: "6");
+  late TextEditingController _nameController;
+  late TextEditingController _issuerController;
+  late TextEditingController _secretController;
+  late TextEditingController _periodController;
+  late TextEditingController _lengthController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final isUpdate = widget.entry != null;
+    _nameController = TextEditingController(text: widget.entry?.name);
+    _issuerController = TextEditingController(text: widget.entry?.issuer);
+    _secretController = TextEditingController(text: widget.entry?.secret);
+    _periodController = TextEditingController(
+        text: isUpdate ? '${widget.entry!.period}' : '${Entry.defaultPeriod}');
+    _lengthController = TextEditingController(
+        text: isUpdate ? '${widget.entry!.length}' : '${Entry.defaultLength}');
+  }
 
   Algorithm _algorithm = Algorithm.SHA1;
   OTPType _type = OTPType.totp;

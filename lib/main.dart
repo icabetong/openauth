@@ -2,23 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
-import 'package:openauth/about/about.dart';
 import 'package:openauth/auth/unlock_notifier.dart';
 import 'package:openauth/auth/unlock_page.dart';
-import 'package:openauth/entry/entry.dart';
-import 'package:openauth/entry/entry_input_page.dart';
 import 'package:openauth/database/database.dart';
 import 'package:openauth/database/notifier.dart';
-import 'package:openauth/entry/entry_list.dart';
 import 'package:openauth/entry/entry_page.dart';
 import 'package:openauth/locales/locales.dart';
-import 'package:openauth/scan/scan_route.dart';
 import 'package:openauth/settings/notifier.dart';
-import 'package:openauth/settings/provider.dart';
-import 'package:openauth/settings/settings.dart';
-import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/theme/core.dart';
-import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
