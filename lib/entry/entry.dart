@@ -99,7 +99,7 @@ class Entry {
       case "SHA512":
         return Algorithm.SHA512;
       default:
-        throw Error();
+        return Algorithm.SHA1;
     }
   }
 

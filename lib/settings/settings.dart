@@ -80,8 +80,9 @@ class _SettingsRouteState extends State<SettingsRoute> {
                           subtitleMaxLines: 3,
                           titleTextStyle: _titleTextStyle,
                           onToggle: (status) {
-                            setState(
-                                () => notifier.changeSecretsHidden(status));
+                            setState(() {
+                              notifier.changeSecretsHidden(status);
+                            });
                           },
                           switchValue: notifier.preferences.isSecretsHidden),
                       SettingsTile.switchTile(

@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/database/notifier.dart';
+import 'package:openauth/entry/entry.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanRoute extends StatefulWidget {
@@ -13,7 +16,6 @@ class ScanRoute extends StatefulWidget {
 
 class _ScanRouteState extends State<ScanRoute> {
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
   QRViewController? controller;
 
   // In order to get hot reload to work we need to pause the camera if the platform
@@ -37,7 +39,11 @@ class _ScanRouteState extends State<ScanRoute> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((data) {
-      setState(() => debugPrint(data.code));
+      if (data.code != null) {
+        final entry = Entry.fromString(data.code!);
+        Provider.of<EntryNotifier>(context, listen: false).put(entry);
+        Navigator.pop(context);
+      }
     });
   }
 
@@ -47,14 +53,14 @@ class _ScanRouteState extends State<ScanRoute> {
             MediaQuery.of(context).size.height < 400)
         ? 300.0
         : 500.0;
-    debugPrint(result?.code);
     return Scaffold(
         appBar: AppBar(
           title: Text(Translations.of(context)!.app_name),
         ),
         body: QRView(
-            key: _qrKey,
-            onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(cutOutSize: scanArea)));
+          key: _qrKey,
+          onQRViewCreated: _onQRViewCreated,
+          overlay: QrScannerOverlayShape(cutOutSize: scanArea, borderRadius: 8),
+        ));
   }
 }

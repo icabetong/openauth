@@ -67,7 +67,7 @@ class _EntryPageState extends State<EntryPage> {
                             padding: const EdgeInsets.all(8),
                             child: Column(
                               children: [
-                                const Icon(Icons.scanner_outlined),
+                                const Icon(Icons.qr_code_scanner_outlined),
                                 Text(Translations.of(context)!.button_scan)
                               ],
                             ),

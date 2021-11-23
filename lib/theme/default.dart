@@ -3,7 +3,7 @@ import 'package:openauth/theme/core.dart';
 
 ThemeData getDefault({Brightness brightness = Brightness.light}) {
   ThemeData base = getBase(brightness: brightness);
-  final primary = Colors.teal.shade500;
+  const primary = Color(0xff3182CE);
   const onPrimary = Colors.white;
   final scaffold = brightness == Brightness.light
       ? base.colorScheme.surface
