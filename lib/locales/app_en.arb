@@ -25,6 +25,7 @@
     "algorithm_type_sha512": "SHA512",
     "button_add": "Add",
     "button_save": "Save",
+    "button_edit": "Edit",
     "button_remove": "Remove",
     "button_scan": "Scan",
     "button_input": "Input",

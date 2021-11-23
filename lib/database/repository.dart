@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:openauth/entry/entry.dart';
 
@@ -20,7 +21,9 @@ class EntryRepository extends Repository<Entry> {
 
   @override
   Future put(Entry data) async {
-    return await box.put(data.entryId, data);
+    debugPrint(data.entryId);
+    await box.put(data.entryId, data);
+    debugPrint(box.keys.map((e) => e).toString());
   }
 
   @override

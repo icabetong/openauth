@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +22,6 @@ extension UserThemeExtension on UserTheme {
   }
 
   static UserTheme parse(String theme) {
-    debugPrint(theme);
     switch (theme) {
       case 'light':
         return UserTheme.light;
