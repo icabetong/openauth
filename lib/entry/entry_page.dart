@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/database/notifier.dart';
+import 'package:openauth/entry/entry.dart';
 import 'package:openauth/entry/entry_input_page.dart';
 import 'package:openauth/entry/entry_list.dart';
 import 'package:openauth/scan/scan_route.dart';
@@ -100,11 +101,45 @@ class _EntryPageState extends State<EntryPage> {
             shrinkWrap: true,
             children: Option.values.map((option) {
               return ListTile(
-                  leading: option.icon,
-                  title: Text(option.getLocalization(context)));
+                leading: option.icon,
+                title: Text(option.getLocalization(context)),
+                onTap: () {
+                  Navigator.pop(context, option);
+                },
+              );
             }).toList(),
           );
         });
+  }
+
+  Future<bool> _invokeRemoveDialog() async {
+    return await showDialog<bool>(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(Translations.of(context)!.dialog_remove_entry),
+                content: Text(
+                    Translations.of(context)!.dialog_remove_entry_subtitle),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: Text(
+                        Translations.of(context)!.button_cancel.toUpperCase()),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: Text(
+                        Translations.of(context)!.button_remove.toUpperCase()),
+                  ),
+                ],
+              );
+            }) ??
+        false;
   }
 
   void _onTap(code) {
@@ -115,8 +150,22 @@ class _EntryPageState extends State<EntryPage> {
     });
   }
 
-  void _onLongPress(entry) async {
+  void _onLongPress(Entry entry) async {
     final result = await _invokeOptions(context);
+    switch (result) {
+      case Option.edit:
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => InputPage(entry: entry)));
+        break;
+      case Option.remove:
+        final response = await _invokeRemoveDialog();
+        if (response) {
+          Provider.of<EntryNotifier>(context, listen: false).remove(entry);
+        }
+        break;
+      default:
+        debugPrint('');
+    }
   }
 
   @override
@@ -148,7 +197,7 @@ class _EntryPageState extends State<EntryPage> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ChangeNotifierProvider<EntryNotifier>.value(
-                          value: notifier, child: const InputRoute());
+                          value: notifier, child: const InputPage());
                     }));
                     break;
                   case Action.scan:

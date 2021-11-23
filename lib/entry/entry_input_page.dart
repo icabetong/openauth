@@ -8,16 +8,16 @@ import 'package:openauth/shared/custom/switch.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
-class InputRoute extends StatefulWidget {
-  const InputRoute({Key? key, this.entry}) : super(key: key);
+class InputPage extends StatefulWidget {
+  const InputPage({Key? key, this.entry}) : super(key: key);
 
   final Entry? entry;
 
   @override
-  _InputRouteState createState() => _InputRouteState();
+  _InputPageState createState() => _InputPageState();
 }
 
-class _InputRouteState extends State<InputRoute> {
+class _InputPageState extends State<InputPage> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _issuerController;
