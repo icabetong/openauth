@@ -28,8 +28,7 @@ class _ProtectionPageState extends State<ProtectionPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: _onWillPop,
-      child: SafeArea(
-        child: Scaffold(
+      child: Scaffold(
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
@@ -128,9 +127,7 @@ class _ProtectionPageState extends State<ProtectionPage> {
                     ),
                   ),
                 )),
-          ),
-        ),
-      ),
+          )),
     );
   }
 

@@ -58,5 +58,11 @@ ThemeData getBase({Brightness brightness = Brightness.light}) {
         ),
       ),
     ),
+    snackBarTheme: base.snackBarTheme.copyWith(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(4),
+      ),
+    ),
   );
 }

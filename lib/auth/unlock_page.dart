@@ -44,47 +44,45 @@ class _UnlockPageState extends State<UnlockPage> {
         backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Column(
-                children: [
-                  const Icon(Icons.admin_panel_settings_outlined, size: 32),
-                  Text(Translations.of(context)!.title_unlock_app,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18)),
-                  const SizedBox(height: 8),
-                  Text(Translations.of(context)!.title_unlock_app_subtitle,
-                      textAlign: TextAlign.center),
-                  const SizedBox(height: 32),
-                  TextFormField(
-                    obscureText: !_isPasswordShown,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    controller: _passphraseController,
-                    decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: Translations.of(context)!.field_password,
-                        errorText: _error,
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(
-                                  () => _isPasswordShown = !_isPasswordShown);
-                            },
-                            icon: Icon(_isPasswordShown
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined))),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    child: Text(Translations.of(context)!.button_unlock),
-                    onPressed: () {
-                      _onAuthenticate(context);
-                    },
-                  )
-                ],
-              ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: Column(
+              children: [
+                const Icon(Icons.admin_panel_settings_outlined, size: 32),
+                Text(Translations.of(context)!.title_unlock_app,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 18)),
+                const SizedBox(height: 8),
+                Text(Translations.of(context)!.title_unlock_app_subtitle,
+                    textAlign: TextAlign.center),
+                const SizedBox(height: 32),
+                TextFormField(
+                  obscureText: !_isPasswordShown,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: _passphraseController,
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: Translations.of(context)!.field_password,
+                      errorText: _error,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(
+                                () => _isPasswordShown = !_isPasswordShown);
+                          },
+                          icon: Icon(_isPasswordShown
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined))),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  child: Text(Translations.of(context)!.button_unlock),
+                  onPressed: () {
+                    _onAuthenticate(context);
+                  },
+                )
+              ],
             ),
           ),
         ),
