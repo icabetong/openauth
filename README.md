@@ -1,5 +1,5 @@
 <h1 align="center">OpenAuth</h1>
-<div align="center"></div>
+<div align="center">A beautiful, secure and simple authenticator app that supports multiple protocols and services. Free and open source. Written in Flutter and Dart.</div>
 
 ## Features
 * Fast and Beautiful UI
