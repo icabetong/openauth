@@ -29,22 +29,26 @@ class DropdownInputField<T> extends StatelessWidget {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
           isEmpty: selected == null,
           child: DropdownButtonHideUnderline(
-            child: DropdownButton<T>(
-              value: selected,
-              isDense: true,
-              onChanged: (T? newValue) {
-                onChange(newValue ?? selected!);
-              },
-              items: items.map((T value) {
-                String label = labels != null && labels!.isNotEmpty
-                    ? labels![items.indexOf(value)]
-                    : value.toString();
+            child: Theme(
+              data: Theme.of(context)
+                  .copyWith(canvasColor: Theme.of(context).colorScheme.surface),
+              child: DropdownButton<T>(
+                value: selected,
+                isDense: true,
+                onChanged: (T? newValue) {
+                  onChange(newValue ?? selected!);
+                },
+                items: items.map((T value) {
+                  String label = labels != null && labels!.isNotEmpty
+                      ? labels![items.indexOf(value)]
+                      : value.toString();
 
-                return DropdownMenuItem<T>(
-                  value: value,
-                  child: Text(label),
-                );
-              }).toList(),
+                  return DropdownMenuItem<T>(
+                    value: value,
+                    child: Text(label),
+                  );
+                }).toList(),
+              ),
             ),
           ),
         );
