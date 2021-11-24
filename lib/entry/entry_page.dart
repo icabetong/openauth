@@ -46,50 +46,52 @@ class _EntryPageState extends State<EntryPage> {
     return await showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(Translations.of(context)!.title_add_account,
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 18)),
-                const SizedBox(height: 32),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      OutlinedButton(
-                          onPressed: () {
-                            Navigator.pop(context, Action.scan);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.qr_code_scanner_outlined),
-                                const SizedBox(width: 16),
-                                Text(Translations.of(context)!.button_scan)
-                              ],
-                            ),
-                          )),
-                      OutlinedButton(
-                          onPressed: () {
-                            Navigator.pop(context, Action.input);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.edit_outlined),
-                                const SizedBox(width: 16),
-                                Text(Translations.of(context)!.button_input)
-                              ],
-                            ),
-                          ))
-                    ]),
-                const SizedBox(height: 16)
-              ],
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(Translations.of(context)!.title_add_account,
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 18)),
+                  const SizedBox(height: 32),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context, Action.scan);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.qr_code_scanner_outlined),
+                                  const SizedBox(width: 16),
+                                  Text(Translations.of(context)!.button_scan)
+                                ],
+                              ),
+                            )),
+                        OutlinedButton(
+                            onPressed: () {
+                              Navigator.pop(context, Action.input);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.edit_outlined),
+                                  const SizedBox(width: 16),
+                                  Text(Translations.of(context)!.button_input)
+                                ],
+                              ),
+                            ))
+                      ]),
+                  const SizedBox(height: 16)
+                ],
+              ),
             ),
           );
         });
