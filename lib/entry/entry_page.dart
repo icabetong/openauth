@@ -177,6 +177,7 @@ class _EntryPageState extends State<EntryPage> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               title: Text(Translations.of(context)!.app_name),
               snap: true,
               floating: true,
