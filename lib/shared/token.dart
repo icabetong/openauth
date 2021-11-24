@@ -2,11 +2,11 @@ import 'package:openauth/entry/entry.dart';
 import 'package:otp/otp.dart';
 
 class TokenGenerator {
-  static String compute(Entry entry) {
+  static String compute(Entry entry, {int? time}) {
     switch (entry.type) {
       case OTPType.totp:
         return OTP.generateTOTPCodeString(
-            entry.secret, DateTime.now().millisecondsSinceEpoch,
+            entry.secret, time ?? DateTime.now().millisecondsSinceEpoch,
             length: entry.length,
             interval: entry.period,
             algorithm: entry.algorithm,

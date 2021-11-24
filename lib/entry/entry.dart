@@ -41,6 +41,31 @@ class Entry {
     entryId = randomId();
   }
 
+  Entry copyWith(
+      {String? secret,
+      String? issuer,
+      String? name,
+      String? entryId,
+      int? length,
+      int? period,
+      int? counter,
+      OTPType? type,
+      Algorithm? algorithm,
+      bool? isGoogle}) {
+    return Entry(
+      secret ?? this.secret,
+      issuer ?? this.issuer,
+      name ?? this.name,
+      entryId: entryId ?? this.entryId,
+      length: length ?? this.length,
+      period: period ?? this.period,
+      counter: counter ?? this.counter,
+      type: type ?? this.type,
+      algorithm: algorithm ?? this.algorithm,
+      isGoogle: isGoogle ?? this.isGoogle,
+    );
+  }
+
   factory Entry.fromString(String contents) {
     contents = contents.replaceFirst("otpauth", "http");
     Uri uri = Uri.parse(contents);
