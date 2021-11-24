@@ -27,19 +27,21 @@ class EntryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate((context, index) {
-        return EntryListTile(
-          key: Key(entries[index].entryId),
-          entry: entries[index],
-          onRemove: (entry) {
-            _onRemove(context, entry);
-          },
-          onTap: onTap,
-          onLongPress: onLongPress,
-        );
-      }, childCount: entries.length),
-    );
+    return entries.isNotEmpty
+        ? SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return EntryListTile(
+                key: Key(entries[index].entryId),
+                entry: entries[index],
+                onRemove: (entry) {
+                  _onRemove(context, entry);
+                },
+                onTap: onTap,
+                onLongPress: onLongPress,
+              );
+            }, childCount: entries.length),
+          )
+        : EntryEmptyState();
   }
 }
 
@@ -143,8 +145,8 @@ class _EntryListTileState extends State<EntryListTile> {
   }
 }
 
-class EmptyEntry extends StatelessWidget {
-  const EmptyEntry({Key? key}) : super(key: key);
+class EntryEmptyState extends StatelessWidget {
+  const EntryEmptyState({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

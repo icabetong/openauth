@@ -52,21 +52,6 @@ class _SettingsRouteState extends State<SettingsRoute> {
                       ),
                     ]),
                 SettingsSection(
-                    title: Translations.of(context)!.settings_group_behavior,
-                    titleTextStyle: _headerTextStyle,
-                    tiles: [
-                      SettingsTile.switchTile(
-                        leading: const Icon(Icons.copy_outlined),
-                        title: Translations.of(context)!.settings_tap_to_copy,
-                        subtitle: Translations.of(context)!
-                            .settings_tap_to_copy_subtitle,
-                        titleTextStyle: _titleTextStyle,
-                        onToggle: (status) {},
-                        switchValue: false,
-                        subtitleMaxLines: 3,
-                      )
-                    ]),
-                SettingsSection(
                     title: Translations.of(context)!.settings_group_security,
                     titleTextStyle: _headerTextStyle,
                     tiles: [

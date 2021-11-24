@@ -5,6 +5,7 @@ import 'package:openauth/theme/amoled.dart';
 import 'package:openauth/theme/default.dart';
 import 'package:openauth/theme/dracula.dart';
 import 'package:openauth/theme/nord.dart';
+import 'package:openauth/theme/sunset.dart';
 
 String getThemeName(BuildContext context, UserTheme theme) {
   switch (theme) {
@@ -18,6 +19,8 @@ String getThemeName(BuildContext context, UserTheme theme) {
       return Translations.of(context)!.settings_theme_dracula;
     case UserTheme.nord:
       return Translations.of(context)!.settings_theme_nord;
+    case UserTheme.sunset:
+      return Translations.of(context)!.settings_theme_sunset;
   }
 }
 
@@ -33,6 +36,8 @@ ThemeData getTheme(UserTheme userTheme) {
       return getDracula();
     case UserTheme.nord:
       return getNord();
+    case UserTheme.sunset:
+      return getSunset();
   }
 }
 

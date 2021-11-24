@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum UserTheme { light, dark, amoled, dracula, nord }
+enum UserTheme { light, dark, amoled, dracula, nord, sunset }
 
 extension UserThemeExtension on UserTheme {
   String get value {
@@ -18,6 +18,8 @@ extension UserThemeExtension on UserTheme {
         return 'dracula';
       case UserTheme.nord:
         return 'nord';
+      case UserTheme.sunset:
+        return 'sunset';
     }
   }
 
@@ -33,6 +35,8 @@ extension UserThemeExtension on UserTheme {
         return UserTheme.dracula;
       case 'nord':
         return UserTheme.nord;
+      case 'sunset':
+        return UserTheme.sunset;
       default:
         throw Error();
     }

@@ -177,18 +177,24 @@ class _EntryPageState extends State<EntryPage> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
+              expandedHeight: 128,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              title: Text(Translations.of(context)!.app_name),
-              snap: true,
-              floating: true,
+              //title: Text(Translations.of(context)!.app_name),
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding: const EdgeInsets.all(16),
+                title: Text(
+                  Translations.of(context)!.app_name,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                ),
+              ),
             ),
-            notifier.entries.isEmpty
-                ? const EmptyEntry()
-                : EntryList(
-                    entries: notifier.entries,
-                    onTap: _onTap,
-                    onLongPress: _onLongPress,
-                  )
+            EntryList(
+              entries: notifier.entries,
+              onTap: _onTap,
+              onLongPress: _onLongPress,
+            )
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(

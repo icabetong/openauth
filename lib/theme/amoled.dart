@@ -4,7 +4,7 @@ import 'package:openauth/theme/core.dart';
 ThemeData getAmoled() {
   final base = getBase(brightness: Brightness.dark);
 
-  final primary = Colors.teal[500];
+  const primary = Color(0xff3182CE);
   const onPrimary = Color(0xffffffff);
   const background = Color(0xff080808);
   const surface = Color(0xff1c1c1c);
