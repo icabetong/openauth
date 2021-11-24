@@ -193,7 +193,7 @@ class _EntryPageState extends State<EntryPage> {
             EntryList(
               entries: notifier.entries,
               onTap: _onTap,
-              onLongPress: _onLongPress,
+              onLongTap: _onLongPress,
             )
           ],
         ),

@@ -13,17 +13,11 @@ class EntryList extends StatelessWidget {
       {Key? key,
       required this.entries,
       required this.onTap,
-      required this.onLongPress})
+      required this.onLongTap})
       : super(key: key);
   final List<Entry> entries;
   final Function(String) onTap;
-  final Function(Entry) onLongPress;
-
-  void _onRemove(BuildContext context, Entry entry) async {
-    final result =
-        await Provider.of<EntryNotifier>(context, listen: false).remove(entry);
-    debugPrint(result);
-  }
+  final Function(Entry) onLongTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +27,12 @@ class EntryList extends StatelessWidget {
               return EntryListTile(
                 key: Key(entries[index].entryId),
                 entry: entries[index],
-                onRemove: (entry) {
-                  _onRemove(context, entry);
-                },
                 onTap: onTap,
-                onLongPress: onLongPress,
+                onLongTap: onLongTap,
               );
             }, childCount: entries.length),
           )
-        : EntryEmptyState();
+        : const EntryEmptyState();
   }
 }
 
@@ -49,14 +40,12 @@ class EntryListTile extends StatefulWidget {
   const EntryListTile(
       {Key? key,
       required this.entry,
-      required this.onRemove,
       required this.onTap,
-      required this.onLongPress})
+      required this.onLongTap})
       : super(key: key);
   final Entry entry;
-  final Function(Entry) onRemove;
   final Function(String) onTap;
-  final Function(Entry) onLongPress;
+  final Function(Entry) onLongTap;
 
   @override
   State<EntryListTile> createState() => _EntryListTileState();
@@ -73,15 +62,15 @@ class _EntryListTileState extends State<EntryListTile> {
 
     switch (widget.entry.type) {
       case OTPType.totp:
-        _start();
+        _startTOTPGeneration();
         break;
       case OTPType.hotp:
-        _generate();
+        _startHOTPGeneration();
         break;
     }
   }
 
-  void _start() {
+  void _startTOTPGeneration() {
     final seconds = DateTime.now().second;
     if (seconds == 0) {
       countdown = CountDown(const Duration(seconds: 30));
@@ -95,10 +84,19 @@ class _EntryListTileState extends State<EntryListTile> {
     }
   }
 
+  void _startHOTPGeneration({bool increment = false}) {
+    if (increment) {
+      final entry = widget.entry;
+      entry.counter++;
+      Provider.of<EntryNotifier>(context, listen: false).put(entry);
+    }
+    _generate();
+  }
+
   void _countdown() {
     final sub = countdown?.stream?.listen(null);
     sub?.onDone(() {
-      _start();
+      _startTOTPGeneration();
     });
 
     sub?.onData((data) {
@@ -123,7 +121,12 @@ class _EntryListTileState extends State<EntryListTile> {
         double progress = time / 30;
         return CircularProgressIndicator(value: progress);
       case OTPType.hotp:
-        return Text(widget.entry.counter.toString());
+        return IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: () {
+            _startHOTPGeneration();
+          },
+        );
     }
   }
 
@@ -139,7 +142,7 @@ class _EntryListTileState extends State<EntryListTile> {
         if (code != null) widget.onTap(code!);
       },
       onLongPress: () {
-        widget.onLongPress(widget.entry);
+        widget.onLongTap(widget.entry);
       },
     );
   }

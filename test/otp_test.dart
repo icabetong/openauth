@@ -8,4 +8,10 @@ void main() {
         algorithm: Algorithm.SHA1, interval: 30, isGoogle: true);
     expect(code, equals('793957'));
   });
+
+  test('Verification of HOTP Generation Algorithm is Correct', () {
+    final code = OTP.generateHOTPCodeString('JBSWY3DPEHPK3PXP', 0,
+        length: 6, algorithm: Algorithm.SHA1);
+    expect(code, equals('282760'));
+  });
 }

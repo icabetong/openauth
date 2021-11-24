@@ -18,7 +18,7 @@ class Entry {
   @HiveField(5)
   final int period;
   @HiveField(6)
-  final int counter;
+  int counter;
   @HiveField(7)
   final OTPType type;
   @HiveField(8)
@@ -115,6 +115,7 @@ class Entry {
 
   static const defaultPeriod = 30;
   static const defaultLength = 6;
+  static const defaultCounter = 0;
 }
 
 @HiveType(typeId: 1)

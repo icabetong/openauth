@@ -24,6 +24,7 @@ class _InputPageState extends State<InputPage> {
   late TextEditingController _secretController;
   late TextEditingController _periodController;
   late TextEditingController _lengthController;
+  late TextEditingController _counterController;
 
   @override
   void initState() {
@@ -37,6 +38,9 @@ class _InputPageState extends State<InputPage> {
         text: isUpdate ? '${widget.entry!.period}' : '${Entry.defaultPeriod}');
     _lengthController = TextEditingController(
         text: isUpdate ? '${widget.entry!.length}' : '${Entry.defaultLength}');
+    _counterController = TextEditingController(
+        text:
+            isUpdate ? '${widget.entry!.counter}' : '${Entry.defaultCounter}');
   }
 
   Algorithm _algorithm = Algorithm.SHA1;
@@ -214,15 +218,25 @@ class _InputPageState extends State<InputPage> {
                                     suffixText: Translations.of(context)!
                                         .concat_seconds)),
                             const SizedBox(height: 16),
-                            TextField(
-                                controller: _lengthController,
-                                decoration: InputDecoration(
-                                    border: const OutlineInputBorder(),
-                                    icon: const Icon(Icons.password_outlined),
-                                    labelText:
-                                        Translations.of(context)!.field_length,
-                                    suffixText: Translations.of(context)!
-                                        .concat_digits)),
+                            _type == OTPType.hotp
+                                ? TextField(
+                                    controller: _counterController,
+                                    decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        icon: const Icon(Icons.plus_one),
+                                        labelText: Translations.of(context)!
+                                            .field_counter),
+                                  )
+                                : TextField(
+                                    controller: _lengthController,
+                                    decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        icon:
+                                            const Icon(Icons.password_outlined),
+                                        labelText: Translations.of(context)!
+                                            .field_length,
+                                        suffixText: Translations.of(context)!
+                                            .concat_digits)),
                             const SizedBox(height: 16),
                             Row(
                               children: [
