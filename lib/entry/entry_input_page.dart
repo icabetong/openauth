@@ -101,25 +101,6 @@ class _InputPageState extends State<InputPage> {
                 child: Form(
                   key: _formKey,
                   child: Column(children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.fingerprint_outlined,
-                            color: Colors.grey),
-                        const SizedBox(width: 16),
-                        Expanded(
-                            child: DropdownInputField<OTPType>(
-                                selected: _type,
-                                items: OTPType.values,
-                                labels: [
-                                  Translations.of(context)!.otp_type_totp,
-                                  Translations.of(context)!.otp_type_hotp
-                                ],
-                                onChange: (type) {
-                                  setState(() => _type = type);
-                                })),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
                     TextFormField(
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
@@ -208,6 +189,27 @@ class _InputPageState extends State<InputPage> {
                         child: Visibility(
                           visible: _advancedOpen,
                           child: Column(children: [
+                            Row(
+                              children: [
+                                const Icon(Icons.fingerprint_outlined,
+                                    color: Colors.grey),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                    child: DropdownInputField<OTPType>(
+                                        selected: _type,
+                                        items: OTPType.values,
+                                        labels: [
+                                          Translations.of(context)!
+                                              .otp_type_totp,
+                                          Translations.of(context)!
+                                              .otp_type_hotp
+                                        ],
+                                        onChange: (type) {
+                                          setState(() => _type = type);
+                                        })),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
                             TextField(
                                 controller: _periodController,
                                 decoration: InputDecoration(
@@ -264,7 +266,8 @@ class _InputPageState extends State<InputPage> {
                             const SizedBox(height: 16),
                             Row(
                               children: [
-                                const Icon(Icons.account_circle_outlined),
+                                const Icon(Icons.account_circle_outlined,
+                                    color: Colors.grey),
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: SwitchField(

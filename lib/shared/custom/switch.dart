@@ -20,6 +20,7 @@ class SwitchField extends StatelessWidget {
       },
       child: Row(
         children: [
+          const SizedBox(width: 8),
           Expanded(flex: 3, child: Text(labelText)),
           Expanded(
               flex: 1,
