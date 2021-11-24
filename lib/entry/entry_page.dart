@@ -64,10 +64,11 @@ class _EntryPageState extends State<EntryPage> {
                             Navigator.pop(context, Action.scan);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
                               children: [
                                 const Icon(Icons.qr_code_scanner_outlined),
+                                const SizedBox(width: 16),
                                 Text(Translations.of(context)!.button_scan)
                               ],
                             ),
@@ -77,10 +78,11 @@ class _EntryPageState extends State<EntryPage> {
                             Navigator.pop(context, Action.input);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
                               children: [
                                 const Icon(Icons.edit_outlined),
+                                const SizedBox(width: 16),
                                 Text(Translations.of(context)!.button_input)
                               ],
                             ),

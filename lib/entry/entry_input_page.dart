@@ -75,22 +75,23 @@ class _InputPageState extends State<InputPage> {
 
       return Consumer<EntryNotifier>(builder: (context, notifier, child) {
         return Scaffold(
-            appBar: AppBar(
-                elevation: 0,
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                actions: [
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(elevation: 0),
-                        onPressed: () {
-                          _save(notifier.put);
-                        },
-                        icon: const Icon(Icons.save_outlined),
-                        label: Text(Translations.of(context)!.button_save)),
-                  )
-                ]),
-            body: SingleChildScrollView(
+          body: CustomScrollView(slivers: [
+            SliverAppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              actions: [
+                Container(
+                  margin: const EdgeInsets.all(8),
+                  child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(elevation: 0),
+                      onPressed: () {
+                        _save(notifier.put);
+                      },
+                      icon: const Icon(Icons.save_outlined),
+                      label: Text(Translations.of(context)!.button_save)),
+                )
+              ],
+            ),
+            SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Form(
@@ -267,7 +268,9 @@ class _InputPageState extends State<InputPage> {
                   ]),
                 ),
               ),
-            ));
+            )
+          ]),
+        );
       });
     });
   }

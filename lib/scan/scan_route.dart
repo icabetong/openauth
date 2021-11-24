@@ -54,13 +54,11 @@ class _ScanRouteState extends State<ScanRoute> {
         ? 300.0
         : 500.0;
     return Scaffold(
-        appBar: AppBar(
-          title: Text(Translations.of(context)!.app_name),
-        ),
-        body: QRView(
-          key: _qrKey,
-          onQRViewCreated: _onQRViewCreated,
-          overlay: QrScannerOverlayShape(cutOutSize: scanArea, borderRadius: 8),
-        ));
+      body: QRView(
+        key: _qrKey,
+        onQRViewCreated: _onQRViewCreated,
+        overlay: QrScannerOverlayShape(cutOutSize: scanArea, borderRadius: 8),
+      ),
+    );
   }
 }
