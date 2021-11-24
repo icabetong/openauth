@@ -32,7 +32,6 @@ class OpenAuth extends StatelessWidget {
           builder: (context, notifier, _) {
             SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
                 systemNavigationBarColor: Colors.transparent,
-                statusBarColor: Colors.transparent,
                 systemStatusBarContrastEnforced: false));
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
             return MaterialApp(
