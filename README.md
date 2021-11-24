@@ -1,8 +1,15 @@
 <h1 align="center">OpenAuth</h1>
 <div align="center">A beautiful, secure and simple authenticator app that supports multiple protocols and services. Free and open source. Written in Flutter and Dart.</div>
+
+<p>
+<div align="center">
+
 ![License](https://img.shields.io/github/license/icabetong/openauth)
 ![Issues](https://img.shields.io/github/issues/icabetong/openauth)
-![Tests](https://github.com/icabetong/openauth/actions/workflows/test.yml/badge.svg)
+![Tests](https://github.com/icabetong/openauth/actions/workflows/tests.yml/badge.svg)
+
+</div>
+</p>
 
 ## Features
 * Fast and Beautiful UI
