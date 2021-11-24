@@ -104,6 +104,7 @@ class _InputPageState extends State<InputPage> {
                         const SizedBox(width: 16),
                         Expanded(
                             child: DropdownInputField<OTPType>(
+                                selected: _type,
                                 items: OTPType.values,
                                 labels: [
                                   Translations.of(context)!.otp_type_totp,
@@ -229,6 +230,7 @@ class _InputPageState extends State<InputPage> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: DropdownInputField<Algorithm>(
+                                    selected: _algorithm,
                                     items: Algorithm.values,
                                     labels: [
                                       Translations.of(context)!

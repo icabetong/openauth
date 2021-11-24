@@ -16,4 +16,33 @@ class TokenGenerator {
             length: entry.length, algorithm: entry.algorithm);
     }
   }
+
+  static const List<String> steamCharacters = [
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'B',
+    'C',
+    'D',
+    'F',
+    'G',
+    'H',
+    'J',
+    'K',
+    'M',
+    'N',
+    'P',
+    'Q',
+    'R',
+    'T',
+    'V',
+    'W',
+    'X',
+    'Y'
+  ];
 }

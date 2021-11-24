@@ -68,7 +68,15 @@ class _EntryListTileState extends State<EntryListTile> {
   @override
   void initState() {
     super.initState();
-    _start();
+
+    switch (widget.entry.type) {
+      case OTPType.totp:
+        _start();
+        break;
+      case OTPType.hotp:
+        _generate();
+        break;
+    }
   }
 
   void _start() {
@@ -107,12 +115,21 @@ class _EntryListTileState extends State<EntryListTile> {
     code = TokenGenerator.compute(widget.entry);
   }
 
+  Widget _getLeading() {
+    switch (widget.entry.type) {
+      case OTPType.totp:
+        double progress = time / 30;
+        return CircularProgressIndicator(value: progress);
+      case OTPType.hotp:
+        return Text(widget.entry.counter.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    double progress = time / 30;
     return ListTile(
       key: widget.key,
-      leading: CircularProgressIndicator(value: progress),
+      leading: _getLeading(),
       title: Text(code ?? Translations.of(context)!.error_code_not_found,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
