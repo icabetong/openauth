@@ -86,11 +86,10 @@ class _EntryListTileState extends State<EntryListTile> {
 
   void _startHOTPGeneration({bool increment = false}) {
     if (increment) {
-      final entry = widget.entry;
-      entry.counter++;
-      Provider.of<EntryNotifier>(context, listen: false).put(entry);
+      widget.entry.counter++;
+      Provider.of<EntryNotifier>(context, listen: false).put(widget.entry);
     }
-    _generate();
+    setState(() => _generate());
   }
 
   void _countdown() {
@@ -119,12 +118,15 @@ class _EntryListTileState extends State<EntryListTile> {
     switch (widget.entry.type) {
       case OTPType.totp:
         double progress = time / 30;
-        return CircularProgressIndicator(value: progress);
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(value: progress),
+        );
       case OTPType.hotp:
         return IconButton(
           icon: const Icon(Icons.refresh),
           onPressed: () {
-            _startHOTPGeneration();
+            _startHOTPGeneration(increment: true);
           },
         );
     }
@@ -134,7 +136,11 @@ class _EntryListTileState extends State<EntryListTile> {
   Widget build(BuildContext context) {
     return ListTile(
       key: widget.key,
-      leading: _getLeading(),
+      leading: SizedBox(
+        child: _getLeading(),
+        width: 40,
+        height: 40,
+      ),
       title: Text(code ?? Translations.of(context)!.error_code_not_found,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
