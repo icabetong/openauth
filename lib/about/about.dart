@@ -18,7 +18,7 @@ class _AboutRouteState extends State<AboutRoute> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          children: [],
+          children: const [],
         ),
       ),
     );
