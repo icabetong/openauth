@@ -30,9 +30,12 @@ class OpenAuth extends StatelessWidget {
         ],
         child: Consumer<PreferenceNotifier>(
           builder: (context, notifier, _) {
+            final _theme = getTheme(notifier.preferences.theme);
+
             SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
                 systemNavigationBarColor: Colors.transparent,
-                systemStatusBarContrastEnforced: false));
+                systemStatusBarContrastEnforced: false,
+                statusBarColor: Colors.transparent));
             SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
             return MaterialApp(
               supportedLocales: AppLocales.all,
@@ -44,7 +47,7 @@ class OpenAuth extends StatelessWidget {
               ],
               home: const MainPage(),
               onGenerateTitle: (context) => Translations.of(context)!.app_name,
-              theme: getTheme(notifier.preferences.theme),
+              theme: _theme,
             );
           },
         ));

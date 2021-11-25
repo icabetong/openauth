@@ -239,11 +239,19 @@ class _EntryPageState extends State<EntryPage> {
                     }
                     break;
                   case Action.scan:
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ChangeNotifierProvider<EntryNotifier>.value(
-                          value: notifier, child: const ScanRoute());
-                    }));
+                    final Entry? data = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ChangeNotifierProvider<EntryNotifier>.value(
+                                value: notifier, child: const ScanRoute()),
+                      ),
+                    );
+                    if (data != null && data is Entry) {
+                      notifier.put(data);
+                      _showSnackbar(
+                          Translations.of(context)!.feedback_entry_created);
+                    }
                     break;
                 }
               }

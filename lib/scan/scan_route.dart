@@ -40,8 +40,7 @@ class _ScanRouteState extends State<ScanRoute> {
     controller.scannedDataStream.listen((data) {
       if (data.code != null) {
         final entry = Entry.fromString(data.code!);
-        Provider.of<EntryNotifier>(context, listen: false).put(entry);
-        Navigator.pop(context);
+        Navigator.pop(context, entry);
       }
     });
   }
@@ -53,6 +52,12 @@ class _ScanRouteState extends State<ScanRoute> {
         ? 300.0
         : 500.0;
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: QRView(
         key: _qrKey,
         onQRViewCreated: _onQRViewCreated,
