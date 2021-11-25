@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:openauth/entry/entry.dart';
+import 'package:openauth/shared/tools.dart';
 
 abstract class Repository<T> {
   Future put(T data);
@@ -19,17 +19,17 @@ class EntryRepository extends Repository<Entry> {
     return true;
   }
 
-  bool check(String entryId, String secret, OTPType type) {
-    return box.values
-        .where(
-            (e) => e.secret == secret && e.type == type && e.entryId == entryId)
-        .isNotEmpty;
-  }
-
   @override
   Future put(Entry data) async {
-    debugPrint(data.entryId);
-    return await box.put(data.entryId, data);
+    final entries = box.values;
+    final entry = data;
+    final lastEntry = entries.isEmpty
+        ? null
+        : box.values.reduce((current, next) =>
+            current.position > next.position ? current : next);
+
+    entry.position = lastEntry == null ? 1 : lastEntry.position + 1;
+    return await box.put(entry.entryId, entry);
   }
 
   @override
@@ -40,5 +40,17 @@ class EntryRepository extends Repository<Entry> {
   @override
   List<Entry> fetch() {
     return List.castFrom(box.values.toList());
+  }
+
+  bool check(String entryId, String secret, OTPType type) {
+    return box.values
+        .where(
+            (e) => e.secret == secret && e.type == type && e.entryId == entryId)
+        .isNotEmpty;
+  }
+
+  void reorder(Entry entry, int newIndex, int oldIndex) {
+    final entries = swap(box.values.toList(), entry, newIndex, oldIndex);
+    box.addAll(entries);
   }
 }

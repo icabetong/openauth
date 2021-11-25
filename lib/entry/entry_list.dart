@@ -152,7 +152,8 @@ class _EntryListTileState extends State<EntryListTile> {
       ),
       title: Text(code ?? Translations.of(context)!.error_code_not_found,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
-      subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
+      // subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
+      subtitle: Text(widget.entry.position.toString()),
       onTap: () {
         if (code != null) widget.onTap(code!);
       },

@@ -5,7 +5,10 @@ import 'package:openauth/database/repository.dart';
 class EntryNotifier extends ChangeNotifier {
   final EntryRepository repository = EntryRepository();
   List<Entry> _entries = [];
-  List<Entry> get entries => _entries;
+  List<Entry> get entries {
+    _entries.sort((current, next) => current.position.compareTo(next.position));
+    return _entries;
+  }
 
   EntryNotifier() {
     _entries = repository.fetch();
