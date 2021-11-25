@@ -78,6 +78,8 @@ class OTPTypeAdapter extends TypeAdapter<OTPType> {
         return OTPType.totp;
       case 1:
         return OTPType.hotp;
+      case 2:
+        return OTPType.steam;
       default:
         return OTPType.totp;
     }
@@ -91,6 +93,9 @@ class OTPTypeAdapter extends TypeAdapter<OTPType> {
         break;
       case OTPType.hotp:
         writer.writeByte(1);
+        break;
+      case OTPType.steam:
+        writer.writeByte(2);
         break;
     }
   }

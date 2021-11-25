@@ -4,7 +4,6 @@ import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/shared/token.dart';
-import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
 enum EntryListAction { edit, remove }
