@@ -4,6 +4,7 @@ import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/shared/token.dart';
+import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
 enum EntryListAction { edit, remove }
@@ -67,6 +68,9 @@ class _EntryListTileState extends State<EntryListTile> {
       case OTPType.hotp:
         _startHOTPGeneration();
         break;
+      case OTPType.steam:
+        _startTOTPGeneration();
+        break;
     }
   }
 
@@ -128,6 +132,12 @@ class _EntryListTileState extends State<EntryListTile> {
           onPressed: () {
             _startHOTPGeneration(increment: true);
           },
+        );
+      case OTPType.steam:
+        double progress = time / 30;
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircularProgressIndicator(value: progress),
         );
     }
   }

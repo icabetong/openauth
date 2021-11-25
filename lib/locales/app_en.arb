@@ -20,6 +20,7 @@
     "field_is_google": "Compatibility Mode for Google Accounts",
     "otp_type_totp": "Time-based Authentication",
     "otp_type_hotp": "Counter-based Authentication",
+    "otp_type_steam": "Steam",
     "algorithm_type_sha1": "SHA1",
     "algorithm_type_sha256": "SHA256",
     "algorithm_type_sha512": "SHA512",

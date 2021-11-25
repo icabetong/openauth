@@ -150,7 +150,9 @@ enum OTPType {
   @HiveField(0)
   totp,
   @HiveField(1)
-  hotp
+  hotp,
+  @HiveField(2)
+  steam
 }
 
 class AlgorithmAdapter extends TypeAdapter<Algorithm> {

@@ -6,6 +6,7 @@ class DropdownInputField<T> extends StatelessWidget {
     required this.selected,
     required this.items,
     required this.onChange,
+    this.enabled = true,
     this.hintText,
     this.labels,
   }) : super(key: key);
@@ -14,14 +15,17 @@ class DropdownInputField<T> extends StatelessWidget {
   final List<T> items;
   final List<String>? labels;
   final String? hintText;
+  final bool enabled;
   final Function(T) onChange;
 
   @override
   Widget build(BuildContext context) {
     return FormField<T>(
+      enabled: enabled,
       builder: (FormFieldState<T> state) {
         return InputDecorator(
           decoration: InputDecoration(
+              enabled: enabled,
               errorStyle: TextStyle(
                   color: Theme.of(context).colorScheme.error, fontSize: 16.0),
               hintText: hintText,
@@ -35,9 +39,11 @@ class DropdownInputField<T> extends StatelessWidget {
               child: DropdownButton<T>(
                 value: selected,
                 isDense: true,
-                onChanged: (T? newValue) {
-                  onChange(newValue ?? selected!);
-                },
+                onChanged: enabled
+                    ? (T? newValue) {
+                        onChange(newValue ?? selected!);
+                      }
+                    : null,
                 items: items.map((T value) {
                   String label = labels != null && labels!.isNotEmpty
                       ? labels![items.indexOf(value)]

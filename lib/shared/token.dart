@@ -14,6 +14,17 @@ class TokenGenerator {
       case OTPType.hotp:
         return OTP.generateHOTPCodeString(entry.secret, entry.counter,
             length: entry.length, algorithm: entry.algorithm);
+      case OTPType.steam:
+        int totp = OTP.generateTOTPCode(
+            entry.secret, time ?? DateTime.now().millisecondsSinceEpoch,
+            algorithm: entry.algorithm, isGoogle: entry.isGoogle);
+
+        String code = "";
+        for (int i = 0; i < entry.length; i++) {
+          code += steamCharacters[totp % steamCharacters.length];
+          totp = totp ~/ steamCharacters.length;
+        }
+        return code;
     }
   }
 

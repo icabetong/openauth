@@ -154,7 +154,7 @@ class _InputPageState extends State<InputPage> {
                       autocorrect: !_notifier.preferences.isSecretsHidden,
                       decoration: InputDecoration(
                           border: const OutlineInputBorder(),
-                          icon: const Icon(Icons.vpn_key_outlined),
+                          icon: const Icon(Icons.fingerprint_outlined),
                           labelText: Translations.of(context)!.field_secret,
                           suffixIcon: _notifier.preferences.isSecretsHidden
                               ? IconButton(
@@ -208,7 +208,7 @@ class _InputPageState extends State<InputPage> {
                           child: Column(children: [
                             Row(
                               children: [
-                                const Icon(Icons.fingerprint_outlined,
+                                const Icon(Icons.vpn_key_outlined,
                                     color: Colors.grey),
                                 const SizedBox(width: 16),
                                 Expanded(
@@ -219,7 +219,9 @@ class _InputPageState extends State<InputPage> {
                                           Translations.of(context)!
                                               .otp_type_totp,
                                           Translations.of(context)!
-                                              .otp_type_hotp
+                                              .otp_type_hotp,
+                                          Translations.of(context)!
+                                              .otp_type_steam
                                         ],
                                         onChange: (type) {
                                           setState(() => _type = type);
@@ -228,6 +230,7 @@ class _InputPageState extends State<InputPage> {
                             ),
                             const SizedBox(height: 16),
                             TextField(
+                                enabled: _type != OTPType.steam,
                                 controller: _periodController,
                                 decoration: InputDecoration(
                                     border: const OutlineInputBorder(),
@@ -247,6 +250,7 @@ class _InputPageState extends State<InputPage> {
                                             .field_counter),
                                   )
                                 : TextField(
+                                    enabled: _type != OTPType.steam,
                                     controller: _lengthController,
                                     decoration: InputDecoration(
                                         border: const OutlineInputBorder(),
@@ -255,7 +259,8 @@ class _InputPageState extends State<InputPage> {
                                         labelText: Translations.of(context)!
                                             .field_length,
                                         suffixText: Translations.of(context)!
-                                            .concat_digits)),
+                                            .concat_digits),
+                                  ),
                             const SizedBox(height: 16),
                             Row(
                               children: [
@@ -263,6 +268,7 @@ class _InputPageState extends State<InputPage> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: DropdownInputField<Algorithm>(
+                                    enabled: _type != OTPType.steam,
                                     selected: _algorithm,
                                     items: Algorithm.values,
                                     labels: [
@@ -288,6 +294,7 @@ class _InputPageState extends State<InputPage> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: SwitchField(
+                                    enabled: _type != OTPType.steam,
                                     labelText: Translations.of(context)!
                                         .field_is_google,
                                     checked: _isGoogle,
