@@ -42,7 +42,7 @@ class EntryPage extends StatefulWidget {
 }
 
 class _EntryPageState extends State<EntryPage> {
-  Future<Action?> _invoke() async {
+  Future<Action?> _invokeMainActions() async {
     return await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -146,6 +146,16 @@ class _EntryPageState extends State<EntryPage> {
         false;
   }
 
+  Future<Operation?> _invokeEditor(EntryNotifier notifier) async {
+    return await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) {
+        return ChangeNotifierProvider<EntryNotifier>.value(
+            value: notifier, child: const InputPage());
+      }),
+    );
+  }
+
   void _onTap(code) {
     Clipboard.setData(ClipboardData(text: code)).then((_) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -165,11 +175,20 @@ class _EntryPageState extends State<EntryPage> {
         final response = await _invokeRemoveDialog();
         if (response) {
           Provider.of<EntryNotifier>(context, listen: false).remove(entry);
+          _showSnackbar(Translations.of(context)!.feedback_entry_removed);
         }
         break;
       default:
-        debugPrint('');
+        throw Error();
     }
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
   }
 
   @override
@@ -201,15 +220,23 @@ class _EntryPageState extends State<EntryPage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
-              final Action? result = await _invoke();
+              final Action? result = await _invokeMainActions();
               if (result != null) {
                 switch (result) {
                   case Action.input:
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ChangeNotifierProvider<EntryNotifier>.value(
-                          value: notifier, child: const InputPage());
-                    }));
+                    final operation = await _invokeEditor(notifier);
+                    switch (operation) {
+                      case Operation.create:
+                        _showSnackbar(
+                            Translations.of(context)!.feedback_entry_created);
+                        break;
+                      case Operation.update:
+                        _showSnackbar(
+                            Translations.of(context)!.feedback_entry_updated);
+                        break;
+                      default:
+                        break;
+                    }
                     break;
                   case Action.scan:
                     Navigator.push(context,

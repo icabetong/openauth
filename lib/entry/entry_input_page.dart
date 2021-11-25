@@ -8,6 +8,8 @@ import 'package:openauth/shared/custom/switch.dart';
 import 'package:otp/otp.dart';
 import 'package:provider/provider.dart';
 
+enum Operation { create, update }
+
 class InputPage extends StatefulWidget {
   const InputPage({Key? key, this.entry}) : super(key: key);
 
@@ -49,22 +51,37 @@ class _InputPageState extends State<InputPage> {
   bool _isSecretObscured = false;
   bool _isGoogle = true;
 
-  void _save(Function(Entry) save) {
+  void _save(Function(Entry) save, Function(String, String, OTPType) check) {
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text;
       final issuer = _issuerController.text;
       final secret = _secretController.text;
       final period = int.parse(_periodController.text);
       final length = int.parse(_lengthController.text);
+
       final entry = Entry(secret, issuer, name,
+          // Passing an empty string in the optional parameter generates
+          // a new id.
+          entryId: widget.entry?.entryId ?? "",
           period: period,
           length: length,
           type: _type,
           algorithm: _algorithm,
           isGoogle: _isGoogle);
 
+      if (check(entry.entryId, secret, _type)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text(Translations.of(context)!.feedback_entry_already_exists),
+          ),
+        );
+        return;
+      }
+
       save(entry);
-      Navigator.pop(context);
+      Navigator.pop(
+          context, widget.entry != null ? Operation.update : Operation.create);
     }
   }
 
@@ -88,7 +105,7 @@ class _InputPageState extends State<InputPage> {
                   child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(elevation: 0),
                       onPressed: () {
-                        _save(notifier.put);
+                        _save(notifier.put, notifier.check);
                       },
                       icon: const Icon(Icons.save_outlined),
                       label: Text(Translations.of(context)!.button_save)),

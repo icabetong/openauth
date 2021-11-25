@@ -38,7 +38,9 @@ class Entry {
     this.algorithm = Algorithm.SHA1,
     this.isGoogle = true,
   }) {
-    entryId = randomId();
+    if (entryId.trim().isEmpty) {
+      entryId = randomId();
+    }
   }
 
   Entry copyWith(

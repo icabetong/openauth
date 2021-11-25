@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:openauth/entry/entry.dart';
 
@@ -18,8 +19,16 @@ class EntryRepository extends Repository<Entry> {
     return true;
   }
 
+  bool check(String entryId, String secret, OTPType type) {
+    return box.values
+        .where(
+            (e) => e.secret == secret && e.type == type && e.entryId == entryId)
+        .isNotEmpty;
+  }
+
   @override
   Future put(Entry data) async {
+    debugPrint(data.entryId);
     return await box.put(data.entryId, data);
   }
 
