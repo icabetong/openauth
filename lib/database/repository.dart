@@ -23,12 +23,9 @@ class EntryRepository extends Repository<Entry> {
   Future put(Entry data) async {
     final entries = box.values;
     final entry = data;
-    final lastEntry = entries.isEmpty
-        ? null
-        : box.values.reduce((current, next) =>
-            current.position > next.position ? current : next);
+    final lastEntry = getLastInPosition(entries.toList());
 
-    entry.position = lastEntry == null ? 1 : lastEntry.position + 1;
+    entry.position = lastEntry == null ? 0 : lastEntry.position + 1;
     return await box.put(entry.entryId, entry);
   }
 
@@ -38,7 +35,7 @@ class EntryRepository extends Repository<Entry> {
   }
 
   @override
-  List<Entry> fetch() {
+  List<Entry> fetch({generate = false}) {
     return List.castFrom(box.values.toList());
   }
 
@@ -50,8 +47,8 @@ class EntryRepository extends Repository<Entry> {
   }
 
   Future reorder(Entry entry, int from, int to) async {
-    final source = box.getAt(from);
-    final destination = box.getAt(to);
+    final source = box.getAt(from)?.copyWith();
+    final destination = box.getAt(to)?.copyWith();
     final affected = to > from
         ? box.values
             .where((entry) => entry.position > from && entry.position < to)
@@ -64,12 +61,12 @@ class EntryRepository extends Repository<Entry> {
       if (from > to) {
         destination.position += 1;
         for (var entry in affected) {
-          entry.position++;
+          entry.position += 1;
         }
       } else {
         destination.position -= 1;
         for (var entry in affected) {
-          entry.position--;
+          entry.position -= 1;
         }
       }
 

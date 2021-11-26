@@ -14,3 +14,10 @@ String randomId() {
   }
   return id;
 }
+
+Entry? getLastInPosition(List<Entry> entries) {
+  return entries.isEmpty
+      ? null
+      : entries
+          .reduce((curr, next) => curr.position > next.position ? curr : next);
+}
