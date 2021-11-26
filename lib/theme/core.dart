@@ -9,39 +9,46 @@ import 'package:openauth/theme/sunset.dart';
 enum AppTheme { light, dark, amoled, dracula, nord, sunset }
 
 extension AppThemeExtension on AppTheme {
+  static const _light = "light";
+  static const _dark = "dark";
+  static const _amoled = "amoled";
+  static const _dracula = "dracula";
+  static const _nord = "nord";
+  static const _sunset = "sunset";
+
   String get value {
     switch (this) {
       case AppTheme.light:
-        return 'light';
+        return _light;
       case AppTheme.dark:
-        return 'dark';
+        return _dark;
       case AppTheme.amoled:
-        return 'amoled';
+        return _amoled;
       case AppTheme.dracula:
-        return 'dracula';
+        return _dracula;
       case AppTheme.nord:
-        return 'nord';
+        return _nord;
       case AppTheme.sunset:
-        return 'sunset';
+        return _sunset;
     }
   }
 
   static AppTheme parse(String theme) {
     switch (theme) {
-      case 'light':
+      case _light:
         return AppTheme.light;
-      case 'dark':
+      case _dark:
         return AppTheme.dark;
-      case 'amoled':
+      case _amoled:
         return AppTheme.amoled;
-      case 'dracula':
+      case _dracula:
         return AppTheme.dracula;
-      case 'nord':
+      case _nord:
         return AppTheme.nord;
-      case 'sunset':
+      case _sunset:
         return AppTheme.sunset;
       default:
-        throw Error();
+        throw Exception("Invalid theme value");
     }
   }
 }

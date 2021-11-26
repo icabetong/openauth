@@ -7,6 +7,8 @@ import 'package:openauth/entry/entry.dart';
 import 'package:openauth/entry/entry_input_page.dart';
 import 'package:openauth/entry/entry_list.dart';
 import 'package:openauth/scan/scan_route.dart';
+import 'package:openauth/settings/notifier.dart';
+import 'package:openauth/settings/provider.dart';
 import 'package:openauth/settings/settings.dart';
 import 'package:provider/provider.dart';
 
@@ -110,6 +112,23 @@ class _EntryPageState extends State<EntryPage> {
                 onTap: () {
                   Navigator.pop(context, option);
                 },
+              );
+            }).toList(),
+          );
+        });
+  }
+
+  Future<Sort?> _invokeSortMenu() async {
+    return await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ListView(
+            shrinkWrap: true,
+            children: Sort.values.map((sort) {
+              return ListTile(
+                title: Text(
+                  sort.getLocalization(context),
+                ),
               );
             }).toList(),
           );
@@ -252,27 +271,37 @@ class _EntryPageState extends State<EntryPage> {
             label: Text(Translations.of(context)!.button_add)),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
-            child: Row(children: [
-          const Spacer(),
-          PopupMenuButton<Menu>(
-              onSelected: (route) =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    switch (route) {
-                      case Menu.settings:
-                        return const SettingsRoute();
-                      case Menu.about:
-                        return const AboutRoute();
-                    }
-                  })),
+          child: Row(children: [
+            const Spacer(),
+            IconButton(
+                onPressed: () async {
+                  final result = await _invokeSortMenu();
+                  if (result != null) {}
+                },
+                icon: const Icon(Icons.sort)),
+            PopupMenuButton<Menu>(
+              onSelected: (route) => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  switch (route) {
+                    case Menu.settings:
+                      return const SettingsRoute();
+                    case Menu.about:
+                      return const AboutRoute();
+                  }
+                }),
+              ),
               itemBuilder: (context) => <PopupMenuEntry<Menu>>[
-                    PopupMenuItem(
-                        child: Text(Translations.of(context)!.menu_settings),
-                        value: Menu.settings),
-                    PopupMenuItem(
-                        child: Text(Translations.of(context)!.menu_about),
-                        value: Menu.about)
-                  ])
-        ])),
+                PopupMenuItem(
+                    child: Text(Translations.of(context)!.menu_settings),
+                    value: Menu.settings),
+                PopupMenuItem(
+                    child: Text(Translations.of(context)!.menu_about),
+                    value: Menu.about)
+              ],
+            )
+          ]),
+        ),
       );
     });
   }

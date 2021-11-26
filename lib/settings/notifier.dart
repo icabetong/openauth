@@ -27,15 +27,21 @@ class PreferenceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeFirstLaunch(bool isFirstLaunch) async {
-    _preferences.isFirstLaunch = isFirstLaunch;
-    await PreferenceHandler.setFirstLaunch(isFirstLaunch);
-    notifyListeners();
-  }
-
   changeProtection(bool isProtected) async {
     _preferences.isAppProtected = isProtected;
     await PreferenceHandler.setAppProtected(isProtected);
+    notifyListeners();
+  }
+
+  changeSort(Sort sort) async {
+    _preferences.sort = sort;
+    await PreferenceHandler.setSort(sort);
+    notifyListeners();
+  }
+
+  changeFirstLaunch(bool isFirstLaunch) async {
+    _preferences.isFirstLaunch = isFirstLaunch;
+    await PreferenceHandler.setFirstLaunch(isFirstLaunch);
     notifyListeners();
   }
 }

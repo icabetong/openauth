@@ -13,7 +13,7 @@ class UnlockNotifier extends ChangeNotifier {
   }
 
   void _load() async {
-    _isProtected = await PreferenceHandler.getAppProtected();
+    _isProtected = await PreferenceHandler.isAppProtected;
     notifyListeners();
   }
 
