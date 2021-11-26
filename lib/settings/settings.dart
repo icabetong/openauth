@@ -120,14 +120,14 @@ class _SettingsRouteState extends State<SettingsRoute> {
 class ThemeSelectionRoute extends StatefulWidget {
   const ThemeSelectionRoute({Key? key, required this.theme}) : super(key: key);
 
-  final UserTheme theme;
+  final AppTheme theme;
 
   @override
   _ThemeSelectionRouteState createState() => _ThemeSelectionRouteState();
 }
 
 class _ThemeSelectionRouteState extends State<ThemeSelectionRoute> {
-  final themes = UserTheme.values;
+  final themes = AppTheme.values;
 
   Widget getLeadingIcon(theme) {
     return theme == widget.theme

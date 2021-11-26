@@ -1,50 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:openauth/theme/core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum UserTheme { light, dark, amoled, dracula, nord, sunset }
-
-extension UserThemeExtension on UserTheme {
-  String get value {
-    switch (this) {
-      case UserTheme.light:
-        return 'light';
-      case UserTheme.dark:
-        return 'dark';
-      case UserTheme.amoled:
-        return 'amoled';
-      case UserTheme.dracula:
-        return 'dracula';
-      case UserTheme.nord:
-        return 'nord';
-      case UserTheme.sunset:
-        return 'sunset';
-    }
-  }
-
-  static UserTheme parse(String theme) {
-    switch (theme) {
-      case 'light':
-        return UserTheme.light;
-      case 'dark':
-        return UserTheme.dark;
-      case 'amoled':
-        return UserTheme.amoled;
-      case 'dracula':
-        return UserTheme.dracula;
-      case 'nord':
-        return UserTheme.nord;
-      case 'sunset':
-        return UserTheme.sunset;
-      default:
-        throw Error();
-    }
-  }
-}
-
 class Preferences {
-  UserTheme theme;
+  AppTheme theme;
   bool isSecretsHidden;
   bool isFirstLaunch;
   bool isAppProtected;
@@ -57,7 +18,7 @@ class Preferences {
 
   static Preferences getDefault() {
     return Preferences(
-        theme: UserTheme.light,
+        theme: AppTheme.light,
         isSecretsHidden: true,
         isFirstLaunch: false,
         isAppProtected: false);
@@ -71,16 +32,17 @@ class Preferences {
 class PreferenceHandler {
   static const _theme = "theme";
   static const _isSecretsHidden = "isSecretsHidden";
-  static const _isFirstLaunch = "isFirstLaunch";
   static const _isAppProtected = "isAppProtected";
+  static const _sort = "sort";
+  static const _isFirstLaunch = "isFirstLaunch";
 
-  static Future<UserTheme> getTheme() async {
+  static Future<AppTheme> getTheme() async {
     final preferences = await SharedPreferences.getInstance();
     String? theme = preferences.getString(_theme);
-    return theme != null ? UserThemeExtension.parse(theme) : UserTheme.light;
+    return theme != null ? AppThemeExtension.parse(theme) : AppTheme.light;
   }
 
-  static Future<bool> setTheme(UserTheme theme) async {
+  static Future<bool> setTheme(AppTheme theme) async {
     final preferences = await SharedPreferences.getInstance();
     return await preferences.setString(_theme, theme.value.toString());
   }

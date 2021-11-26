@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openauth/settings/provider.dart';
+import 'package:openauth/theme/core.dart';
 
 class PreferenceNotifier extends ChangeNotifier {
   Preferences _preferences = Preferences.getDefault();
@@ -14,7 +15,7 @@ class PreferenceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeTheme(UserTheme theme) async {
+  changeTheme(AppTheme theme) async {
     _preferences.theme = theme;
     await PreferenceHandler.setTheme(theme);
     notifyListeners();

@@ -1,5 +1,4 @@
 import 'package:flutter_gen/gen_l10n/translations.dart';
-import 'package:openauth/settings/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:openauth/theme/amoled.dart';
 import 'package:openauth/theme/default.dart';
@@ -7,36 +6,76 @@ import 'package:openauth/theme/dracula.dart';
 import 'package:openauth/theme/nord.dart';
 import 'package:openauth/theme/sunset.dart';
 
-String getThemeName(BuildContext context, UserTheme theme) {
+enum AppTheme { light, dark, amoled, dracula, nord, sunset }
+
+extension AppThemeExtension on AppTheme {
+  String get value {
+    switch (this) {
+      case AppTheme.light:
+        return 'light';
+      case AppTheme.dark:
+        return 'dark';
+      case AppTheme.amoled:
+        return 'amoled';
+      case AppTheme.dracula:
+        return 'dracula';
+      case AppTheme.nord:
+        return 'nord';
+      case AppTheme.sunset:
+        return 'sunset';
+    }
+  }
+
+  static AppTheme parse(String theme) {
+    switch (theme) {
+      case 'light':
+        return AppTheme.light;
+      case 'dark':
+        return AppTheme.dark;
+      case 'amoled':
+        return AppTheme.amoled;
+      case 'dracula':
+        return AppTheme.dracula;
+      case 'nord':
+        return AppTheme.nord;
+      case 'sunset':
+        return AppTheme.sunset;
+      default:
+        throw Error();
+    }
+  }
+}
+
+String getThemeName(BuildContext context, AppTheme theme) {
   switch (theme) {
-    case UserTheme.light:
+    case AppTheme.light:
       return Translations.of(context)!.settings_theme_light;
-    case UserTheme.dark:
+    case AppTheme.dark:
       return Translations.of(context)!.settings_theme_dark;
-    case UserTheme.amoled:
+    case AppTheme.amoled:
       return Translations.of(context)!.settings_theme_amoled;
-    case UserTheme.dracula:
+    case AppTheme.dracula:
       return Translations.of(context)!.settings_theme_dracula;
-    case UserTheme.nord:
+    case AppTheme.nord:
       return Translations.of(context)!.settings_theme_nord;
-    case UserTheme.sunset:
+    case AppTheme.sunset:
       return Translations.of(context)!.settings_theme_sunset;
   }
 }
 
-ThemeData getTheme(UserTheme userTheme) {
+ThemeData getTheme(AppTheme userTheme) {
   switch (userTheme) {
-    case UserTheme.light:
+    case AppTheme.light:
       return getDefault();
-    case UserTheme.dark:
+    case AppTheme.dark:
       return getDefault(brightness: Brightness.dark);
-    case UserTheme.amoled:
+    case AppTheme.amoled:
       return getAmoled();
-    case UserTheme.dracula:
+    case AppTheme.dracula:
       return getDracula();
-    case UserTheme.nord:
+    case AppTheme.nord:
       return getNord();
-    case UserTheme.sunset:
+    case AppTheme.sunset:
       return getSunset();
   }
 }
