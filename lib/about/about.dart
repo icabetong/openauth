@@ -13,7 +13,7 @@ class _AboutRouteState extends State<AboutRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translations.of(context)!.navigation_about),
+        title: Text(Translations.of(context)!.menu_about),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

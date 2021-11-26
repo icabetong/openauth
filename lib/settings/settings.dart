@@ -21,8 +21,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar:
-            AppBar(title: Text(Translations.of(context)!.navigation_settings)),
+        appBar: AppBar(title: Text(Translations.of(context)!.menu_settings)),
         body: Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),

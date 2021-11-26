@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 enum Action { input, scan }
 enum Option { edit, remove }
-enum Route { settings, about }
+enum Menu { settings, about }
 
 extension OptionExtensions on Option {
   Widget get icon {
@@ -174,12 +174,13 @@ class _EntryPageState extends State<EntryPage> {
       case Option.remove:
         final response = await _invokeRemoveDialog();
         if (response) {
-          Provider.of<EntryNotifier>(context, listen: false).remove(entry);
+          await Provider.of<EntryNotifier>(context, listen: false)
+              .remove(entry);
           _showSnackbar(Translations.of(context)!.feedback_entry_removed);
         }
         break;
       default:
-        throw Error();
+        break;
     }
   }
 
@@ -195,29 +196,20 @@ class _EntryPageState extends State<EntryPage> {
   Widget build(BuildContext context) {
     return Consumer<EntryNotifier>(builder: (context, notifier, child) {
       return Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: 128,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              //title: Text(Translations.of(context)!.app_name),
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding: const EdgeInsets.all(16),
-                title: Text(
-                  Translations.of(context)!.app_name,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                ),
-              ),
+        body: CustomScrollView(slivers: [
+          SliverAppBar(
+            pinned: true,
+            title: Text(
+              Translations.of(context)!.app_name,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
             ),
-            EntryList(
-              entries: notifier.entries,
-              onTap: _onTap,
-              onLongTap: _onLongPress,
-            )
-          ],
-        ),
+          ),
+          EntryList(
+            entries: notifier.entries,
+            onTap: _onTap,
+            onLongTap: _onLongPress,
+          ),
+        ]),
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
               final Action? result = await _invokeMainActions();
@@ -262,24 +254,23 @@ class _EntryPageState extends State<EntryPage> {
         bottomNavigationBar: BottomAppBar(
             child: Row(children: [
           const Spacer(),
-          PopupMenuButton<Route>(
+          PopupMenuButton<Menu>(
               onSelected: (route) =>
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     switch (route) {
-                      case Route.settings:
+                      case Menu.settings:
                         return const SettingsRoute();
-                      case Route.about:
+                      case Menu.about:
                         return const AboutRoute();
                     }
                   })),
-              itemBuilder: (context) => <PopupMenuEntry<Route>>[
+              itemBuilder: (context) => <PopupMenuEntry<Menu>>[
                     PopupMenuItem(
-                        child:
-                            Text(Translations.of(context)!.navigation_settings),
-                        value: Route.settings),
+                        child: Text(Translations.of(context)!.menu_settings),
+                        value: Menu.settings),
                     PopupMenuItem(
-                        child: Text(Translations.of(context)!.navigation_about),
-                        value: Route.about)
+                        child: Text(Translations.of(context)!.menu_about),
+                        value: Menu.about)
                   ])
         ])),
       );

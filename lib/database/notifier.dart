@@ -31,4 +31,11 @@ class EntryNotifier extends ChangeNotifier {
     notifyListeners();
     return result;
   }
+
+  Future<bool?> reorder(Entry entry, int from, int to) async {
+    final result = await repository.reorder(entry, from, to);
+    _entries = repository.fetch();
+    notifyListeners();
+    return result;
+  }
 }

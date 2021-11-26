@@ -5,16 +5,17 @@ import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/shared/token.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderables/reorderables.dart';
 
 enum EntryListAction { edit, remove }
 
 class EntryList extends StatelessWidget {
-  const EntryList(
-      {Key? key,
-      required this.entries,
-      required this.onTap,
-      required this.onLongTap})
-      : super(key: key);
+  const EntryList({
+    Key? key,
+    required this.entries,
+    required this.onTap,
+    required this.onLongTap,
+  }) : super(key: key);
   final List<Entry> entries;
   final Function(String) onTap;
   final Function(Entry) onLongTap;
@@ -22,15 +23,22 @@ class EntryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return entries.isNotEmpty
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return EntryListTile(
-                key: Key(entries[index].entryId),
-                entry: entries[index],
-                onTap: onTap,
-                onLongTap: onLongTap,
-              );
-            }, childCount: entries.length),
+        ? ReorderableSliverList(
+            delegate: ReorderableSliverChildBuilderDelegate(
+              (context, index) {
+                return EntryListTile(
+                  key: Key(entries[index].entryId),
+                  entry: entries[index],
+                  onTap: onTap,
+                  onLongTap: onLongTap,
+                );
+              },
+              childCount: entries.length,
+            ),
+            onReorder: (from, to) async {
+              await Provider.of<EntryNotifier>(context, listen: false)
+                  .reorder(entries[from], from, to);
+            },
           )
         : const EntryEmptyState();
   }
@@ -61,14 +69,12 @@ class _EntryListTileState extends State<EntryListTile> {
     super.initState();
 
     switch (widget.entry.type) {
+      case OTPType.steam:
       case OTPType.totp:
         _startTOTPGeneration();
         break;
       case OTPType.hotp:
         _startHOTPGeneration();
-        break;
-      case OTPType.steam:
-        _startTOTPGeneration();
         break;
     }
   }
@@ -150,15 +156,17 @@ class _EntryListTileState extends State<EntryListTile> {
         width: 40,
         height: 40,
       ),
+      trailing: GestureDetector(
+        child: const Icon(Icons.more_vert_outlined),
+        onTap: () {
+          widget.onLongTap(widget.entry);
+        },
+      ),
       title: Text(code ?? Translations.of(context)!.error_code_not_found,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
-      // subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
-      subtitle: Text(widget.entry.position.toString()),
+      subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
       onTap: () {
         if (code != null) widget.onTap(code!);
-      },
-      onLongPress: () {
-        widget.onLongTap(widget.entry);
       },
     );
   }

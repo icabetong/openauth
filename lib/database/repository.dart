@@ -49,8 +49,35 @@ class EntryRepository extends Repository<Entry> {
         .isNotEmpty;
   }
 
-  void reorder(Entry entry, int newIndex, int oldIndex) {
-    final entries = swap(box.values.toList(), entry, newIndex, oldIndex);
-    box.addAll(entries);
+  Future reorder(Entry entry, int from, int to) async {
+    final source = box.getAt(from);
+    final destination = box.getAt(to);
+    final affected = to > from
+        ? box.values
+            .where((entry) => entry.position > from && entry.position < to)
+        : box.values
+            .where((entry) => entry.position < from && entry.position > to);
+
+    if (source != null && destination != null) {
+      source.position = to;
+      // from bottom to top
+      if (from > to) {
+        destination.position += 1;
+        for (var entry in affected) {
+          entry.position++;
+        }
+      } else {
+        destination.position -= 1;
+        for (var entry in affected) {
+          entry.position--;
+        }
+      }
+
+      await box.put(source.entryId, source);
+      await box.put(destination.entryId, destination);
+      for (var entry in affected) {
+        await box.put(entry.entryId, entry);
+      }
+    }
   }
 }
