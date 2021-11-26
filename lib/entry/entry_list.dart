@@ -39,6 +39,7 @@ class EntryList extends StatelessWidget {
               await Provider.of<EntryNotifier>(context, listen: false)
                   .reorder(entries[from], from, to);
             },
+            enabled: true,
           )
         : const EntryEmptyState();
   }

@@ -61,12 +61,18 @@ class EntryRepository extends Repository<Entry> {
       if (from > to) {
         destination.position += 1;
         for (var entry in affected) {
-          entry.position += 1;
+          if (entry.entryId != source.entryId ||
+              entry.entryId != destination.entryId) {
+            entry.position += 1;
+          }
         }
       } else {
         destination.position -= 1;
         for (var entry in affected) {
-          entry.position -= 1;
+          if (entry.entryId != source.entryId ||
+              entry.entryId != destination.entryId) {
+            entry.position -= 1;
+          }
         }
       }
 
