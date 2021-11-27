@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
-import 'package:hive/hive.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry.dart';

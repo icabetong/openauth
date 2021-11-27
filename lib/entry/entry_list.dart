@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
