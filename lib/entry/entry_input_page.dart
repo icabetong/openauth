@@ -151,7 +151,7 @@ class _InputPageState extends State<InputPage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    obscureText: _notifier.preferences.isSecretsHidden,
+                    obscureText: !_isSecretObscured,
                     enableSuggestions: !_notifier.preferences.isSecretsHidden,
                     autocorrect: !_notifier.preferences.isSecretsHidden,
                     decoration: InputDecoration(
@@ -160,7 +160,7 @@ class _InputPageState extends State<InputPage> {
                         labelText: Translations.of(context)!.field_secret,
                         suffixIcon: _notifier.preferences.isSecretsHidden
                             ? IconButton(
-                                icon: Icon(_isSecretObscured
+                                icon: Icon(!_isSecretObscured
                                     ? Icons.visibility_outlined
                                     : Icons.visibility_off_outlined),
                                 onPressed: () {

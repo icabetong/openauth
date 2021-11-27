@@ -118,7 +118,7 @@ class _EntryPageState extends State<EntryPage> {
         });
   }
 
-  Future<Sort?> _invokeSortMenu() async {
+  Future<Sort?> _invokeSortMenu(PreferenceNotifier notifier) async {
     return await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -126,9 +126,14 @@ class _EntryPageState extends State<EntryPage> {
             shrinkWrap: true,
             children: Sort.values.map((sort) {
               return ListTile(
+                leading: Icon(
+                    notifier.preferences.sort == sort ? Icons.check : null),
                 title: Text(
                   sort.getLocalization(context),
                 ),
+                onTap: () {
+                  notifier.changeSort(sort);
+                },
               );
             }).toList(),
           );
@@ -195,7 +200,7 @@ class _EntryPageState extends State<EntryPage> {
         if (response) {
           await Provider.of<EntryNotifier>(context, listen: false)
               .remove(entry);
-          _showSnackbar(Translations.of(context)!.feedback_entry_removed);
+          _showSnackBar(Translations.of(context)!.feedback_entry_removed);
         }
         break;
       default:
@@ -203,7 +208,7 @@ class _EntryPageState extends State<EntryPage> {
     }
   }
 
-  void _showSnackbar(String message) {
+  void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -214,95 +219,100 @@ class _EntryPageState extends State<EntryPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<EntryNotifier>(builder: (context, notifier, child) {
-      return Scaffold(
-        body: CustomScrollView(slivers: [
-          SliverAppBar(
-            pinned: true,
-            title: Text(
-              Translations.of(context)!.app_name,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
-          ),
-          EntryList(
-            entries: notifier.entries,
-            onTap: _onTap,
-            onLongTap: _onLongPress,
-          ),
-        ]),
-        floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              final Action? result = await _invokeMainActions();
-              if (result != null) {
-                switch (result) {
-                  case Action.input:
-                    final operation = await _invokeEditor(notifier);
-                    switch (operation) {
-                      case Operation.create:
-                        _showSnackbar(
-                            Translations.of(context)!.feedback_entry_created);
-                        break;
-                      case Operation.update:
-                        _showSnackbar(
-                            Translations.of(context)!.feedback_entry_updated);
-                        break;
-                      default:
-                        break;
-                    }
-                    break;
-                  case Action.scan:
-                    final Entry? data = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ChangeNotifierProvider<EntryNotifier>.value(
-                                value: notifier, child: const ScanRoute()),
-                      ),
-                    );
-                    if (data != null && data is Entry) {
-                      notifier.put(data);
-                      _showSnackbar(
-                          Translations.of(context)!.feedback_entry_created);
-                    }
-                    break;
-                }
-              }
-            },
-            icon: const Icon(Icons.add),
-            label: Text(Translations.of(context)!.button_add)),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomAppBar(
-          child: Row(children: [
-            const Spacer(),
-            IconButton(
-                onPressed: () async {
-                  final result = await _invokeSortMenu();
-                  if (result != null) {}
-                },
-                icon: const Icon(Icons.sort)),
-            PopupMenuButton<Menu>(
-              onSelected: (route) => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  switch (route) {
-                    case Menu.settings:
-                      return const SettingsRoute();
-                    case Menu.about:
-                      return const AboutRoute();
-                  }
-                }),
+      return Consumer<PreferenceNotifier>(
+          builder: (context, preferenceNotifier, child) {
+        return Scaffold(
+          body: CustomScrollView(slivers: [
+            SliverAppBar(
+              pinned: true,
+              title: Text(
+                Translations.of(context)!.app_name,
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
               ),
-              itemBuilder: (context) => <PopupMenuEntry<Menu>>[
-                PopupMenuItem(
-                    child: Text(Translations.of(context)!.menu_settings),
-                    value: Menu.settings),
-                PopupMenuItem(
-                    child: Text(Translations.of(context)!.menu_about),
-                    value: Menu.about)
-              ],
-            )
+            ),
+            EntryList(
+              entries: notifier.entries,
+              onTap: _onTap,
+              onLongTap: _onLongPress,
+            ),
           ]),
-        ),
-      );
+          floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                final Action? result = await _invokeMainActions();
+                if (result != null) {
+                  switch (result) {
+                    case Action.input:
+                      final operation = await _invokeEditor(notifier);
+                      switch (operation) {
+                        case Operation.create:
+                          _showSnackBar(
+                              Translations.of(context)!.feedback_entry_created);
+                          break;
+                        case Operation.update:
+                          _showSnackBar(
+                              Translations.of(context)!.feedback_entry_updated);
+                          break;
+                        default:
+                          break;
+                      }
+                      break;
+                    case Action.scan:
+                      final Entry? data = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ChangeNotifierProvider<EntryNotifier>.value(
+                                  value: notifier, child: const ScanRoute()),
+                        ),
+                      );
+                      if (data != null && data is Entry) {
+                        notifier.put(data);
+                        _showSnackBar(
+                            Translations.of(context)!.feedback_entry_created);
+                      }
+                      break;
+                  }
+                }
+              },
+              icon: const Icon(Icons.add),
+              label: Text(Translations.of(context)!.button_add)),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: BottomAppBar(
+            child: Row(children: [
+              const Spacer(),
+              IconButton(
+                  onPressed: () async {
+                    final result = await _invokeSortMenu(preferenceNotifier);
+                    if (result != null) {}
+                  },
+                  icon: const Icon(Icons.sort)),
+              PopupMenuButton<Menu>(
+                onSelected: (route) => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    switch (route) {
+                      case Menu.settings:
+                        return const SettingsRoute();
+                      case Menu.about:
+                        return const AboutRoute();
+                    }
+                  }),
+                ),
+                itemBuilder: (context) => <PopupMenuEntry<Menu>>[
+                  PopupMenuItem(
+                      child: Text(Translations.of(context)!.menu_settings),
+                      value: Menu.settings),
+                  PopupMenuItem(
+                      child: Text(Translations.of(context)!.menu_about),
+                      value: Menu.about)
+                ],
+              )
+            ]),
+          ),
+        );
+      });
     });
   }
 }
