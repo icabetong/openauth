@@ -21,5 +21,6 @@ ThemeData getDracula() {
       bottomAppBarTheme: base.bottomAppBarTheme.copyWith(color: surface),
       popupMenuTheme: base.popupMenuTheme.copyWith(color: surface),
       bottomSheetTheme:
-          base.bottomSheetTheme.copyWith(backgroundColor: surface));
+          base.bottomSheetTheme.copyWith(backgroundColor: surface),
+      cardTheme: base.cardTheme.copyWith(color: surface));
 }
