@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:hive/hive.dart';
 import 'package:openauth/about/about.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry.dart';
@@ -118,7 +119,10 @@ class _EntryPageState extends State<EntryPage> {
         });
   }
 
-  Future<Sort?> _invokeSortMenu(PreferenceNotifier notifier) async {
+  Future<Sort?> _invokeSortMenu(
+    PreferenceNotifier preferenceNotifier,
+    EntryNotifier entryNotifier,
+  ) async {
     return await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -126,13 +130,16 @@ class _EntryPageState extends State<EntryPage> {
             shrinkWrap: true,
             children: Sort.values.map((sort) {
               return ListTile(
-                leading: Icon(
-                    notifier.preferences.sort == sort ? Icons.check : null),
+                leading: Icon(preferenceNotifier.preferences.sort == sort
+                    ? Icons.check
+                    : null),
                 title: Text(
                   sort.getLocalization(context),
                 ),
                 onTap: () {
-                  notifier.changeSort(sort);
+                  preferenceNotifier.changeSort(sort);
+                  entryNotifier.sort(sort);
+                  Navigator.pop(context);
                 },
               );
             }).toList(),
@@ -231,11 +238,20 @@ class _EntryPageState extends State<EntryPage> {
                     TextStyle(color: Theme.of(context).colorScheme.onSurface),
               ),
             ),
-            EntryList(
-              entries: notifier.entries,
-              onTap: _onTap,
-              onLongTap: _onLongPress,
-            ),
+            ValueListenableBuilder<Box<Entry>>(
+                valueListenable: notifier.listen(),
+                builder: (context, box, widget) {
+                  final List<Entry> entries =
+                      List.castFrom(box.toMap().values.toList());
+                  entries.sort(
+                      (prev, curr) => prev.position.compareTo(curr.position));
+
+                  return EntryList(
+                      entries: entries,
+                      onTap: _onTap,
+                      onLongTap: _onLongPress,
+                      box: box);
+                }),
           ]),
           floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {
@@ -284,8 +300,7 @@ class _EntryPageState extends State<EntryPage> {
               const Spacer(),
               IconButton(
                   onPressed: () async {
-                    final result = await _invokeSortMenu(preferenceNotifier);
-                    if (result != null) {}
+                    await _invokeSortMenu(preferenceNotifier, notifier);
                   },
                   icon: const Icon(Icons.sort)),
               PopupMenuButton<Menu>(

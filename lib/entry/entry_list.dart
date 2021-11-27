@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:hive/hive.dart';
 import 'package:openauth/database/notifier.dart';
+import 'package:openauth/database/repository.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/shared/token.dart';
@@ -15,13 +17,16 @@ class EntryList extends StatelessWidget {
     required this.entries,
     required this.onTap,
     required this.onLongTap,
+    required this.box,
   }) : super(key: key);
   final List<Entry> entries;
   final Function(String) onTap;
   final Function(Entry) onLongTap;
+  final Box<Entry> box;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(entries.map((e) => '${e.name}:${e.position}').toString());
     return entries.isNotEmpty
         ? ReorderableSliverList(
             delegate: ReorderableSliverChildBuilderDelegate(
@@ -36,8 +41,9 @@ class EntryList extends StatelessWidget {
               childCount: entries.length,
             ),
             onReorder: (from, to) async {
-              await Provider.of<EntryNotifier>(context, listen: false)
-                  .reorder(entries[from], from, to);
+              // await Provider.of<EntryNotifier>(context, listen: false)
+              //     .reorder(entries[from], from, to);
+              await EntryRepository.swap(box, entries[from], from, to);
             },
             enabled: true,
           )
@@ -62,22 +68,22 @@ class EntryListTile extends StatefulWidget {
 
 class _EntryListTileState extends State<EntryListTile> {
   CountDown? countdown;
-  String? code;
+  String? code = "";
   int time = 0;
 
   @override
   void initState() {
     super.initState();
 
-    switch (widget.entry.type) {
-      case OTPType.steam:
-      case OTPType.totp:
-        _startTOTPGeneration();
-        break;
-      case OTPType.hotp:
-        _startHOTPGeneration();
-        break;
-    }
+    // switch (widget.entry.type) {
+    //   case OTPType.steam:
+    //   case OTPType.totp:
+    //     _startTOTPGeneration();
+    //     break;
+    //   case OTPType.hotp:
+    //     _startHOTPGeneration();
+    //     break;
+    // }
   }
 
   void _startTOTPGeneration() {
@@ -112,7 +118,7 @@ class _EntryListTileState extends State<EntryListTile> {
       if (mounted) {
         setState(() {
           time = data.inSeconds;
-          if (time == 0 || code == null) {
+          if (time == 0 || code == "") {
             _generate();
           }
         });

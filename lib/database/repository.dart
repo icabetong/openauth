@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/tools.dart';
 
@@ -46,8 +49,7 @@ class EntryRepository extends Repository<Entry> {
         .isNotEmpty;
   }
 
-  Future reorder(Entry entry, int from, int to) async {
-    final source = box.getAt(from)?.copyWith();
+  Future reorder(Entry source, int from, int to) async {
     final destination = box.getAt(to)?.copyWith();
     final affected = to > from
         ? box.values
@@ -55,32 +57,77 @@ class EntryRepository extends Repository<Entry> {
         : box.values
             .where((entry) => entry.position < from && entry.position > to);
 
-    if (source != null && destination != null) {
+    if (destination != null) {
       source.position = to;
       // from bottom to top
       if (from > to) {
-        destination.position += 1;
+        destination.position = to + 1;
         for (var entry in affected) {
-          if (entry.entryId != source.entryId ||
+          if (entry.entryId != source.entryId &&
               entry.entryId != destination.entryId) {
-            entry.position += 1;
+            entry.position = to + 2;
           }
         }
-      } else {
-        destination.position -= 1;
+      } else if (to > from) {
+        destination.position = to - 1;
         for (var entry in affected) {
-          if (entry.entryId != source.entryId ||
+          if (entry.entryId != source.entryId &&
               entry.entryId != destination.entryId) {
-            entry.position -= 1;
+            entry.position = to - 2;
           }
         }
       }
 
       await box.put(source.entryId, source);
       await box.put(destination.entryId, destination);
+      debugPrint('${source.name}:${source.position}');
+      debugPrint(destination.position.toString());
       for (var entry in affected) {
         await box.put(entry.entryId, entry);
       }
     }
+  }
+
+  static swap(Box<Entry> box, Entry source, int from, int to) async {
+    final destination = box.getAt(to)?.copyWith();
+    final affected = to > from
+        ? box.values
+            .where((entry) => entry.position > from && entry.position < to)
+        : box.values
+            .where((entry) => entry.position < from && entry.position > to);
+
+    if (destination != null) {
+      source.position = to;
+      // from bottom to top
+      if (from > to) {
+        destination.position = to + 1;
+        for (var entry in affected) {
+          if (entry.entryId != source.entryId &&
+              entry.entryId != destination.entryId) {
+            entry.position = to + 2;
+          }
+        }
+      } else if (to > from) {
+        destination.position = to - 1;
+        for (var entry in affected) {
+          if (entry.entryId != source.entryId &&
+              entry.entryId != destination.entryId) {
+            entry.position = to - 2;
+          }
+        }
+      }
+
+      await box.put(source.entryId, source);
+      await box.put(destination.entryId, destination);
+      debugPrint('${source.name}:${source.position}');
+      debugPrint(destination.position.toString());
+      for (var entry in affected) {
+        await box.put(entry.entryId, entry);
+      }
+    }
+  }
+
+  ValueListenable<Box<Entry>> listen() {
+    return box.listenable();
   }
 }
