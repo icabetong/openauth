@@ -121,9 +121,8 @@ class _EntryPageState extends State<EntryPage> {
 
   Future<Sort?> _invokeSortMenu(
     PreferenceNotifier preferenceNotifier,
-    EntryNotifier entryNotifier,
   ) async {
-    return await showModalBottomSheet(
+    return await showModalBottomSheet<Sort>(
         context: context,
         builder: (context) {
           return ListView(
@@ -138,8 +137,7 @@ class _EntryPageState extends State<EntryPage> {
                 ),
                 onTap: () {
                   preferenceNotifier.changeSort(sort);
-                  entryNotifier.sort(sort);
-                  Navigator.pop(context);
+                  Navigator.pop(context, sort);
                 },
               );
             }).toList(),
@@ -291,7 +289,10 @@ class _EntryPageState extends State<EntryPage> {
               const Spacer(),
               IconButton(
                   onPressed: () async {
-                    await _invokeSortMenu(preferenceNotifier, notifier);
+                    final result = await _invokeSortMenu(preferenceNotifier);
+                    if (result != null) {
+                      notifier.sort(result);
+                    }
                   },
                   icon: const Icon(Icons.sort)),
               PopupMenuButton<Menu>(

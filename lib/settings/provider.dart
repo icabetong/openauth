@@ -150,7 +150,7 @@ class PreferenceHandler {
   static Future<Sort> get sort async {
     final preferences = await SharedPreferences.getInstance();
     String? sort = preferences.getString(_sort);
-    return sort != null ? SortExtension.parse(_sort) : Sort.custom;
+    return sort != null ? SortExtension.parse(sort) : Sort.custom;
   }
 
   static Future<bool> get isFirstLaunch async {
