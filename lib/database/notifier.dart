@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/database/repository.dart';
 import 'package:openauth/settings/provider.dart';
@@ -7,17 +6,10 @@ import 'package:openauth/settings/provider.dart';
 class EntryNotifier extends ChangeNotifier {
   final EntryRepository repository = EntryRepository();
   List<Entry> _entries = [];
-  List<Entry> get entries {
-    _entries.sort((current, next) => current.position.compareTo(next.position));
-    return _entries;
-  }
+  List<Entry> get entries => _entries;
 
   EntryNotifier() {
     _entries = repository.fetch();
-  }
-
-  ValueListenable<Box<Entry>> listen() {
-    return repository.listen();
   }
 
   bool check(String entryId, String secret, OTPType type) {
@@ -27,8 +19,6 @@ class EntryNotifier extends ChangeNotifier {
   void sort(Sort sort) {
     switch (sort) {
       case Sort.custom:
-        _entries
-            .sort((current, next) => current.position.compareTo(next.position));
         break;
       case Sort.nameAscending:
         _entries.sort((current, next) => current.name.compareTo(next.name));
@@ -62,9 +52,6 @@ class EntryNotifier extends ChangeNotifier {
 
   Future<bool?> reorder(Entry entry, int from, int to) async {
     final result = await repository.reorder(entry, from, to);
-    _entries = repository.fetch();
-    _entries.sort((current, next) => current.position.compareTo(next.position));
-    //debugPrint(_entries.map((e) => '${e.name}:${e.position}').toString());
     notifyListeners();
     return result;
   }

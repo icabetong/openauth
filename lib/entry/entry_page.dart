@@ -238,20 +238,11 @@ class _EntryPageState extends State<EntryPage> {
                     TextStyle(color: Theme.of(context).colorScheme.onSurface),
               ),
             ),
-            ValueListenableBuilder<Box<Entry>>(
-                valueListenable: notifier.listen(),
-                builder: (context, box, widget) {
-                  final List<Entry> entries =
-                      List.castFrom(box.toMap().values.toList());
-                  entries.sort(
-                      (prev, curr) => prev.position.compareTo(curr.position));
-
-                  return EntryList(
-                      entries: entries,
-                      onTap: _onTap,
-                      onLongTap: _onLongPress,
-                      box: box);
-                }),
+            EntryList(
+              entries: notifier.entries,
+              onTap: _onTap,
+              onLongTap: _onLongPress,
+            ),
           ]),
           floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {

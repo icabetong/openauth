@@ -4,7 +4,7 @@ import 'package:otp/otp.dart';
 part 'entry.g.dart';
 
 @HiveType(typeId: 0)
-class Entry {
+class Entry extends HiveObject {
   @HiveField(0)
   String entryId;
   @HiveField(1)
@@ -25,8 +25,6 @@ class Entry {
   final Algorithm algorithm;
   @HiveField(9)
   final bool isGoogle;
-  @HiveField(10)
-  int position;
 
   Entry(
     this.secret,
@@ -39,7 +37,6 @@ class Entry {
     this.type = OTPType.totp,
     this.algorithm = Algorithm.SHA1,
     this.isGoogle = true,
-    this.position = -1,
   }) {
     if (entryId.trim().isEmpty) {
       entryId = randomId();
@@ -57,7 +54,6 @@ class Entry {
     OTPType? type,
     Algorithm? algorithm,
     bool? isGoogle,
-    int? position,
   }) {
     return Entry(
       secret ?? this.secret,
@@ -70,7 +66,6 @@ class Entry {
       type: type ?? this.type,
       algorithm: algorithm ?? this.algorithm,
       isGoogle: isGoogle ?? this.isGoogle,
-      position: position ?? this.position,
     );
   }
 

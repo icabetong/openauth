@@ -17,16 +17,13 @@ class EntryList extends StatelessWidget {
     required this.entries,
     required this.onTap,
     required this.onLongTap,
-    required this.box,
   }) : super(key: key);
   final List<Entry> entries;
   final Function(String) onTap;
   final Function(Entry) onLongTap;
-  final Box<Entry> box;
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(entries.map((e) => '${e.name}:${e.position}').toString());
     return entries.isNotEmpty
         ? ReorderableSliverList(
             delegate: ReorderableSliverChildBuilderDelegate(
@@ -41,9 +38,8 @@ class EntryList extends StatelessWidget {
               childCount: entries.length,
             ),
             onReorder: (from, to) async {
-              // await Provider.of<EntryNotifier>(context, listen: false)
-              //     .reorder(entries[from], from, to);
-              await EntryRepository.swap(box, entries[from], from, to);
+              await Provider.of<EntryNotifier>(context, listen: false)
+                  .reorder(entries[from], from, to);
             },
             enabled: true,
           )
