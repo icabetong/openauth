@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/settings/notifier.dart';
+import 'package:openauth/settings/provider.dart';
 import 'package:openauth/shared/custom/dropdown_field.dart';
 import 'package:openauth/shared/custom/switch.dart';
 import 'package:otp/otp.dart';
@@ -31,6 +32,9 @@ class _InputPageState extends State<InputPage> {
   @override
   void initState() {
     super.initState();
+
+    PreferenceHandler.isSecretsHidden
+        .then((secrets) => setState(() => _isSecretObscured = secrets));
 
     final isUpdate = widget.entry != null;
     _nameController = TextEditingController(text: widget.entry?.name);
@@ -90,12 +94,6 @@ class _InputPageState extends State<InputPage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<PreferenceNotifier>(builder: (_context, _notifier, _child) {
-      // If the user changed unhides the secrets from the app settings menu,
-      // revert the obscurity of the secrets in this interface.
-      if (!_notifier.preferences.isSecretsHidden && _isSecretObscured) {
-        setState(() => _isSecretObscured = false);
-      }
-
       return Scaffold(
         body: CustomScrollView(slivers: [
           SliverAppBar(
@@ -151,7 +149,7 @@ class _InputPageState extends State<InputPage> {
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
-                    obscureText: !_isSecretObscured,
+                    obscureText: _isSecretObscured,
                     enableSuggestions: !_notifier.preferences.isSecretsHidden,
                     autocorrect: !_notifier.preferences.isSecretsHidden,
                     decoration: InputDecoration(

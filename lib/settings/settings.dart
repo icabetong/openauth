@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/settings/other/protection_page.dart';
 import 'package:openauth/settings/notifier.dart';
-import 'package:openauth/settings/provider.dart';
 import 'package:openauth/theme/core.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
