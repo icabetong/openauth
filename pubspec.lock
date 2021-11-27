@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "2.8.1"
   base32:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: base32
       url: "https://pub.dartlang.org"

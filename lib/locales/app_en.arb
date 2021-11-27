@@ -47,7 +47,7 @@
     "feedback_entry_updated": "Entry updated",
     "feedback_entry_removed": "Entry removed",
     "error_generic": "An error occured",
-    "error_code_not_found": "Error Code Not Found",
+    "error_secret_invalid": "Invalid Secret",
     "error_name_cant_be_empty": "Name cannot be empty",
     "error_issuer_cant_be_empty": "Issuer cannot be empty",
     "error_secret_cant_be_empty": "Secrets cannot be empty",

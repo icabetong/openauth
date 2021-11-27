@@ -39,6 +39,7 @@ dependencies:
   qr_code_scanner: ^0.6.1
   otp: ^3.0.1
   reorderables: ^0.4.1
+  base32: ^2.1.1
   
 dev_dependencies:
   flutter_test:

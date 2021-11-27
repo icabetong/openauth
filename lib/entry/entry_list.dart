@@ -1,8 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
-import 'package:hive/hive.dart';
 import 'package:openauth/database/notifier.dart';
-import 'package:openauth/database/repository.dart';
 import 'package:openauth/entry/entry.dart';
 import 'package:openauth/shared/countdown.dart';
 import 'package:openauth/shared/token.dart';
@@ -63,23 +64,25 @@ class EntryListTile extends StatefulWidget {
 }
 
 class _EntryListTileState extends State<EntryListTile> {
+  Exception? exception;
   CountDown? countdown;
-  String? code = "";
+  StreamSubscription<Duration>? subscription;
+  String? code;
   int time = 0;
 
   @override
   void initState() {
     super.initState();
 
-    // switch (widget.entry.type) {
-    //   case OTPType.steam:
-    //   case OTPType.totp:
-    //     _startTOTPGeneration();
-    //     break;
-    //   case OTPType.hotp:
-    //     _startHOTPGeneration();
-    //     break;
-    // }
+    switch (widget.entry.type) {
+      case OTPType.steam:
+      case OTPType.totp:
+        _startTOTPGeneration();
+        break;
+      case OTPType.hotp:
+        _startHOTPGeneration();
+        break;
+    }
   }
 
   void _startTOTPGeneration() {
@@ -105,16 +108,16 @@ class _EntryListTileState extends State<EntryListTile> {
   }
 
   void _countdown() {
-    final sub = countdown?.stream?.listen(null);
-    sub?.onDone(() {
+    subscription = countdown?.stream?.listen(null);
+    subscription?.onDone(() {
       _startTOTPGeneration();
     });
 
-    sub?.onData((data) {
+    subscription?.onData((data) {
       if (mounted) {
         setState(() {
           time = data.inSeconds;
-          if (time == 0 || code == "") {
+          if (time == 0 || code == null) {
             _generate();
           }
         });
@@ -123,7 +126,14 @@ class _EntryListTileState extends State<EntryListTile> {
   }
 
   void _generate() {
-    code = TokenGenerator.compute(widget.entry);
+    try {
+      base32.decode(widget.entry.secret);
+      code = TokenGenerator.compute(widget.entry);
+    } on FormatException catch (exception) {
+      this.exception = exception;
+      countdown = null;
+      subscription?.cancel();
+    }
   }
 
   Widget _getLeading() {
@@ -155,7 +165,7 @@ class _EntryListTileState extends State<EntryListTile> {
     return ListTile(
       key: widget.key,
       leading: SizedBox(
-        child: _getLeading(),
+        child: exception is FormatException ? null : _getLeading(),
         width: 40,
         height: 40,
       ),
@@ -165,7 +175,7 @@ class _EntryListTileState extends State<EntryListTile> {
           widget.onLongTap(widget.entry);
         },
       ),
-      title: Text(code ?? Translations.of(context)!.error_code_not_found,
+      title: Text(code ?? Translations.of(context)!.error_secret_invalid,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
       onTap: () {
