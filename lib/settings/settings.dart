@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/settings/other/protection_page.dart';
 import 'package:openauth/settings/notifier.dart';
+import 'package:openauth/shared/custom/preference.dart';
 import 'package:openauth/theme/core.dart';
 import 'package:provider/provider.dart';
-import 'package:settings_ui/settings_ui.dart';
 
 class SettingsRoute extends StatefulWidget {
   const SettingsRoute({Key? key}) : super(key: key);
@@ -15,28 +15,27 @@ class SettingsRoute extends StatefulWidget {
 }
 
 class _SettingsRouteState extends State<SettingsRoute> {
-  Color get _themeColor => Theme.of(context).colorScheme.primary;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(Translations.of(context)!.menu_settings)),
-        body: Consumer<PreferenceNotifier>(builder: (context, notifier, child) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: SettingsList(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              sections: [
-                SettingsSection(
-                    title: Translations.of(context)!.settings_group_display,
-                    titleTextStyle: _headerTextStyle,
+      body: Consumer<PreferenceNotifier>(
+        builder: (context, notifier, child) {
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                title: Text(Translations.of(context)!.menu_settings),
+                pinned: true,
+              ),
+              PreferenceList(
+                items: [
+                  PreferenceGroup(
+                    header: Translations.of(context)!.settings_group_display,
                     tiles: [
-                      SettingsTile(
+                      PreferenceTile(
                         leading: const Icon(Icons.palette_outlined),
                         title: Translations.of(context)!.settings_theme,
                         subtitle:
                             getThemeName(context, notifier.preferences.theme),
-                        titleTextStyle: _titleTextStyle,
                         onPressed: (context) async {
                           final result = await Navigator.push(
                               context,
@@ -48,72 +47,77 @@ class _SettingsRouteState extends State<SettingsRoute> {
                           }
                         },
                       ),
-                    ]),
-                SettingsSection(
-                    title: Translations.of(context)!.settings_group_security,
-                    titleTextStyle: _headerTextStyle,
+                    ],
+                  ),
+                  PreferenceGroup(
+                    header: Translations.of(context)!.settings_group_behavior,
                     tiles: [
-                      SettingsTile.switchTile(
-                          leading: const Icon(Icons.visibility_off_outlined),
-                          switchActiveColor: _themeColor,
-                          title:
-                              Translations.of(context)!.settings_hide_secrets,
+                      PreferenceTile.switchTile(
+                          leading: const Icon(Icons.copy_outlined),
+                          title: Translations.of(context)!.settings_tap_to_copy,
                           subtitle: Translations.of(context)!
-                              .settings_hide_secrets_subtitle,
-                          subtitleMaxLines: 3,
-                          titleTextStyle: _titleTextStyle,
-                          onToggle: (status) {
-                            setState(() {
-                              notifier.changeSecretsHidden(status);
-                            });
-                          },
-                          switchValue: notifier.preferences.isSecretsHidden),
-                      SettingsTile.switchTile(
-                          leading:
-                              const Icon(Icons.admin_panel_settings_outlined),
-                          switchActiveColor: _themeColor,
-                          title: Translations.of(context)!
-                              .settings_access_protection,
-                          titleTextStyle: _titleTextStyle,
-                          subtitle: Translations.of(context)!
-                              .settings_access_protection_subtitle,
-                          subtitleMaxLines: 3,
-                          onToggle: (status) async {
-                            bool isAppProtected = status;
-                            if (status) {
-                              final result = Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          const ProtectionPage(),
-                                      transitionsBuilder: (context, animation,
-                                              secondaryAnimation, child) =>
-                                          SharedAxisTransition(
-                                              child: child,
-                                              animation: animation,
-                                              secondaryAnimation:
-                                                  secondaryAnimation,
-                                              transitionType:
-                                                  SharedAxisTransitionType
-                                                      .horizontal)));
-                              isAppProtected = await result;
-                            }
-                            setState(() {
-                              notifier.changeProtection(isAppProtected);
-                            });
-                          },
-                          switchValue: notifier.preferences.isAppProtected)
-                    ])
-              ],
-            ),
+                              .settings_tap_to_copy_subtitle,
+                          onToggle: (value) {},
+                          checked: notifier.preferences.tapToCopy)
+                    ],
+                  ),
+                  PreferenceGroup(
+                      header: Translations.of(context)!.settings_group_security,
+                      tiles: [
+                        PreferenceTile.switchTile(
+                            leading: const Icon(Icons.visibility_off_outlined),
+                            title:
+                                Translations.of(context)!.settings_hide_secrets,
+                            subtitle: Translations.of(context)!
+                                .settings_hide_secrets_subtitle,
+                            onToggle: (status) {
+                              setState(() {
+                                notifier.changeSecretsHidden(status);
+                              });
+                            },
+                            checked: notifier.preferences.isSecretsHidden),
+                        PreferenceTile.switchTile(
+                            leading:
+                                const Icon(Icons.admin_panel_settings_outlined),
+                            title: Translations.of(context)!
+                                .settings_access_protection,
+                            subtitle: Translations.of(context)!
+                                .settings_access_protection_subtitle,
+                            onToggle: (status) async {
+                              bool isAppProtected = status;
+                              if (status) {
+                                final result = Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            const ProtectionPage(),
+                                        transitionsBuilder: (context, animation,
+                                                secondaryAnimation, child) =>
+                                            SharedAxisTransition(
+                                                child: child,
+                                                animation: animation,
+                                                secondaryAnimation:
+                                                    secondaryAnimation,
+                                                transitionType:
+                                                    SharedAxisTransitionType
+                                                        .horizontal)));
+                                isAppProtected = await result;
+                              }
+                              setState(() {
+                                notifier.changeProtection(isAppProtected);
+                              });
+                            },
+                            checked: notifier.preferences.isAppProtected)
+                      ])
+                ],
+              ),
+            ],
           );
-        }));
+        },
+      ),
+    );
   }
-
-  TextStyle get _titleTextStyle => const TextStyle(fontWeight: FontWeight.w500);
-  TextStyle get _headerTextStyle =>
-      TextStyle(color: _themeColor, fontWeight: FontWeight.w500);
 }
 
 class ThemeSelectionRoute extends StatefulWidget {
@@ -139,12 +143,15 @@ class _ThemeSelectionRouteState extends State<ThemeSelectionRoute> {
     return Scaffold(
       appBar: AppBar(title: Text(Translations.of(context)!.settings_theme)),
       body: ListView.builder(
-          itemBuilder: (context, index) => ListTile(
+          itemBuilder: (context, index) {
+            return ListTile(
               title: Text(getThemeName(context, themes[index])),
               leading: getLeadingIcon(themes[index]),
               onTap: () {
                 Navigator.pop(context, themes[index]);
-              }),
+              },
+            );
+          },
           itemCount: themes.length),
     );
   }

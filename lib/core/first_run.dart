@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 class FirstRunPage extends StatelessWidget {
   const FirstRunPage({Key? key}) : super(key: key);
 
-  final width = 940.67538;
-  final height = 433.96214;
+  final _width = 940.67538;
+  final _height = 433.96214;
 
   @override
   Widget build(BuildContext context) {
@@ -36,17 +36,22 @@ class FirstRunPage extends StatelessWidget {
             const SizedBox(height: 64),
             SvgPicture.asset(
               'assets/vault.svg',
-              width: width / 4,
-              height: height / 4,
+              width: _width / 4,
+              height: _height / 4,
               fit: BoxFit.scaleDown,
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-                onPressed: () {
-                  Provider.of<PreferenceNotifier>(context, listen: false)
-                      .changeFirstRun(false);
-                },
-                child: Text(Translations.of(context)!.button_lets_start))
+              onPressed: () {
+                Provider.of<PreferenceNotifier>(context, listen: false)
+                    .changeFirstRun(false);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(Translations.of(context)!.button_lets_start),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

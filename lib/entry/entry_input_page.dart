@@ -120,9 +120,10 @@ class _InputPageState extends State<InputPage> {
                 child: Column(children: [
                   TextFormField(
                     decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        icon: const Icon(Icons.edit_outlined),
-                        labelText: Translations.of(context)!.field_name),
+                      border: const OutlineInputBorder(),
+                      icon: const Icon(Icons.edit_outlined),
+                      labelText: Translations.of(context)!.field_name,
+                    ),
                     controller: _nameController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
@@ -135,9 +136,10 @@ class _InputPageState extends State<InputPage> {
                   const SizedBox(height: 16),
                   TextFormField(
                     decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        icon: const Icon(Icons.badge_outlined),
-                        labelText: Translations.of(context)!.field_issuer),
+                      border: const OutlineInputBorder(),
+                      icon: const Icon(Icons.badge_outlined),
+                      labelText: Translations.of(context)!.field_issuer,
+                    ),
                     controller: _issuerController,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {

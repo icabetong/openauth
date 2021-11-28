@@ -68,55 +68,75 @@ extension SortExtension on Sort {
 }
 
 class Preferences {
+  Sort sort;
   AppTheme theme;
+  bool tapToCopy;
+  bool hideTokens;
   bool isSecretsHidden;
   bool isAppProtected;
-  Sort sort;
   bool isFirstRun;
 
   Preferences({
+    required this.sort,
     required this.theme,
+    required this.tapToCopy,
+    required this.hideTokens,
     required this.isSecretsHidden,
     required this.isAppProtected,
-    required this.sort,
     required this.isFirstRun,
   });
 
   static Preferences getDefault() {
     return Preferences(
+      sort: Sort.custom,
       theme: AppTheme.light,
+      tapToCopy: defaultTapToCopy,
+      hideTokens: defaultHideTokens,
       isSecretsHidden: defaultSecretsHidden,
       isAppProtected: defaultAppProtected,
-      sort: Sort.custom,
       isFirstRun: defaultFirstLaunch,
     );
   }
 
+  static const defaultTapToCopy = true;
+  static const defaultHideTokens = false;
   static const defaultSecretsHidden = false;
   static const defaultFirstLaunch = true;
   static const defaultAppProtected = false;
 }
 
 class PreferenceHandler {
+  static const _sort = "sort";
   static const _theme = "theme";
+  static const _tapToCopy = "tapToCopy";
+  static const _hideTokens = "hideTokens";
   static const _secretsHidden = "secretsHidden";
   static const _appProtected = "appProtected";
-  static const _sort = "sort";
   static const _firstRun = "firstLaunch";
+
+  static Future<bool> setSort(Sort sort) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(_sort, sort.value.toString());
+  }
 
   static Future<bool> setTheme(AppTheme theme) async {
     final preferences = await SharedPreferences.getInstance();
     return await preferences.setString(_theme, theme.value.toString());
   }
 
+  static Future<bool> setTapToCopy(bool tapToCopy) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_tapToCopy, tapToCopy);
+  }
+
+  static Future<bool> setHideTokens(bool hideTokens) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_hideTokens, hideTokens);
+  }
+
   static Future<bool> setSecretsHidden(bool isSecretsHidden) async {
     final preferences = await SharedPreferences.getInstance();
     return await preferences.setBool(_secretsHidden, isSecretsHidden);
-  }
-
-  static Future<bool> setSort(Sort sort) async {
-    final preferences = await SharedPreferences.getInstance();
-    return await preferences.setString(_sort, sort.value.toString());
   }
 
   static Future<bool> setAppProtected(bool isAppProtected) async {
@@ -129,10 +149,26 @@ class PreferenceHandler {
     return await preferences.setBool(_firstRun, isFirstRun);
   }
 
+  static Future<Sort> get sort async {
+    final preferences = await SharedPreferences.getInstance();
+    String? sort = preferences.getString(_sort);
+    return sort != null ? SortExtension.parse(sort) : Sort.custom;
+  }
+
   static Future<AppTheme> get theme async {
     final preferences = await SharedPreferences.getInstance();
     String? theme = preferences.getString(_theme);
     return theme != null ? AppThemeExtension.parse(theme) : AppTheme.light;
+  }
+
+  static Future<bool> get tapToCopy async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(_tapToCopy) ?? Preferences.defaultTapToCopy;
+  }
+
+  static Future<bool> get hideTokens async {
+    final preferences = await SharedPreferences.getInstance();
+    return preferences.getBool(_hideTokens) ?? Preferences.defaultHideTokens;
   }
 
   static Future<bool> get isSecretsHidden async {
@@ -147,12 +183,6 @@ class PreferenceHandler {
         Preferences.defaultAppProtected;
   }
 
-  static Future<Sort> get sort async {
-    final preferences = await SharedPreferences.getInstance();
-    String? sort = preferences.getString(_sort);
-    return sort != null ? SortExtension.parse(sort) : Sort.custom;
-  }
-
   static Future<bool> get isFirstRun async {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getBool(_firstRun) ?? Preferences.defaultFirstLaunch;
@@ -160,10 +190,12 @@ class PreferenceHandler {
 
   static Future<Preferences> getPreferences() async {
     return Preferences(
+      sort: await sort,
       theme: await theme,
+      tapToCopy: await tapToCopy,
+      hideTokens: await hideTokens,
       isSecretsHidden: await isSecretsHidden,
       isAppProtected: await isAppProtected,
-      sort: await sort,
       isFirstRun: await isFirstRun,
     );
   }
