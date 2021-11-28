@@ -39,9 +39,9 @@ class PreferenceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  changeFirstLaunch(bool isFirstLaunch) async {
-    _preferences.isFirstLaunch = isFirstLaunch;
-    await PreferenceHandler.setFirstLaunch(isFirstLaunch);
+  changeFirstRun(bool isFirstRun) async {
+    _preferences.isFirstRun = isFirstRun;
+    await PreferenceHandler.setFirstRun(isFirstRun);
     notifyListeners();
   }
 }

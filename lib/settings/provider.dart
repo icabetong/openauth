@@ -72,14 +72,14 @@ class Preferences {
   bool isSecretsHidden;
   bool isAppProtected;
   Sort sort;
-  bool isFirstLaunch;
+  bool isFirstRun;
 
   Preferences({
     required this.theme,
     required this.isSecretsHidden,
     required this.isAppProtected,
     required this.sort,
-    required this.isFirstLaunch,
+    required this.isFirstRun,
   });
 
   static Preferences getDefault() {
@@ -88,7 +88,7 @@ class Preferences {
       isSecretsHidden: defaultSecretsHidden,
       isAppProtected: defaultAppProtected,
       sort: Sort.custom,
-      isFirstLaunch: defaultFirstLaunch,
+      isFirstRun: defaultFirstLaunch,
     );
   }
 
@@ -99,10 +99,10 @@ class Preferences {
 
 class PreferenceHandler {
   static const _theme = "theme";
-  static const _isSecretsHidden = "isSecretsHidden";
-  static const _isAppProtected = "isAppProtected";
+  static const _secretsHidden = "secretsHidden";
+  static const _appProtected = "appProtected";
   static const _sort = "sort";
-  static const _isFirstLaunch = "isFirstLaunch";
+  static const _firstRun = "firstLaunch";
 
   static Future<bool> setTheme(AppTheme theme) async {
     final preferences = await SharedPreferences.getInstance();
@@ -111,7 +111,7 @@ class PreferenceHandler {
 
   static Future<bool> setSecretsHidden(bool isSecretsHidden) async {
     final preferences = await SharedPreferences.getInstance();
-    return await preferences.setBool(_isSecretsHidden, isSecretsHidden);
+    return await preferences.setBool(_secretsHidden, isSecretsHidden);
   }
 
   static Future<bool> setSort(Sort sort) async {
@@ -119,14 +119,14 @@ class PreferenceHandler {
     return await preferences.setString(_sort, sort.value.toString());
   }
 
-  static Future<bool> setFirstLaunch(bool isFirstLaunch) async {
-    final preferences = await SharedPreferences.getInstance();
-    return await preferences.setBool(_isFirstLaunch, isFirstLaunch);
-  }
-
   static Future<bool> setAppProtected(bool isAppProtected) async {
     final preferences = await SharedPreferences.getInstance();
-    return await preferences.setBool(_isAppProtected, isAppProtected);
+    return await preferences.setBool(_appProtected, isAppProtected);
+  }
+
+  static Future<bool> setFirstRun(bool isFirstRun) async {
+    final preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(_firstRun, isFirstRun);
   }
 
   static Future<AppTheme> get theme async {
@@ -137,13 +137,13 @@ class PreferenceHandler {
 
   static Future<bool> get isSecretsHidden async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.getBool(_isSecretsHidden) ??
+    return preferences.getBool(_secretsHidden) ??
         Preferences.defaultSecretsHidden;
   }
 
   static Future<bool> get isAppProtected async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.getBool(_isAppProtected) ??
+    return preferences.getBool(_appProtected) ??
         Preferences.defaultAppProtected;
   }
 
@@ -153,10 +153,9 @@ class PreferenceHandler {
     return sort != null ? SortExtension.parse(sort) : Sort.custom;
   }
 
-  static Future<bool> get isFirstLaunch async {
+  static Future<bool> get isFirstRun async {
     final preferences = await SharedPreferences.getInstance();
-    return preferences.getBool(_isFirstLaunch) ??
-        Preferences.defaultFirstLaunch;
+    return preferences.getBool(_firstRun) ?? Preferences.defaultFirstLaunch;
   }
 
   static Future<Preferences> getPreferences() async {
@@ -165,7 +164,7 @@ class PreferenceHandler {
       isSecretsHidden: await isSecretsHidden,
       isAppProtected: await isAppProtected,
       sort: await sort,
-      isFirstLaunch: await isFirstLaunch,
+      isFirstRun: await isFirstRun,
     );
   }
 }

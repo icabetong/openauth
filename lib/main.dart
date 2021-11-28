@@ -1,9 +1,12 @@
+import 'dart:ui';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/auth/unlock_notifier.dart';
 import 'package:openauth/auth/unlock_page.dart';
+import 'package:openauth/core/first_run.dart';
 import 'package:openauth/database/database.dart';
 import 'package:openauth/database/notifier.dart';
 import 'package:openauth/entry/entry_page.dart';
@@ -45,7 +48,9 @@ class OpenAuth extends StatelessWidget {
                 GlobalWidgetsLocalizations.delegate,
                 Translations.delegate
               ],
-              home: const MainPage(),
+              home: notifier.preferences.isFirstRun
+                  ? const FirstRunPage()
+                  : const MainPage(),
               onGenerateTitle: (context) => Translations.of(context)!.app_name,
               theme: _theme,
             );

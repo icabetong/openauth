@@ -117,3 +117,46 @@ ThemeData getBase({Brightness brightness = Brightness.light}) {
     ),
   );
 }
+
+ThemeData build(
+    {Brightness? brightness,
+    Color? primary,
+    Color? onPrimary,
+    Color? secondary,
+    Color? onSecondary,
+    Color? background,
+    Color? surface,
+    Color? onSurface,
+    Color? error,
+    Color? onError,
+    Color? popup}) {
+  final base = getBase(brightness: brightness ?? Brightness.light);
+  primary ??= base.colorScheme.primary;
+  onPrimary ??= base.colorScheme.onPrimary;
+  surface ??= base.colorScheme.surface;
+  onSurface ??= base.colorScheme.onSurface;
+  error ??= base.colorScheme.error;
+  onError ??= base.colorScheme.onError;
+  background ??= base.scaffoldBackgroundColor;
+  secondary ??= primary;
+  onSecondary ??= onPrimary;
+  popup ??= surface;
+
+  return base.copyWith(
+    scaffoldBackgroundColor: background,
+    bottomAppBarColor: surface,
+    colorScheme: base.colorScheme.copyWith(
+      primary: primary,
+      onPrimary: onPrimary,
+      secondary: secondary,
+      onSecondary: onSecondary,
+      surface: surface,
+      onSurface: onSurface,
+      error: error,
+      onError: onError,
+    ),
+    popupMenuTheme: base.popupMenuTheme.copyWith(color: surface),
+    bottomSheetTheme: base.bottomSheetTheme.copyWith(backgroundColor: surface),
+    cardTheme: base.cardTheme.copyWith(color: surface),
+  );
+}

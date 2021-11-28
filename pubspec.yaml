@@ -41,6 +41,7 @@ dependencies:
   reorderables: ^0.4.1
   base32: ^2.1.1
   package_info_plus: ^1.3.0
+  flutter_svg: ^0.23.0+1
   
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,8 @@ flutter:
           weight: 400
         - asset: 'fonts/Rubik-Light.ttf'
           weight: 300
+  assets:
+      - assets/vault.svg
           
   # To add assets to your application, add an assets section, like this:
   # assets:
