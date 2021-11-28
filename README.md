@@ -20,7 +20,7 @@
 * QR scanning and manual input
 * Data Export (Plain Text or Encrypted)
 * Data Import
-* Automated Backups
+* Automated Backups (Android Only)
 
 ## License
 This project is licensed under the GPL-3.0 - see the license file for more details.

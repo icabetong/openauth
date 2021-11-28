@@ -69,6 +69,19 @@ class Entry extends HiveObject {
     );
   }
 
+  Map toJson() => {
+        jsonSecret: secret,
+        jsonIssuer: issuer,
+        jsonName: name,
+        jsonEntryId: entryId,
+        jsonLength: length,
+        jsonPeriod: period,
+        jsonCounter: counter,
+        jsonType: type,
+        jsonAlgorithm: algorithm,
+        jsonIsGoogle: isGoogle,
+      };
+
   factory Entry.fromString(String contents) {
     contents = contents.replaceFirst("otpauth", "http");
     Uri uri = Uri.parse(contents);
@@ -134,6 +147,7 @@ class Entry extends HiveObject {
   static const jsonSecret = "secret";
   static const jsonIssuer = "issuer";
   static const jsonName = "name";
+  static const jsonEntryId = "entryId";
   static const jsonLength = "length";
   static const jsonPeriod = "period";
   static const jsonCounter = "counter";

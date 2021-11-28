@@ -15,9 +15,27 @@ class PreferenceNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  changeSort(Sort sort) async {
+    _preferences.sort = sort;
+    await PreferenceHandler.setSort(sort);
+    notifyListeners();
+  }
+
   changeTheme(AppTheme theme) async {
     _preferences.theme = theme;
     await PreferenceHandler.setTheme(theme);
+    notifyListeners();
+  }
+
+  changeTapToCopy(bool tapToCopy) async {
+    _preferences.tapToCopy = tapToCopy;
+    await PreferenceHandler.setTapToCopy(tapToCopy);
+    notifyListeners();
+  }
+
+  changeHideTokens(bool hideTokens) async {
+    _preferences.hideTokens = hideTokens;
+    await PreferenceHandler.setHideTokens(hideTokens);
     notifyListeners();
   }
 
@@ -30,12 +48,6 @@ class PreferenceNotifier extends ChangeNotifier {
   changeProtection(bool isProtected) async {
     _preferences.isAppProtected = isProtected;
     await PreferenceHandler.setAppProtected(isProtected);
-    notifyListeners();
-  }
-
-  changeSort(Sort sort) async {
-    _preferences.sort = sort;
-    await PreferenceHandler.setSort(sort);
     notifyListeners();
   }
 

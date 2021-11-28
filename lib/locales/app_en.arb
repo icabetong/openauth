@@ -5,7 +5,7 @@
     "title_unlock_app_subtitle": "Enter your passphrase to unlock the app",
     "title_setup_app_protection": "Setup App Protection",
     "title_setup_app_protection_subtitle": "You can setup a password to restrict access to this app and its contents.",
-    "title_add_account": "How do you want to add your account?",
+    "title_add_account": "Add Account",
     "menu_sort": "Sort",
     "menu_settings": "Settings",
     "menu_about": "About",
@@ -83,7 +83,10 @@
     "settings_access_protection_subtitle": "Require a PIN to access the app",
     "about_version": "Version",
     "about_changelog": "Changelog",
-    "about_source_code": "Source Code",
+    "about_changelog_subtitle": "Check what's new",
+    "about_github": "GitHub",
+    "about_github_subtitle": "Submit an issue or browse the codebase",
     "about_license": "License",
-    "about_third_party": "Third Party"
+    "about_acknowledgements": "Acknowledgements",
+    "about_acknowledgements_subtitle": "Other people's works that is used by OpenAuth"
 }

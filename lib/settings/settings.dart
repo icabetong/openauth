@@ -57,13 +57,25 @@ class _SettingsRouteState extends State<SettingsRoute> {
                           title: Translations.of(context)!.settings_tap_to_copy,
                           subtitle: Translations.of(context)!
                               .settings_tap_to_copy_subtitle,
-                          onToggle: (value) {},
+                          onToggle: (checked) {
+                            notifier.changeTapToCopy(checked);
+                          },
                           checked: notifier.preferences.tapToCopy)
                     ],
                   ),
                   PreferenceGroup(
                       header: Translations.of(context)!.settings_group_security,
                       tiles: [
+                        PreferenceTile.switchTile(
+                            leading: const Icon(Icons.touch_app_outlined),
+                            title: Translations.of(context)!
+                                .settings_tap_to_reveal,
+                            subtitle: Translations.of(context)!
+                                .settings_tap_to_reveal_subtitle,
+                            onToggle: (checked) {
+                              notifier.changeHideTokens(checked);
+                            },
+                            checked: notifier.preferences.hideTokens),
                         PreferenceTile.switchTile(
                             leading: const Icon(Icons.visibility_off_outlined),
                             title:

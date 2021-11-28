@@ -53,9 +53,9 @@ class _EntryPageState extends State<EntryPage> {
               padding: const EdgeInsets.all(16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(Translations.of(context)!.title_add_account,
-                      textAlign: TextAlign.start,
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 18)),
                   const SizedBox(height: 32),
@@ -124,22 +124,33 @@ class _EntryPageState extends State<EntryPage> {
     return await showModalBottomSheet<Sort>(
         context: context,
         builder: (context) {
-          return ListView(
-            shrinkWrap: true,
-            children: Sort.values.map((sort) {
-              return ListTile(
-                leading: Icon(preferenceNotifier.preferences.sort == sort
-                    ? Icons.check
-                    : null),
-                title: Text(
-                  sort.getLocalization(context),
-                ),
-                onTap: () {
-                  preferenceNotifier.changeSort(sort);
-                  Navigator.pop(context, sort);
-                },
-              );
-            }).toList(),
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(Translations.of(context)!.menu_sort,
+                    style: Theme.of(context).textTheme.headline6),
+              ),
+              ListView(
+                shrinkWrap: true,
+                children: Sort.values.map((sort) {
+                  return ListTile(
+                    leading: Icon(preferenceNotifier.preferences.sort == sort
+                        ? Icons.check
+                        : null),
+                    title: Text(
+                      sort.getLocalization(context),
+                    ),
+                    onTap: () {
+                      preferenceNotifier.changeSort(sort);
+                      Navigator.pop(context, sort);
+                    },
+                  );
+                }).toList(),
+              ),
+            ],
           );
         });
   }
@@ -237,7 +248,9 @@ class _EntryPageState extends State<EntryPage> {
             ),
             EntryList(
               entries: notifier.entries,
-              onTap: _onTap,
+              enableDragging:
+                  preferenceNotifier.preferences.sort != Sort.custom,
+              onTap: preferenceNotifier.preferences.tapToCopy ? _onTap : null,
               onLongTap: _onLongPress,
             ),
           ]),

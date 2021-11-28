@@ -15,11 +15,13 @@ class EntryList extends StatelessWidget {
   const EntryList({
     Key? key,
     required this.entries,
-    required this.onTap,
+    this.enableDragging = true,
+    this.onTap,
     required this.onLongTap,
   }) : super(key: key);
   final List<Entry> entries;
-  final Function(String) onTap;
+  final bool enableDragging;
+  final Function(String)? onTap;
   final Function(Entry) onLongTap;
 
   @override
@@ -41,21 +43,21 @@ class EntryList extends StatelessWidget {
               await Provider.of<EntryNotifier>(context, listen: false)
                   .reorder(entries[from], from, to);
             },
-            enabled: true,
+            enabled: enableDragging,
           )
         : const EntryEmptyState();
   }
 }
 
 class EntryListTile extends StatefulWidget {
-  const EntryListTile(
-      {Key? key,
-      required this.entry,
-      required this.onTap,
-      required this.onLongTap})
-      : super(key: key);
+  const EntryListTile({
+    Key? key,
+    required this.entry,
+    this.onTap,
+    required this.onLongTap,
+  }) : super(key: key);
   final Entry entry;
-  final Function(String) onTap;
+  final Function(String)? onTap;
   final Function(Entry) onLongTap;
 
   @override
@@ -178,7 +180,7 @@ class _EntryListTileState extends State<EntryListTile> {
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
       onTap: () {
-        if (code != null) widget.onTap(code!);
+        if (code != null && widget.onTap != null) widget.onTap!(code!);
       },
     );
   }

@@ -27,11 +27,15 @@ class PreferenceGroup extends StatelessWidget {
     this.tiles = const [],
     this.header,
     this.headerTextStyle,
+    this.headerPadding = const EdgeInsets.all(16),
+    this.listPadding = const EdgeInsets.all(0),
   }) : super(key: key);
 
   final List<PreferenceTile> tiles;
   final String? header;
   final TextStyle? headerTextStyle;
+  final EdgeInsetsGeometry headerPadding;
+  final EdgeInsetsGeometry listPadding;
 
   TextStyle _getHeaderStyle(BuildContext context) {
     return TextStyle(
@@ -45,10 +49,11 @@ class PreferenceGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         if (header != null)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: headerPadding,
             child: Text(
               header!,
               style: headerTextStyle ?? _getHeaderStyle(context),
@@ -57,6 +62,7 @@ class PreferenceGroup extends StatelessWidget {
             ),
           ),
         ListView.separated(
+          padding: listPadding,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, int index) {
@@ -77,7 +83,7 @@ enum _PreferenceTileType {
 }
 
 class PreferenceTile extends StatelessWidget {
-  static const _titleMaxLines = 2;
+  static const _titleMaxLines = 1;
   static const _subtitleMaxLines = 2;
 
   const PreferenceTile({
