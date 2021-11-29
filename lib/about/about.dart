@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_icons/simple_icons.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class AboutRoute extends StatefulWidget {
   const AboutRoute({Key? key}) : super(key: key);
@@ -19,23 +21,33 @@ class _AboutRouteState extends State<AboutRoute> {
 
   @override
   Widget build(BuildContext context) {
-    void _launchUrl(BuildContext context, String url) async {
-      try {
-        await launch(
-          url,
-          customTabsOption: CustomTabsOption(
-            showPageTitle: true,
-            enableDefaultShare: true,
-            enableUrlBarHiding: true,
-            animation: CustomTabsSystemAnimation.slideIn(),
-          ),
-        );
-      } catch (e) {
+    void _launchUrlFallback(String url) async {
+      if (!await UrlLauncher.launch(url)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(Translations.of(context)!.error_generic),
           ),
         );
+      }
+    }
+
+    void _launchUrl(BuildContext context, String url) async {
+      if (Platform.isAndroid || Platform.isIOS) {
+        try {
+          await launch(
+            url,
+            customTabsOption: CustomTabsOption(
+              showPageTitle: true,
+              enableDefaultShare: true,
+              enableUrlBarHiding: true,
+              animation: CustomTabsSystemAnimation.slideIn(),
+            ),
+          );
+        } catch (e) {
+          _launchUrlFallback(url);
+        }
+      } else {
+        _launchUrlFallback(url);
       }
     }
 
