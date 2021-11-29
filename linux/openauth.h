@@ -1,9 +1,9 @@
-#ifndef FLUTTER_MY_APPLICATION_H_
-#define FLUTTER_MY_APPLICATION_H_
+#ifndef FLUTTER_OPEN_AUTH_H_
+#define FLUTTER_OPEN_AUTH_H_
 
 #include <gtk/gtk.h>
 
-G_DECLARE_FINAL_TYPE(MyApplication, my_application, MY, APPLICATION,
+G_DECLARE_FINAL_TYPE(OpenAuth, openauth, OPEN, AUTH,
                      GtkApplication)
 
 /**
@@ -13,6 +13,6 @@ G_DECLARE_FINAL_TYPE(MyApplication, my_application, MY, APPLICATION,
  *
  * Returns: a new #MyApplication.
  */
-MyApplication* my_application_new();
+OpenAuth* openauth_new();
 
 #endif  // FLUTTER_MY_APPLICATION_H_

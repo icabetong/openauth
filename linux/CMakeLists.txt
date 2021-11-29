@@ -48,7 +48,7 @@ add_definitions(-DAPPLICATION_ID="${APPLICATION_ID}")
 # Application build
 add_executable(${BINARY_NAME}
   "main.cc"
-  "my_application.cc"
+  "openauth.cc"
   "${FLUTTER_MANAGED_DIR}/generated_plugin_registrant.cc"
 )
 apply_standard_settings(${BINARY_NAME})
