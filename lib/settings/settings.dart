@@ -64,64 +64,78 @@ class _SettingsRouteState extends State<SettingsRoute> {
                     ],
                   ),
                   PreferenceGroup(
-                      header: Translations.of(context)!.settings_group_security,
-                      tiles: [
-                        PreferenceTile.switchTile(
-                            leading: const Icon(Icons.touch_app_outlined),
-                            title: Translations.of(context)!
-                                .settings_tap_to_reveal,
-                            subtitle: Translations.of(context)!
-                                .settings_tap_to_reveal_subtitle,
-                            onToggle: (checked) {
-                              notifier.changeHideTokens(checked);
-                            },
-                            checked: notifier.preferences.hideTokens),
-                        PreferenceTile.switchTile(
-                            leading: const Icon(Icons.visibility_off_outlined),
-                            title:
-                                Translations.of(context)!.settings_hide_secrets,
-                            subtitle: Translations.of(context)!
-                                .settings_hide_secrets_subtitle,
-                            onToggle: (status) {
-                              setState(() {
-                                notifier.changeSecretsHidden(status);
-                              });
-                            },
-                            checked: notifier.preferences.isSecretsHidden),
-                        PreferenceTile.switchTile(
-                            leading:
-                                const Icon(Icons.admin_panel_settings_outlined),
-                            title: Translations.of(context)!
-                                .settings_access_protection,
-                            subtitle: Translations.of(context)!
-                                .settings_access_protection_subtitle,
-                            onToggle: (status) async {
-                              bool isAppProtected = status;
-                              if (status) {
-                                final result = Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                        pageBuilder: (context, animation,
-                                                secondaryAnimation) =>
-                                            const ProtectionPage(),
-                                        transitionsBuilder: (context, animation,
-                                                secondaryAnimation, child) =>
-                                            SharedAxisTransition(
-                                                child: child,
-                                                animation: animation,
-                                                secondaryAnimation:
-                                                    secondaryAnimation,
-                                                transitionType:
-                                                    SharedAxisTransitionType
-                                                        .horizontal)));
-                                isAppProtected = await result;
-                              }
-                              setState(() {
-                                notifier.changeProtection(isAppProtected);
-                              });
-                            },
-                            checked: notifier.preferences.isAppProtected)
-                      ])
+                    header: Translations.of(context)!.settings_group_security,
+                    tiles: [
+                      PreferenceTile.switchTile(
+                          leading: const Icon(Icons.touch_app_outlined),
+                          title:
+                              Translations.of(context)!.settings_tap_to_reveal,
+                          subtitle: Translations.of(context)!
+                              .settings_tap_to_reveal_subtitle,
+                          onToggle: (checked) {
+                            notifier.changeHideTokens(checked);
+                          },
+                          checked: notifier.preferences.hideTokens),
+                      PreferenceTile.switchTile(
+                          leading: const Icon(Icons.visibility_off_outlined),
+                          title:
+                              Translations.of(context)!.settings_hide_secrets,
+                          subtitle: Translations.of(context)!
+                              .settings_hide_secrets_subtitle,
+                          onToggle: (status) {
+                            setState(() {
+                              notifier.changeSecretsHidden(status);
+                            });
+                          },
+                          checked: notifier.preferences.isSecretsHidden),
+                      PreferenceTile.switchTile(
+                          leading:
+                              const Icon(Icons.admin_panel_settings_outlined),
+                          title: Translations.of(context)!
+                              .settings_access_protection,
+                          subtitle: Translations.of(context)!
+                              .settings_access_protection_subtitle,
+                          onToggle: (status) async {
+                            bool isAppProtected = status;
+                            if (status) {
+                              final result = Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                      pageBuilder: (context, animation,
+                                              secondaryAnimation) =>
+                                          const ProtectionPage(),
+                                      transitionsBuilder: (context, animation,
+                                              secondaryAnimation, child) =>
+                                          SharedAxisTransition(
+                                              child: child,
+                                              animation: animation,
+                                              secondaryAnimation:
+                                                  secondaryAnimation,
+                                              transitionType:
+                                                  SharedAxisTransitionType
+                                                      .horizontal)));
+                              isAppProtected = await result;
+                            }
+                            setState(() {
+                              notifier.changeProtection(isAppProtected);
+                            });
+                          },
+                          checked: notifier.preferences.isAppProtected)
+                    ],
+                  ),
+                  PreferenceGroup(
+                    header: Translations.of(context)!.settings_group_backup,
+                    tiles: [
+                      PreferenceTile(
+                        leading: const Icon(Icons.file_download_outlined),
+                        title: Translations.of(context)!.settings_import,
+                      ),
+                      PreferenceTile(
+                        leading: const Icon(Icons.file_upload_outlined),
+                        title: Translations.of(context)!.settings_export,
+                      )
+                    ],
+                  )
                 ],
               ),
             ],

@@ -11,6 +11,14 @@
 </div>
 </p>
 
+### Screenshots
+
+<div align="center">
+<img src="art/screenshot-1.png" width="250">
+<img src="art/screenshot-2.png" width="250">
+<img src="art/screenshot-3.png" width="250">
+</div>
+
 ## Features
 * Fast and Beautiful UI
 * Cross Platform (Android, iOS, Windows, macOS and Linux)

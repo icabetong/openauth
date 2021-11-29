@@ -16,11 +16,13 @@ class EntryList extends StatelessWidget {
     Key? key,
     required this.entries,
     this.enableDragging = true,
+    this.hideToken = false,
     this.onTap,
     required this.onLongTap,
   }) : super(key: key);
   final List<Entry> entries;
   final bool enableDragging;
+  final bool hideToken;
   final Function(String)? onTap;
   final Function(Entry) onLongTap;
 
@@ -33,6 +35,7 @@ class EntryList extends StatelessWidget {
                 return EntryListTile(
                   key: Key(entries[index].entryId),
                   entry: entries[index],
+                  hideToken: hideToken,
                   onTap: onTap,
                   onLongTap: onLongTap,
                 );
@@ -53,10 +56,12 @@ class EntryListTile extends StatefulWidget {
   const EntryListTile({
     Key? key,
     required this.entry,
+    this.hideToken = false,
     this.onTap,
     required this.onLongTap,
   }) : super(key: key);
   final Entry entry;
+  final bool hideToken;
   final Function(String)? onTap;
   final Function(Entry) onLongTap;
 
@@ -65,6 +70,9 @@ class EntryListTile extends StatefulWidget {
 }
 
 class _EntryListTileState extends State<EntryListTile> {
+  static const _char = "•";
+  bool hidden = false;
+  String? _obscuringText;
   Exception? exception;
   CountDown? countdown;
   StreamSubscription<Duration>? subscription;
@@ -74,6 +82,17 @@ class _EntryListTileState extends State<EntryListTile> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.hideToken) {
+      String text = '';
+      for (int i = 0; i <= widget.entry.length; i++) {
+        text += _char;
+      }
+      setState(() {
+        _obscuringText = text;
+        hidden = widget.hideToken;
+      });
+    }
 
     switch (widget.entry.type) {
       case OTPType.steam:
@@ -130,6 +149,9 @@ class _EntryListTileState extends State<EntryListTile> {
     try {
       base32.decode(widget.entry.secret);
       code = TokenGenerator.compute(widget.entry);
+      if (widget.hideToken) {
+        setState(() => hidden = !hidden);
+      }
     } on FormatException catch (exception) {
       this.exception = exception;
       countdown = null;
@@ -176,10 +198,16 @@ class _EntryListTileState extends State<EntryListTile> {
           widget.onLongTap(widget.entry);
         },
       ),
-      title: Text(code ?? Translations.of(context)!.error_secret_invalid,
+      title: Text(
+          hidden
+              ? _obscuringText!
+              : code ?? Translations.of(context)!.error_secret_invalid,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
       onTap: () {
+        if (widget.hideToken) {
+          setState(() => hidden = !hidden);
+        }
         if (code != null && widget.onTap != null) widget.onTap!(code!);
       },
     );

@@ -250,6 +250,7 @@ class _EntryPageState extends State<EntryPage> {
               entries: notifier.entries,
               enableDragging:
                   preferenceNotifier.preferences.sort != Sort.custom,
+              hideToken: preferenceNotifier.preferences.hideTokens,
               onTap: preferenceNotifier.preferences.tapToCopy ? _onTap : null,
               onLongTap: _onLongPress,
             ),
