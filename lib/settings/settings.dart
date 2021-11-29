@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/settings/other/export_page.dart';
 import 'package:openauth/settings/other/protection_page.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/shared/custom/preference.dart';
@@ -36,6 +37,7 @@ class _SettingsRouteState extends State<SettingsRoute> {
                         title: Translations.of(context)!.settings_theme,
                         subtitle:
                             getThemeName(context, notifier.preferences.theme),
+                        subtitleMaxLines: 1,
                         onPressed: (context) async {
                           final result = await Navigator.push(
                               context,
@@ -89,38 +91,40 @@ class _SettingsRouteState extends State<SettingsRoute> {
                           },
                           checked: notifier.preferences.isSecretsHidden),
                       PreferenceTile.switchTile(
-                          leading:
-                              const Icon(Icons.admin_panel_settings_outlined),
-                          title: Translations.of(context)!
-                              .settings_access_protection,
-                          subtitle: Translations.of(context)!
-                              .settings_access_protection_subtitle,
-                          onToggle: (status) async {
-                            bool isAppProtected = status;
-                            if (status) {
-                              final result = Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                      pageBuilder: (context, animation,
-                                              secondaryAnimation) =>
-                                          const ProtectionPage(),
-                                      transitionsBuilder: (context, animation,
-                                              secondaryAnimation, child) =>
-                                          SharedAxisTransition(
-                                              child: child,
-                                              animation: animation,
-                                              secondaryAnimation:
-                                                  secondaryAnimation,
-                                              transitionType:
-                                                  SharedAxisTransitionType
-                                                      .horizontal)));
-                              isAppProtected = await result;
-                            }
-                            setState(() {
-                              notifier.changeProtection(isAppProtected);
-                            });
-                          },
-                          checked: notifier.preferences.isAppProtected)
+                        leading:
+                            const Icon(Icons.admin_panel_settings_outlined),
+                        title: Translations.of(context)!
+                            .settings_access_protection,
+                        subtitle: Translations.of(context)!
+                            .settings_access_protection_subtitle,
+                        onToggle: (status) async {
+                          bool isAppProtected = status;
+                          if (status) {
+                            final result = Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        const ProtectionPage(),
+                                    transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) =>
+                                        SharedAxisTransition(
+                                            child: child,
+                                            animation: animation,
+                                            secondaryAnimation:
+                                                secondaryAnimation,
+                                            transitionType:
+                                                SharedAxisTransitionType
+                                                    .horizontal)));
+                            isAppProtected = await result;
+                          }
+                          setState(() {
+                            notifier.changeProtection(isAppProtected);
+                          });
+                        },
+                        checked: notifier.preferences.isAppProtected,
+                        subtitleMaxLines: 1,
+                      )
                     ],
                   ),
                   PreferenceGroup(
@@ -129,10 +133,34 @@ class _SettingsRouteState extends State<SettingsRoute> {
                       PreferenceTile(
                         leading: const Icon(Icons.file_download_outlined),
                         title: Translations.of(context)!.settings_import,
+                        subtitle:
+                            Translations.of(context)!.settings_import_subtitle,
+                        subtitleMaxLines: 1,
                       ),
                       PreferenceTile(
                         leading: const Icon(Icons.file_upload_outlined),
                         title: Translations.of(context)!.settings_export,
+                        subtitle:
+                            Translations.of(context)!.settings_export_subtitle,
+                        subtitleMaxLines: 1,
+                        onPressed: (context) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondAnimation) =>
+                                      const ExportPage(),
+                              transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) =>
+                                  SharedAxisTransition(
+                                      child: child,
+                                      animation: animation,
+                                      secondaryAnimation: secondaryAnimation,
+                                      transitionType:
+                                          SharedAxisTransitionType.horizontal),
+                            ),
+                          );
+                        },
                       )
                     ],
                   )

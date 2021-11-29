@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/settings/provider.dart';
+import 'package:openauth/shared/custom/header.dart';
 
 class ProtectionPage extends StatefulWidget {
   const ProtectionPage({Key? key}) : super(key: key);
@@ -42,20 +43,13 @@ class _ProtectionPageState extends State<ProtectionPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.admin_panel_settings_outlined,
-                            size: 32),
-                        Text(
-                            Translations.of(context)!
-                                .title_setup_app_protection,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18)),
-                        const SizedBox(height: 8),
-                        Text(
-                          Translations.of(context)!
+                        Header(
+                          icon: Icons.admin_panel_settings_outlined,
+                          title: Translations.of(context)!
+                              .title_setup_app_protection,
+                          subtitle: Translations.of(context)!
                               .title_setup_app_protection_subtitle,
-                          textAlign: TextAlign.center,
                         ),
-                        const SizedBox(height: 32),
                         TextFormField(
                           obscureText: !_isPasswordVisible,
                           enableSuggestions: false,

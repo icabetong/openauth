@@ -216,6 +216,8 @@ class _InputPageState extends State<InputPage> {
                                   child: DropdownInputField<OTPType>(
                                       selected: _type,
                                       items: OTPType.values,
+                                      labelText:
+                                          Translations.of(context)!.field_type,
                                       labels: [
                                         Translations.of(context)!.otp_type_totp,
                                         Translations.of(context)!.otp_type_hotp,
@@ -268,6 +270,8 @@ class _InputPageState extends State<InputPage> {
                                   enabled: _type != OTPType.steam,
                                   selected: _algorithm,
                                   items: Algorithm.values,
+                                  labelText:
+                                      Translations.of(context)!.field_algorithm,
                                   labels: [
                                     Translations.of(context)!
                                         .algorithm_type_sha1,

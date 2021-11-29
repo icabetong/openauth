@@ -61,14 +61,13 @@ class PreferenceGroup extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-        ListView.separated(
+        ListView.builder(
           padding: listPadding,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemBuilder: (context, int index) {
             return tiles[index];
           },
-          separatorBuilder: (context, index) => const Divider(),
           itemCount: tiles.length,
         )
       ],
@@ -89,9 +88,9 @@ class PreferenceTile extends StatelessWidget {
   const PreferenceTile({
     Key? key,
     required this.title,
-    this.titleMaxLines,
+    this.titleMaxLines = _titleMaxLines,
     this.subtitle,
-    this.subtitleMaxLines,
+    this.subtitleMaxLines = _subtitleMaxLines,
     this.leading,
     this.trailing,
     this.onPressed,
@@ -106,9 +105,9 @@ class PreferenceTile extends StatelessWidget {
         super(key: key);
 
   final String title;
-  final int? titleMaxLines;
+  final int titleMaxLines;
   final String? subtitle;
-  final int? subtitleMaxLines;
+  final int subtitleMaxLines;
   final Widget? leading;
   final Widget? trailing;
   final Function(BuildContext context)? onPressed;
@@ -134,8 +133,8 @@ class PreferenceTile extends StatelessWidget {
     this.subtitleTextStyle,
   })  : _tileType = _PreferenceTileType.switchTile,
         onPressed = null,
-        assert(titleMaxLines == null || titleMaxLines > 0),
-        assert(subtitleMaxLines == null || subtitleMaxLines > 0),
+        assert(titleMaxLines > 0),
+        assert(subtitleMaxLines > 0),
         super(key: key);
 
   const PreferenceTile.checkBoxTile({
@@ -153,8 +152,8 @@ class PreferenceTile extends StatelessWidget {
     this.subtitleTextStyle,
   })  : _tileType = _PreferenceTileType.switchTile,
         onPressed = null,
-        assert(titleMaxLines == null || titleMaxLines > 0),
-        assert(subtitleMaxLines == null || subtitleMaxLines > 0),
+        assert(titleMaxLines > 0),
+        assert(subtitleMaxLines > 0),
         super(key: key);
 
   @override
@@ -167,7 +166,7 @@ class PreferenceTile extends StatelessWidget {
               ? Text(
                   subtitle!,
                   style: subtitleTextStyle ?? _subtitleTextStyle,
-                  maxLines: subtitleMaxLines ?? _subtitleMaxLines,
+                  maxLines: subtitleMaxLines,
                   overflow: TextOverflow.ellipsis,
                 )
               : null,
@@ -177,6 +176,7 @@ class PreferenceTile extends StatelessWidget {
           onTap: () {
             onPressed?.call(context);
           },
+          isThreeLine: subtitleMaxLines > 1 || titleMaxLines > 1,
         );
       case _PreferenceTileType.switchTile:
         return SwitchListTile(
@@ -198,6 +198,7 @@ class PreferenceTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 )
               : null,
+          isThreeLine: subtitleMaxLines > 1 || titleMaxLines > 1,
         );
       case _PreferenceTileType.checkboxTile:
         return CheckboxListTile(
@@ -223,6 +224,7 @@ class PreferenceTile extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 )
               : null,
+          isThreeLine: subtitleMaxLines > 1 || titleMaxLines > 1,
         );
     }
   }

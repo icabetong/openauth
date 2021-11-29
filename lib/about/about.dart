@@ -4,7 +4,7 @@ import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_icons/simple_icons.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart' as url;
 
 class AboutRoute extends StatefulWidget {
   const AboutRoute({Key? key}) : super(key: key);
@@ -21,8 +21,8 @@ class _AboutRouteState extends State<AboutRoute> {
 
   @override
   Widget build(BuildContext context) {
-    void _launchUrlFallback(String url) async {
-      if (!await UrlLauncher.launch(url)) {
+    void _launchUrlFallback(String _url) async {
+      if (!await url.launch(_url)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(Translations.of(context)!.error_generic),

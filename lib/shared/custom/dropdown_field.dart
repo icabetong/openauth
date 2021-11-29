@@ -7,6 +7,7 @@ class DropdownInputField<T> extends StatelessWidget {
     required this.items,
     required this.onChange,
     this.enabled = true,
+    this.labelText,
     this.hintText,
     this.labels,
   }) : super(key: key);
@@ -14,6 +15,7 @@ class DropdownInputField<T> extends StatelessWidget {
   final T selected;
   final List<T> items;
   final List<String>? labels;
+  final String? labelText;
   final String? hintText;
   final bool enabled;
   final Function(T) onChange;
@@ -28,6 +30,7 @@ class DropdownInputField<T> extends StatelessWidget {
               enabled: enabled,
               errorStyle: TextStyle(
                   color: Theme.of(context).colorScheme.error, fontSize: 16.0),
+              labelText: labelText,
               hintText: hintText,
               border:
                   OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
