@@ -71,11 +71,11 @@ class _ProtectionPageState extends State<ProtectionPage> {
                           validator: (value) {
                             if (value != null && value.trim().isEmpty) {
                               return Translations.of(context)!
-                                  .error_passphrase_empty;
+                                  .feedback_passphrase_empty;
                             } else if (value !=
                                 _confirmPasswordController.text) {
                               return Translations.of(context)!
-                                  .error_passphrase_not_matched;
+                                  .feedback_passphrase_not_matched;
                             }
 
                             return null;
@@ -103,10 +103,10 @@ class _ProtectionPageState extends State<ProtectionPage> {
                           validator: (value) {
                             if (value != null && value.trim().isEmpty) {
                               return Translations.of(context)!
-                                  .error_confirm_passphrase_empty;
+                                  .feedback_confirm_passphrase_empty;
                             } else if (value != _passwordController.text) {
                               return Translations.of(context)!
-                                  .error_passphrase_not_matched;
+                                  .feedback_passphrase_not_matched;
                             }
 
                             return null;

@@ -201,7 +201,7 @@ class _EntryListTileState extends State<EntryListTile> {
       title: Text(
           hidden
               ? _obscuringText!
-              : code ?? Translations.of(context)!.error_secret_invalid,
+              : code ?? Translations.of(context)!.feedback_secret_invalid,
           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500)),
       subtitle: Text(widget.entry.name + " - " + widget.entry.issuer),
       onTap: () {

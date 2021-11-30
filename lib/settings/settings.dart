@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
 import 'package:openauth/settings/other/export_page.dart';
+import 'package:openauth/settings/other/import_page.dart';
 import 'package:openauth/settings/other/protection_page.dart';
 import 'package:openauth/settings/notifier.dart';
 import 'package:openauth/shared/custom/preference.dart';
@@ -136,6 +137,24 @@ class _SettingsRouteState extends State<SettingsRoute> {
                         subtitle:
                             Translations.of(context)!.settings_import_subtitle,
                         subtitleMaxLines: 1,
+                        onPressed: (context) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const ImportPage(),
+                              transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) =>
+                                  SharedAxisTransition(
+                                      child: child,
+                                      animation: animation,
+                                      secondaryAnimation: secondaryAnimation,
+                                      transitionType:
+                                          SharedAxisTransitionType.horizontal),
+                            ),
+                          );
+                        },
                       ),
                       PreferenceTile(
                         leading: const Icon(Icons.file_upload_outlined),

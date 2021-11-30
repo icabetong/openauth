@@ -25,7 +25,7 @@ class _AboutRouteState extends State<AboutRoute> {
       if (!await url.launch(_url)) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(Translations.of(context)!.error_generic),
+            content: Text(Translations.of(context)!.feedback_generic),
           ),
         );
       }

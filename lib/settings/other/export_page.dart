@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
+import 'package:openauth/database/repository.dart';
 import 'package:openauth/shared/constants.dart';
 import 'package:openauth/shared/custom/header.dart';
 
@@ -20,11 +22,21 @@ class _ExportPageState extends State<ExportPage> {
 
   void _onSave() async {
     setState(() => _writing = true);
+    final repository = EntryRepository();
+    final entries = repository.fetch();
+
     final directory = '$_directory/$_fileName';
     final file = File(directory);
     await file.create();
-    await file.writeAsString("The Following");
+    await file.writeAsString(jsonEncode(entries));
     setState(() => _writing = false);
+
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(Translations.of(context)!.feedback_export_success),
+      ),
+    );
   }
 
   @override
@@ -32,7 +44,7 @@ class _ExportPageState extends State<ExportPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Padding(
         padding: pagePadding,
@@ -66,7 +78,7 @@ class _ExportPageState extends State<ExportPage> {
             ),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: _onSave,
+              onPressed: _writing ? null : _onSave,
               child: Text(Translations.of(context)!.button_export),
             )
           ],

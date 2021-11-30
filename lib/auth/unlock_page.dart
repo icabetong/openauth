@@ -21,7 +21,8 @@ class _UnlockPageState extends State<UnlockPage> {
   void _onAuthenticate(context) async {
     final input = _passphraseController.text;
     if (input.trim().isEmpty) {
-      setState(() => _error = Translations.of(context)!.error_passphrase_empty);
+      setState(
+          () => _error = Translations.of(context)!.feedback_passphrase_empty);
       return;
     }
 
@@ -30,7 +31,7 @@ class _UnlockPageState extends State<UnlockPage> {
 
     if (passphrase != provided) {
       setState(
-          () => _error = Translations.of(context)!.error_passphrase_invalid);
+          () => _error = Translations.of(context)!.feedback_passphrase_invalid);
       return;
     }
     Provider.of<UnlockNotifier>(context, listen: false).change(true);

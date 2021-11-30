@@ -128,7 +128,7 @@ class _InputPageState extends State<InputPage> {
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return Translations.of(context)!
-                            .error_name_cant_be_empty;
+                            .feedback_name_cant_be_empty;
                       }
                       return null;
                     },
@@ -144,7 +144,7 @@ class _InputPageState extends State<InputPage> {
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return Translations.of(context)!
-                            .error_issuer_cant_be_empty;
+                            .feedback_issuer_cant_be_empty;
                       }
                       return null;
                     },
@@ -177,7 +177,7 @@ class _InputPageState extends State<InputPage> {
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return Translations.of(context)!
-                            .error_secret_cant_be_empty;
+                            .feedback_secret_cant_be_empty;
                       }
                       return null;
                     },

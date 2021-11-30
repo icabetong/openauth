@@ -47,6 +47,7 @@ dependencies:
   file_picker: ^4.2.5
   introduction_screen: ^2.1.0
   url_launcher: ^6.0.16
+  encrypt: ^5.0.1
   
 dev_dependencies:
   flutter_test:

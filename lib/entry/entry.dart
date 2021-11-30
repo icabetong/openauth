@@ -69,7 +69,7 @@ class Entry extends HiveObject {
     );
   }
 
-  Map toJson() => {
+  Map<String, dynamic> toJson() => {
         jsonSecret: secret,
         jsonIssuer: issuer,
         jsonName: name,
@@ -77,10 +77,22 @@ class Entry extends HiveObject {
         jsonLength: length,
         jsonPeriod: period,
         jsonCounter: counter,
-        jsonType: type,
-        jsonAlgorithm: algorithm,
+        jsonType: type.value,
+        jsonAlgorithm: algorithm.value,
         jsonIsGoogle: isGoogle,
       };
+
+  Entry.fromJson(Map<String, dynamic> json)
+      : secret = json[jsonSecret],
+        issuer = json[jsonIssuer],
+        name = json[jsonName],
+        entryId = json[jsonEntryId],
+        type = OTPTypeExtension.parse(json[jsonType]),
+        length = int.parse(json[jsonLength]),
+        period = int.parse(json[jsonPeriod]),
+        counter = int.parse(json[jsonCounter]),
+        algorithm = json[jsonAlgorithm],
+        isGoogle = json[jsonIsGoogle];
 
   factory Entry.fromString(String contents) {
     contents = contents.replaceFirst("otpauth", "http");
@@ -92,11 +104,14 @@ class Entry extends HiveObject {
 
     OTPType type;
     switch (uri.host) {
-      case 'totp':
+      case OTPTypeExtension.totp:
         type = OTPType.totp;
         break;
-      case 'hotp':
+      case OTPTypeExtension.hotp:
         type = OTPType.hotp;
+        break;
+      case OTPTypeExtension.steam:
+        type = OTPType.steam;
         break;
       default:
         throw Error();
@@ -119,7 +134,7 @@ class Entry extends HiveObject {
       type: type,
       length: length != null ? int.parse(length) : defaultLength,
       period: period != null ? int.parse(period) : defaultPeriod,
-      algorithm: _parseAlgorithm(algorithm),
+      algorithm: AlgorithmExtension.parse(algorithm),
     );
   }
 
@@ -128,19 +143,6 @@ class Entry extends HiveObject {
       return label.trim();
     } else {
       return label.substring(issuer.length + 1).trim();
-    }
-  }
-
-  static Algorithm _parseAlgorithm(String? algorithm) {
-    switch (algorithm) {
-      case "SHA1":
-        return Algorithm.SHA1;
-      case "SHA256":
-        return Algorithm.SHA256;
-      case "SHA512":
-        return Algorithm.SHA512;
-      default:
-        return Algorithm.SHA1;
     }
   }
 
@@ -170,16 +172,76 @@ enum OTPType {
   steam
 }
 
+extension OTPTypeExtension on OTPType {
+  static const totp = 'totp';
+  static const hotp = 'hotp';
+  static const steam = 'steam';
+
+  String get value {
+    switch (this) {
+      case OTPType.totp:
+        return totp;
+      case OTPType.hotp:
+        return hotp;
+      case OTPType.steam:
+        return steam;
+    }
+  }
+
+  static OTPType parse(String? otpType) {
+    switch (otpType) {
+      case totp:
+        return OTPType.totp;
+      case hotp:
+        return OTPType.hotp;
+      case steam:
+        return OTPType.steam;
+      default:
+        throw Exception();
+    }
+  }
+}
+
+extension AlgorithmExtension on Algorithm {
+  static const sha1 = "SHA1";
+  static const sha256 = "SHA256";
+  static const sha512 = "SHA512";
+
+  String get value {
+    switch (this) {
+      case Algorithm.SHA1:
+        return sha1;
+      case Algorithm.SHA256:
+        return sha256;
+      case Algorithm.SHA512:
+        return sha512;
+    }
+  }
+
+  static Algorithm parse(String? algorithm) {
+    switch (algorithm) {
+      case AlgorithmExtension.sha1:
+        return Algorithm.SHA1;
+      case AlgorithmExtension.sha256:
+        return Algorithm.SHA256;
+      case AlgorithmExtension.sha512:
+        return Algorithm.SHA512;
+      default:
+        return Algorithm.SHA1;
+    }
+  }
+}
+
 class AlgorithmAdapter extends TypeAdapter<Algorithm> {
   @override
   Algorithm read(BinaryReader reader) {
     final _algorithm = reader.read();
     switch (_algorithm) {
-      case "SHA1":
+      case AlgorithmExtension.sha1:
         return Algorithm.SHA1;
-      case "SHA256":
+      case AlgorithmExtension.sha256:
         return Algorithm.SHA256;
-      case "SHA512":
+      case AlgorithmExtension.sha512:
         return Algorithm.SHA512;
       default:
         throw Error();
