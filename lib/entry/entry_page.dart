@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/translations.dart';
@@ -185,14 +187,25 @@ class _EntryPageState extends State<EntryPage> {
         false;
   }
 
-  Future<Operation?> _invokeEditor(EntryNotifier notifier) async {
-    return await Navigator.push(
+  Future _invokeEditor(EntryNotifier notifier) async {
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
         return ChangeNotifierProvider<EntryNotifier>.value(
             value: notifier, child: const InputPage());
       }),
     );
+    switch (result) {
+      case Operation.create:
+        _showSnackBar(Translations.of(context)!.feedback_entry_created);
+        break;
+      case Operation.update:
+        _showSnackBar(Translations.of(context)!.feedback_entry_updated);
+        break;
+      default:
+        break;
+    }
+    return true;
   }
 
   void _onTap(code) {
@@ -257,40 +270,32 @@ class _EntryPageState extends State<EntryPage> {
           ]),
           floatingActionButton: FloatingActionButton.extended(
               onPressed: () async {
-                final Action? result = await _invokeMainActions();
-                if (result != null) {
-                  switch (result) {
-                    case Action.input:
-                      final operation = await _invokeEditor(notifier);
-                      switch (operation) {
-                        case Operation.create:
+                if (Platform.isAndroid || Platform.isIOS) {
+                  final Action? result = await _invokeMainActions();
+                  if (result != null) {
+                    switch (result) {
+                      case Action.input:
+                        await _invokeEditor(notifier);
+                        break;
+                      case Action.scan:
+                        final Entry? data = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ChangeNotifierProvider<EntryNotifier>.value(
+                                    value: notifier, child: const ScanRoute()),
+                          ),
+                        );
+                        if (data != null && data is Entry) {
+                          notifier.put(data);
                           _showSnackBar(
                               Translations.of(context)!.feedback_entry_created);
-                          break;
-                        case Operation.update:
-                          _showSnackBar(
-                              Translations.of(context)!.feedback_entry_updated);
-                          break;
-                        default:
-                          break;
-                      }
-                      break;
-                    case Action.scan:
-                      final Entry? data = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ChangeNotifierProvider<EntryNotifier>.value(
-                                  value: notifier, child: const ScanRoute()),
-                        ),
-                      );
-                      if (data != null && data is Entry) {
-                        notifier.put(data);
-                        _showSnackBar(
-                            Translations.of(context)!.feedback_entry_created);
-                      }
-                      break;
+                        }
+                        break;
+                    }
                   }
+                } else {
+                  await _invokeEditor(notifier);
                 }
               },
               icon: const Icon(Icons.add),
