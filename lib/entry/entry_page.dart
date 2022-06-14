@@ -15,7 +15,9 @@ import 'package:openauth/settings/settings.dart';
 import 'package:provider/provider.dart';
 
 enum Action { input, scan }
+
 enum Option { edit, remove }
+
 enum Menu { settings, about }
 
 extension OptionExtensions on Option {
@@ -286,7 +288,7 @@ class _EntryPageState extends State<EntryPage> {
                                     value: notifier, child: const ScanRoute()),
                           ),
                         );
-                        if (data != null && data is Entry) {
+                        if (data != null) {
                           notifier.put(data);
                           _showSnackBar(
                               Translations.of(context)!.feedback_entry_created);
