@@ -22,7 +22,7 @@ class _AboutRouteState extends State<AboutRoute> {
   @override
   Widget build(BuildContext context) {
     void _launchUrlFallback(String _url) async {
-      if (!await url.launch(_url)) {
+      if (!await url.launchUrl(Uri.parse(_url))) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(Translations.of(context)!.feedback_generic),
